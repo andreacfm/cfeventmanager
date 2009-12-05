@@ -1,0 +1,48 @@
+03/07/2009 -- build 5
+------------------------------------------------------------------
+- Tracer do not collect items in adobe
+- Add mapping control for css resources.
+- Added Id to eventListeners.
+
+21/06/2009 -- 0.5
+------------------------------------------------------------------
+- Events Class moved to package EventManager.events
+- Event base class extends AbstractEvent. Removed interface IEvent.
+- Added a dispatcherFactory and dispatch package.
+- DispatcherFactory create synch or asynch dispatcher.
+- Event add a mode argument for switching synch/asynch beahviour ( default synch ).
+- Added conf xml syntax file.
+- Added confgs AsynchDispatcher and SynchDispathcer. Classes to be used for dispatching events.
+- Added config for customizing the framework base event class.
+- Configs can be overwritten via xml syntax ( loadXml ) or programmatically.
+- Counter for any event has been added.
+- EventManager debug mode ( default false ) for differents scopes ( default request ).
+- Added method renderDebug() for outputting the saved trace ( in base of the scope passed to em instance ).
+- Added Api in docs folder.
+
+*14/06/2009 -- 0.4 b1
+-------------------------------------------------------------------
+- Add Listeners by regex in place of eventName ( no case sensitive).
+- If no event match listeners is simply skipped. No error is thrown.
+
+*14/06/2009 -- 0.4
+-------------------------------------------------------------------
+- Event Object has internal access to the eventManager instance via mehod getEM()
+
+*14/06/2009 -- 0.3 build 02
+-------------------------------------------------------------------
+- Event properties name,type,target are read only.
+
+*28/05/2009 -- 0.3 build 01
+-------------------------------------------------------------------
+- Added factory/EventFactory.cfc for delegating the events creation
+- Added support for coldspring autowiring via BeanInjector
+
+*27/05/2009 -- 0.3
+--------------------------------------------------------------------
+First tag 0.3
+
+
+*********
+Road Map
+********

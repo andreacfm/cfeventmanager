@@ -1,0 +1,30 @@
+<?xml encoding="UTF-8"?>
+
+<!ELEMENT event-manager (events,listeners)>
+<!ATTLIST event-manager
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT events (event)+>
+<!ATTLIST events
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT listeners (listener)+>
+<!ATTLIST listeners
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT event EMPTY>
+<!ATTLIST event
+  xmlns CDATA #FIXED ''
+  name NMTOKEN #REQUIRED
+  type NMTOKEN #IMPLIED>
+
+<!ELEMENT listener EMPTY>
+<!ATTLIST listener
+  xmlns CDATA #FIXED ''
+  cache NMTOKEN #IMPLIED
+  event NMTOKEN #REQUIRED
+  init-method NMTOKEN #IMPLIED
+  listener NMTOKEN #REQUIRED
+  method NMTOKEN #REQUIRED
+  mode NMTOKEN #IMPLIED
+  priority CDATA #REQUIRED>

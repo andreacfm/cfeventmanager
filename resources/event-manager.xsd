@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="event-manager">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="events"/>
+        <xs:element ref="listeners"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="events">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="event"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="event">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="listeners">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="listener"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="listener">
+    <xs:complexType>
+      <xs:attribute name="cache" type="xs:boolean"/>
+      <xs:attribute name="event" use="required" type="xs:NCName"/>
+      <xs:attribute name="init-method" type="xs:NCName"/>
+      <xs:attribute name="listener" use="required" type="xs:NCName"/>
+      <xs:attribute name="method" use="required" type="xs:NCName"/>
+      <xs:attribute name="mode" type="xs:NCName"/>
+      <xs:attribute name="priority" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event-manager>
+    
+    <events>
+        
+        <event name="getPods" type="EventManager.events.CollectDataEvent" />
+        
+    </events>
+    
+    <listeners>
+        
+        <listener 
+            event="getPods" 
+            listener="EventManager.samples.handlers.getpods" />
+
+        <listener 
+            event="getPods" 
+            listener="EventManager.samples.handlers.getpods2"
+            priority="10"
+        />
+        
+    </listeners>
+    
+</event-manager>
