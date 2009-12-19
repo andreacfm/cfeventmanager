@@ -1,10 +1,9 @@
-<!--- 
-				
-Project:     Cf Event Manager http://www.cfeventmanager.com
-Author:      Andrea Campolonghi <acampolonghi@gmail.com>
-Version:     1.0
-Build Date:  2009/10/25 16:16
-Build:		 25
+<!--- /*		
+Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
+Author:      Andrea Campolonghi <andrea@getrailo.org>
+Version:     1.0.1
+Build Date:  sabato dic 19, 2009
+Build:		 111
 
 Copyright 2009 Andrea Campolonghi
 
@@ -19,8 +18,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.	
-						
---->
+			
+*/--->
 
 <cfcomponent extends="EventManager.events.Event" output="false">
 	
@@ -48,6 +47,12 @@ limitations under the License.
     <cffunction name="addItem" output="false" access="public" returntype="void">
     	<cfargument name="Item" type="any" required="true" />
 		<cfset variables.instance.data.items.add(item) />
+    </cffunction>
+
+	<!---addItems--->
+    <cffunction name="addItems" output="false" access="public" returntype="void">
+    	<cfargument name="Items" type="Array" required="true" />
+		<cfset variables.instance.data.items.addAll(items) />
     </cffunction>
 	
 	<!---getItems--->

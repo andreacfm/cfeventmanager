@@ -1,10 +1,9 @@
-<!--- 
-				
-Project:     Cf Event Manager http://www.cfeventmanager.com
-Author:      Andrea Campolonghi <acampolonghi@gmail.com>
-Version:     1.0
-Build Date:  2009/10/25 16:16
-Build:		 25
+<!--- /*		
+Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
+Author:      Andrea Campolonghi <andrea@getrailo.org>
+Version:     1.0.1
+Build Date:  sabato dic 19, 2009
+Build:		 111
 
 Copyright 2009 Andrea Campolonghi
 
@@ -19,8 +18,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.	
-						
- --->
+			
+*/--->
 
 <cfcomponent 
 	output="false" 
@@ -432,23 +431,6 @@ limitations under the License.
 		</cfscript>		
 	</cffunction>
 
-	<!--- renderDebug --->
-	<cffunction name="renderDebug" output="false" returntype="string" access="public">
-		<cfscript>
-			if(not structKeyExists(variables.instance,'tracer') or not getdebug()){
-				throw('Debug cannot be rendered when is not active.','EventManger.debugOutputException');
-			}
-			return 	getTracer().render();        	        
-        </cfscript>
-	</cffunction>
-
-	<!--- clearDebug --->
-	<cffunction name="clearDebug" output="false" returntype="string" access="public">
-		<cfscript>
-		return 	getTracer().clear();        	        
-        </cfscript>
-	</cffunction>
-
     <!---   Sorter   --->
 	<cffunction name="getSorter" access="public" output="false" returntype="EventManager.util.AbstractSortable">
 		<cfreturn variables.instance.Sorter/>
@@ -468,7 +450,13 @@ limitations under the License.
 		<cfreturn variables.instance['beanInjector'] />
 	</cffunction>		
 
-    <!---   tracer   --->
+ 	<!---	beanInjector  --->
+	<cffunction name="setBeanInjector" access="public" returntype="void" output="false" hint="I set the BeanInjector.">
+		<cfargument name="beanInjector" type="any" required="true" hint="BeanInjector" />
+		<cfset variables.instance['beanInjector'] = arguments.beanInjector />
+	</cffunction>
+
+   <!---   tracer   --->
 	<cffunction name="gettracer" access="public" output="false" returntype="EventManager.stats.Tracer">
 		<cfreturn variables.instance.tracer/>
 	</cffunction>
@@ -485,9 +473,24 @@ limitations under the License.
 		<cfargument name="scope" type="string" required="false" default="request"/>
 		<cfset variables.instance.debug = arguments.debug/>
 		<cfset variables.instance.scope = arguments.scope/>
-		<cfif arguments.debug>
-			<cfset setTracer(createObject('component','EventManager.stats.Tracer').init(arguments.scope)) />
-		</cfif>
+		<cfset setTracer(createObject('component','EventManager.stats.Tracer').init(arguments.scope)) />
+	</cffunction>
+
+	<!--- renderDebug --->
+	<cffunction name="renderDebug" output="false" returntype="string" access="public">
+		<cfscript>
+			if(not structKeyExists(variables.instance,'tracer') or not getdebug()){
+				throw('Debug cannot be rendered when is not active.','EventManger.debugOutputException');
+			}
+			return 	getTracer().render();        	        
+        </cfscript>
+	</cffunction>
+
+	<!--- clearDebug --->
+	<cffunction name="clearDebug" output="false" returntype="string" access="public">
+		<cfscript>
+		return 	getTracer().clear();        	        
+        </cfscript>
 	</cffunction>
 	
 	<!--- getConfig  --->
@@ -516,18 +519,21 @@ limitations under the License.
 		<cfset variables.instance.helpers[arguments.name] = arguments.value />
 	</cffunction> 
 
+	<!----	beanFactory	--->
+	<cffunction name="getBeanFactory" access="public" returntype="any" output="false" hint="Return the beanFactory instance">
+		<cfreturn variables.instance.beanFactory />
+	</cffunction>		
+	<cffunction name="setBeanFactory" access="public" returntype="void" output="false" hint="Inject a beanFactory reference.">
+		<cfargument name="beanFactory" type="coldspring.beans.BeanFactory" required="true" />
+		<cfset variables.instance.beanFactory = arguments.beanFactory />
+	</cffunction>
+
 	<!------------------------------------------- PRIVATE ------------------------------------------->		
 
 	<!---   Sorter   --->
 	<cffunction name="setSorter" access="private" output="false" returntype="void">
 		<cfargument name="Sorter" type="EventManager.util.AbstractSortable" required="true"/>
 		<cfset variables.instance['sorter'] = arguments.Sorter/>
-	</cffunction>
-
-	<!---	beanInjector  --->
-	<cffunction name="setBeanInjector" access="private" returntype="void" output="false" hint="I set the BeanInjector.">
-		<cfargument name="beanInjector" type="any" required="true" hint="BeanInjector" />
-		<cfset variables.instance['beanInjector'] = arguments.beanInjector />
 	</cffunction>
 
     <!---   tracer   --->
