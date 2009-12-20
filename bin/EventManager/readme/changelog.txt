@@ -1,3 +1,8 @@
+19/12/2009 1.0.1.1
+-----------------------------------------------------------------
+[http://code.google.com/p/cfeventmanager/issues/detail?id=2]
+[http://code.google.com/p/cfeventmanager/issues/detail?id=3]
+
 18/12/2009 1.0.1
 -----------------------------------------------------------------
 - Added adItems() in collectDatEvent interface

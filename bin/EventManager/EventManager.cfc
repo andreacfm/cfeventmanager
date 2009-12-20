@@ -1,9 +1,9 @@
 <!--- /*		
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
-Version:     1.0.1
-Build Date:  sabato dic 19, 2009
-Build:		 111
+Version:     1.0.1.1
+Build Date:  domenica dic 20, 2009
+Build:		 114
 
 Copyright 2009 Andrea Campolonghi
 
@@ -238,7 +238,7 @@ limitations under the License.
 	
 	<!---dispatchEvent--->
 	<cffunction name="dispatchEvent" output="false" returntype="void">
-		<cfargument name="name" required="false" type="string" default="EventManager.Event" />
+		<cfargument name="name" required="false" type="string" default="Event" />
 		<cfargument name="data" required="false" type="struct" default="#structNew()#"/>		
 		<cfargument name="target" required="false" type="any" default="" />
 		<cfargument name="mode" required="false" type="string" default="synch" />
@@ -254,7 +254,7 @@ limitations under the License.
 			arguments.name = local.eventObj.getName();
 		}else{
 			/* be sure event exists */	
-			local.event = getEvent(arguments.name);			
+			local.eventObj = getEvent(arguments.name);			
 		}
 		
 		if(arraylen(getlisteners(arguments.name))){
@@ -262,15 +262,14 @@ limitations under the License.
 			if(not structKeyExists(local,'eventObj')){
 				local.eventObj = getFactory().createEvent(name=arguments.name,data=arguments.data,target=arguments.target,mode=arguments.mode);
 			}
-
+			/*really dispatch event only if there are listeners. 
+			If not avoid the overhead.*/
+			getFactory().createDispatcher(local.eventObj).dispatch();
 		}
 		
 		if(local.debug){
 			getTracer().trace('Dispatching Event','Dispatched Event #arguments.name#',local.eventObj,'dispatch');
-		}		
-		
-		getFactory().createDispatcher(local.eventObj).dispatch();
-		
+		}				
 		</cfscript>	
 
 	</cffunction>
