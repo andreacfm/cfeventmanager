@@ -1,3 +1,6 @@
+29/12/2009
+Dispatch Event by name do not create the event object correctly
+
 19/12/2009 1.0.1.1
 -----------------------------------------------------------------
 [http://code.google.com/p/cfeventmanager/issues/detail?id=2]

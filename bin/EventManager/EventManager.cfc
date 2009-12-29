@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.1.1
-Build Date:  domenica dic 20, 2009
-Build:		 114
+Build Date:  martedì dic 29, 2009
+Build:		 115
 
 Copyright 2009 Andrea Campolonghi
 
@@ -42,7 +42,7 @@ limitations under the License.
 		<cfargument name="autowire" required="false" type="boolean" default="false"/>
 		<cfargument name="debug" required="false" type="boolean" default="false"/>
 		<cfargument name="scope" required="false" type="string" default="request"/>
-		<cfscript>
+		<cfscript>		
 		//create factories
 		var factory = createObject('component','EventManager.factory.Factory').init();
 		var EventFactory = createObject('component','EventManager.factory.EventFactory').init(this,arguments.autowire);
@@ -56,6 +56,10 @@ limitations under the License.
 		factory.addFactory('InterceptionFactory',InterceptionFactory);
 		
 		setFactory(factory);
+		
+		// trace the autowiring election
+		this.autowire = arguments.autowire;
+
 		
 		//Load System Configs
 		loadConfig('/EventManager/config/eventmanager.xml.cfm');
@@ -123,14 +127,23 @@ limitations under the License.
 				/* If the object passed is path try to see if we have a cached copy to push into the events array.
 				   Otherwise create a copy store it for future use and push it into array */	 
 				if(not isObject(arguments.listener) and not listenerExists(arguments.listener) and arguments.cache){
-		
-					variables.instance.cachedListeners['#arguments.listener#'] = invokeObject(arguments.listener,arguments.initMethod);
+					
+					local.list = invokeObject(arguments.listener,arguments.initMethod);
+					if(this.autowire){
+						getBeanFactory().getBean('beanInjector').autowire(local.list);
+					}
+					variables.instance.cachedListeners['#arguments.listener#'] = local.list;
 					arguments.listener = variables.instance.cachedListeners['#arguments.listener#'];
 				
 				/* refuse to use previous cached instance and craete a new one */
 				}else if(not isObject(arguments.listener) and not arguments.cache){
+
+					local.list = invokeObject(arguments.listener,arguments.initMethod);
+					if(this.autowire){
+						getBeanFactory().getBean('beanInjector').autowire(local.list);
+					}
 		
-					arguments.listener = invokeObject(arguments.listener,arguments.initMethod);
+					arguments.listener = local.list;
 		
 				/* cached copy exists and cache is true so just add reference */
 				}else if( not isObject(arguments.listener) and listenerExists(arguments.listener ) and arguments.cache){
@@ -254,7 +267,7 @@ limitations under the License.
 			arguments.name = local.eventObj.getName();
 		}else{
 			/* be sure event exists */	
-			local.eventObj = getEvent(arguments.name);			
+			getEvent(arguments.name);			
 		}
 		
 		if(arraylen(getlisteners(arguments.name))){
