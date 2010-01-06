@@ -1,5 +1,9 @@
-29/12/2009
-Dispatch Event by name do not create the event object correctly
+1.0.2 - 06/01/2010
+-------------------------------------------------------------
+- Dispatch Event by name do not create the event object correctly
+- All internals array are now ArrayLists to avoid ACF pass by value issue. 
+- Listener id as ( listener class + method ). Improved listener removing.
+- Data arguments for dispatching and event creation is wrapped into a struct if needed. Arguments accept any type.
 
 19/12/2009 1.0.1.1
 -----------------------------------------------------------------

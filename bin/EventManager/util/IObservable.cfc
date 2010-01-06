@@ -1,11 +1,11 @@
 <!--- /*		
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
-Version:     1.0.1.1
-Build Date:  martedì dic 29, 2009
-Build:		 115
+Version:     1.0.2
+Build Date:  mercoledì gen 06, 2010
+Build:		 119
 
-Copyright 2009 Andrea Campolonghi
+Copyright 2010 Andrea Campolonghi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

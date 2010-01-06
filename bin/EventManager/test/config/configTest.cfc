@@ -1,22 +1,19 @@
-<cfcomponent displayname="core-bean"  extends="mxunit.framework.TestCase">
-
+<cfcomponent extends="mxunit.framework.TestCase">
 
 	<!--- setup--->
 	<cffunction name="setUp">
-		<cfscript>		
-		EM = createObject('component','EventManager.eventManager').init(xmlPath='/EventManager/test/eventmanager.xml');
-		</cfscript>
+		
 	</cffunction>
-
 	
 	<cffunction name="testinit" returntype="void" hint="Init with multiple events and listeners">
 		
-		<cfset var events = EM.getEvents() />
+		<cfset var EM = createObject('component','EventManager.EventManager').init(xmlPath = 'eventManager.xml') />
 		
+		<cfset var events = EM.getEvents() />
+				
 		<!--- DEFAULTS --->
 		<cfset assertTrue(not EM.getDebug(),'Debug default mode is not false') />
 		<cfset assertTrue(EM.getScope() eq 'request','Debug default scope is not request') />
-		<cfset assertTrue(EM.getConfig('mapping') eq '','Debug default mapping is not /')/>
 		
 		<!--- CONFIGS --->
 		<cfset assertTrue(EM.getConfig('AsynchDispatcher') eq 'EventManager.dispatch.AsynchDispatcher','Error in config loading') />
@@ -33,10 +30,6 @@
 		<!--- event addItem declare a custom class. --->
 		<cfset assertTrue(events['addItem'].type eq 'EventManager.test.Event','Error in registering an event with custom type') />
 				
-		<!--- Check that custom listener id are registered correctly --->
-		<cfset local.value = EM.getListeners('AddItem') />		
-		<cfset assertTrue(local.value[1].id eq 'addItemsId','Custom listener id not save correctly') />
-
 		<!--- Check that custom method registered correctly --->
 		<cfset local.value = EM.getListeners('AddItem') />		
 		<cfset assertTrue(local.value[1].method eq 'addItem','Custom listener method not save correctly') />
@@ -54,10 +47,10 @@
 				{name = 'test1'},
 				{name = 'test2'}] />
 		<cfset local.listenerArray=[
-				{id="test1id", event='test1',listener = 'EventManager.test.listener'},
-				{id="test2id", event='test2',listener = 'EventManager.test.listener'}				
+				{id="test1id", event='test1',listener = 'EventManager.test.mocks.listener'},
+				{id="test2id", event='test2',listener = 'EventManager.test.mocks.listener'}				
 		]/>
-		<cfset EM = createObject('component','EventManager.eventManager').init(
+		<cfset EM = createObject('component','EventManager.EventManager').init(
 				events = local.eventsArray, 
 				listeners = local.listenerArray,
 				debug = true,
@@ -76,9 +69,38 @@
 		<cfset assertTrue(local.value[1].id eq 'test1id','Error in listener load') />
 		<cfset local.value = EM.getListeners('test2') />		
 		<cfset assertTrue(local.value[1].id eq 'test2id','Error in listenr load') />
-			
-											
+													
 	</cffunction>
 	
-					
-</cfcomponent>
+	
+	
+	<!--- Listeners Ids --->
+	<cffunction name="testlistenersId" returntype="void" hint="">
+		
+		<cfset var local = {} />
+
+		<cfset local.eventsArray = [
+					{name = 'test1'}
+				] />
+		<cfset local.listenerArray=[
+				{id="customId", event='test1',listener = 'EventManager.test.mocks.Listener'},
+				{event="test1",listener = 'EventManager.test.mocks.Listener'}	
+			]/>
+		<cfset local.EM = createObject('component','EventManager.EventManager').init(
+				events = local.eventsArray, 
+				listeners = local.listenerArray
+				)/>	
+
+		<cfset local.value = local.EM.getListeners('test1') />		
+		
+		<!--- Check that custom listener id are registered correctly --->
+		<cfset assertTrue(local.value[1].id eq 'customId','Custom listener id not save correctly') />
+		
+		<!--- Check default id : class + method --->
+		<cfset assertTrue(local.value[2].id eq 'EventManager.test.mocks.listener.test1','Default listener id not save correctly') />
+		
+			
+	</cffunction>
+	
+
+</cfcomponent>	

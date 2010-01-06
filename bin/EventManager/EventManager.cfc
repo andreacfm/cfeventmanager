@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.1.1
-Build Date:  martedì dic 29, 2009
-Build:		 115
+Build Date:  domenica dic 20, 2009
+Build:		 114
 
 Copyright 2009 Andrea Campolonghi
 
@@ -24,7 +24,7 @@ limitations under the License.
 <cfcomponent 
 	output="false" 
 	name="EventManager" 
-	hint="Event Manager Class.">
+	hint="Event Manager Class">
 
 	<cfscript>
 	variables.instance.events = structNew();
@@ -86,8 +86,8 @@ limitations under the License.
 		if(not eventExists(arguments.name)){
 			variables.instance.events['#name#'] = structNew();
 			variables.instance.events['#name#'].type = arguments.type;
-			variables.instance.events['#name#'].listeners = arrayNew(1);
-			variables.instance.events['#name#'].interceptions = arrayNew(1);
+			variables.instance.events['#name#'].listeners = createObject('java','java.util.ArrayList').init();
+			variables.instance.events['#name#'].interceptions = createObject('java','java.util.ArrayList').init();
 			variables.instance.events['#name#'].counter = 0 ;
 		}else{
 			throw('Cannot register a duplicate Event. The event #arguments.name# already exists.','EventManager.duplicateEventsExeption');
@@ -102,7 +102,7 @@ limitations under the License.
 	<cffunction name="addEventListener" output="false" returntype="void" hint="Register a listener to respond to a specific event invocation.">
 		<cfargument name="event" required="true" type="string" />
 		<cfargument name="listener" required="true" type="any" />
-		<cfargument name="id" required="false" type="string" default="listener-#hash(randRange(1,99999999) & now())#"/>
+		<cfargument name="id" required="false" type="string" default=""/>
 		<cfargument name="method" required="false" type="string" default=""/>
 		<cfargument name="priority" required="false" type="numeric" default="1"/>
 		<cfargument name="initMethod" required="false" type="string" default="init"/>
@@ -112,7 +112,7 @@ limitations under the License.
 		/* registered events */
 		local.events = getEvents();
 		local.sorter = getSorter();
-		
+				
 		for(item in local.events){
 			
 			local.match = reFindNoCase(arguments.event,item,1,true);
@@ -154,7 +154,12 @@ limitations under the License.
 				
 				/* save explicitly the class path for the listener object. This will make easier unsubscribe operations when implemented */	
 				arguments.listener.listenerClass = getmetadata(arguments.listener).name;
-		
+				
+				/* if no id make a unique */
+				if(not len(arguments.id)){
+					arguments.id = arguments.listener.listenerClass & '.' & arguments.method;
+				}
+
 				local.events[item]['listeners'].add(arguments);
 				
 				local.events[item]['listeners'] = local.sorter.sortArray(local.events[item]['listeners'],'LT');	
@@ -173,8 +178,8 @@ limitations under the License.
 	
 	<!---removeEventListener--->
     <cffunction name="removeEventListener" output="false" access="public" returntype="void">
-   		<cfargument name="id" required="false" type="string"/>
 		<cfargument name="event" required="true" type="string" />
+   		<cfargument name="id" required="false" type="string"/>
  		
 		<cfscript>
 		var listeners = getListeners(arguments.event);
@@ -230,10 +235,16 @@ limitations under the License.
 	<!---createEvent--->
 	<cffunction name="createEvent" output="false" returntype="EventManager.events.AbstractEvent">
 		<cfargument name="name" required="true" type="string"/>
-		<cfargument name="data" required="false" type="struct" default="#structNew()#"/>		
+		<cfargument name="data" required="false" type="any" default=""/>		
 		<cfargument name="target" required="false" type="any" default="" />
 		<cfargument name="mode" required="false" type="string" default="synch" />
 		<cfscript>
+		/* convert data to struct if is not */
+		if(not isStruct(arguments.data)){
+			local.dataStr = {};
+			local.datStr.data = arguments.data;
+			arguments.data = local.dataStr;
+		}
 		return getFactory().createEvent(argumentCollection=arguments);
 		</cfscript>
 	</cffunction>
@@ -252,7 +263,7 @@ limitations under the License.
 	<!---dispatchEvent--->
 	<cffunction name="dispatchEvent" output="false" returntype="void">
 		<cfargument name="name" required="false" type="string" default="Event" />
-		<cfargument name="data" required="false" type="struct" default="#structNew()#"/>		
+		<cfargument name="data" required="false" type="any" default=""/>		
 		<cfargument name="target" required="false" type="any" default="" />
 		<cfargument name="mode" required="false" type="string" default="synch" />
 		<cfargument name="event" required="false" type="EventManager.events.AbstractEvent"/>
@@ -260,6 +271,13 @@ limitations under the License.
 		<cfscript>	
 		var local = structNew();
 		local.debug = getDebug();
+		
+		/* convert data to struct if is not */
+		if(not isStruct(arguments.data)){
+			local.dataStr = {};
+			local.datStr.data = arguments.data;
+			arguments.data = local.dataStr;
+		}
 		
 		/*if is passed an object as event argument*/
 		if(structKeyexists(arguments,'event') and isObject(arguments.event)){
@@ -569,5 +587,15 @@ limitations under the License.
 		<cfargument name="type" type="string" required="false" default="any" />  
 		<cfthrow message="#arguments.Message#" type="#arguments.type#"/> 
 	</cffunction> 
+
+	<!---dump--->
+	<cffunction name="dump" returntype="void">
+		<cfargument name="variable" required="true">
+		<cfargument name="abort" required="false" default="false" type="boolean">
+		<cfdump var="#arguments.variable#">
+		<cfif abort>
+			<cfabort>
+		</cfif>
+	</cffunction>
 
 </cfcomponent>

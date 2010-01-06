@@ -1,7 +1,8 @@
 ﻿<cfparam name="URL.output" default="extjs">
 <cfscript>	
  testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
- testSuite.addAll("EventManager.test.unitTest");
+ testSuite.addAll("EventManager.test.config.configTest");
+ testSuite.addAll("EventManager.test.asynch.asynchTest");
  results = testSuite.run();
 </cfscript>
 <cfoutput>#results.getResultsOutput(URL.output)#</cfoutput>  

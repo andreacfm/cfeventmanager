@@ -10,13 +10,9 @@
         
         <event name="test1" />
         
-        <event 
-            name="AddItem"
-            type="EventManager.test.Event" />
+        <event name="AddItem" type="EventManager.test.mocks.Event" />
         
-        <event 
-            name="ResetItems" 
-            type="EventManager.test.Event" />
+        <event name="ResetItems" type="EventManager.test.mocks.Event" />
 
        <!--  <event 
             name="beforeSidebarBegin">
@@ -52,9 +48,8 @@
     <listeners>
         
         <listener 
-            id="addItemsId"
             event="AddItem" 
-            listener="EventManager.test.listener" 
+            listener="EventManager.test.mocks.Listener" 
             method="addItem" 
             priority="10"
             init-method="setUp"
@@ -62,7 +57,7 @@
 
         <listener
             event="ResetItems" 
-            listener="EventManager.test.listener" 
+            listener="EventManager.test.mocks.Listener" 
             priority="5"/>
         
     </listeners>

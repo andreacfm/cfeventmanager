@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.1.1
-Build Date:  martedì dic 29, 2009
-Build:		 115
+Build Date:  domenica dic 20, 2009
+Build:		 114
 
 Copyright 2009 Andrea Campolonghi
 
@@ -24,9 +24,9 @@ limitations under the License.
 <cfcomponent name="AsynchDispatcher" extends="EventManager.dispatch.Dispatcher">
 	
 	<cffunction name="dispatch" returntype="void" output="false">
-		<cfthread name="#local.event.getEventId()#-#randRange(1,1000000)#" action="run" obj="this">	
+		<cfthread name="#randRange(1,1000000)#" action="run">	
 			<cfscript>
-				attributes.obj.dispatch();
+				super.dispatch();
 			</cfscript>				
 		</cfthread>		
 	</cffunction>
