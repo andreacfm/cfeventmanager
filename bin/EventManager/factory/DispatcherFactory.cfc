@@ -1,11 +1,11 @@
 <!--- /*		
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
-Version:     1.0.2
-Build Date:  venerdì gen 29, 2010
-Build:		 120
+Version:     1.0.1.1
+Build Date:  domenica dic 20, 2009
+Build:		 114
 
-Copyright 2010 Andrea Campolonghi
+Copyright 2009 Andrea Campolonghi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,9 +33,6 @@ limitations under the License.
 		}else{
 			result = createObject('component','#getEventManager().getConfig('SynchDispatcher')#').init(getEventManager(),arguments.event);		
 		}
-		if(autowire()){
-			getEventManager().getBeanInjector().autowire(result);		
-		}	
 		return result;
 		</cfscript>
 	</cffunction>

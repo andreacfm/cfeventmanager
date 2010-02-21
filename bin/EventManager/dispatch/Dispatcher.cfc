@@ -1,11 +1,11 @@
 <!--- /*		
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
-Version:     1.0.2
-Build Date:  venerdì gen 29, 2010
-Build:		 120
+Version:     1.0.1.1
+Build Date:  domenica dic 20, 2009
+Build:		 114
 
-Copyright 2010 Andrea Campolonghi
+Copyright 2009 Andrea Campolonghi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -47,6 +47,15 @@ limitations under the License.
 
 		for(i=1; i lte arraylen(local.listeners); i++){
 			if(local.event.isActive()){
+				
+				/* lazy autowiring if needed*/
+				if(local.em.autowire){
+					if(not local.listeners[i].autowired){
+						local.em.getBeanFactory().getBean('beanInjector').autowire(local.listeners[i].listener);
+					}
+					local.listeners[i].autowired = true;
+				}
+				
 				if(i==1){
 					local.event.updatePoint('before');
 				}

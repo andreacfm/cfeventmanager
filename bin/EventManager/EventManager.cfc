@@ -59,7 +59,6 @@ limitations under the License.
 		
 		// trace the autowiring election
 		this.autowire = arguments.autowire;
-
 		
 		//Load System Configs
 		loadConfig('/EventManager/config/eventmanager.xml.cfm');
@@ -106,73 +105,49 @@ limitations under the License.
 		<cfargument name="method" required="false" type="string" default=""/>
 		<cfargument name="priority" required="false" type="numeric" default="1"/>
 		<cfargument name="initMethod" required="false" type="string" default="init"/>
-		<cfargument name="cache" required="false" type="boolean" default="true"/>		
-		<cfscript>
-		var local = structNew();
-		/* registered events */
-		local.events = getEvents();
-		local.sorter = getSorter();
-				
-		for(item in local.events){
-			
-			local.match = reFindNoCase(arguments.event,item,1,true);
-			
-			if(local.match.len[1] gt 0){
-				
-				/* if the method has not been passed set eventName as default*/
-				if(arguments.method eq ""){
-					arguments.method = item;
-				}
-				
-				/* If the object passed is path try to see if we have a cached copy to push into the events array.
-				   Otherwise create a copy store it for future use and push it into array */	 
-				if(not isObject(arguments.listener) and not listenerExists(arguments.listener) and arguments.cache){
-					
-					local.list = invokeObject(arguments.listener,arguments.initMethod);
-					if(this.autowire){
-						getBeanFactory().getBean('beanInjector').autowire(local.list);
-					}
-					variables.instance.cachedListeners['#arguments.listener#'] = local.list;
-					arguments.listener = variables.instance.cachedListeners['#arguments.listener#'];
-				
-				/* refuse to use previous cached instance and craete a new one */
-				}else if(not isObject(arguments.listener) and not arguments.cache){
+		<!--- <cfargument name="cache" required="false" type="boolean" default="true"/> --->		
 
-					local.list = invokeObject(arguments.listener,arguments.initMethod);
-					if(this.autowire){
-						getBeanFactory().getBean('beanInjector').autowire(local.list);
-					}
+		<cfset var sorter = getSorter() />
+		<cfset var conf = {} />
+		<cfset var key = "" />
 		
-					arguments.listener = local.list;
+		<cfloop collection="#arguments#" item="key">
+			<cfset conf[key] = arguments[key] />
+		</cfloop>
 		
-				/* cached copy exists and cache is true so just add reference */
-				}else if( not isObject(arguments.listener) and listenerExists(arguments.listener ) and arguments.cache){
-		
-					arguments.listener = variables.instance.cachedListeners['#arguments.listener#'];
-		
-				}
-				
-				/* save explicitly the class path for the listener object. This will make easier unsubscribe operations when implemented */	
-				arguments.listener.listenerClass = getmetadata(arguments.listener).name;
-				
-				/* if no id make a unique */
-				if(not len(arguments.id)){
-					arguments.id = arguments.listener.listenerClass & '.' & arguments.method;
-				}
-
-				local.events[item]['listeners'].add(arguments);
-				
-				local.events[item]['listeners'] = local.sorter.sortArray(local.events[item]['listeners'],'LT');	
-				
-				if(getDebug()){
-					getTracer().trace('Adding Listener','<ul><li>Added Listener id {#arguments.id#}</li><li>Event #arguments.event#</li><li>Priority : #arguments.priority#</li></ul>');
-				}		
-							
-			} 
+		<cfloop collection="#variables.instance.events#" item="key">
 			
-		}
+			<cfif findNocase(arguments.event,key) gt 0  >
+				
+				<cfset conf.autowired = false />
+				
+				<cfif not isObject(conf.listener)>					
+					<cfset conf.listener = invokeObject(arguments.listener,conf.initMethod) />
+				</cfif>
+				
+				<!--- /* if the method has not been passed set eventName as default*/ --->
+				<cfif conf.method eq "">
+					<cfset conf.method = key />
+				</cfif>
+				
+				<!--- /* save explicitly the class path for the listener object. 
+				This will make easier unsubscribe operations when implemented */	 --->
+				<cfset conf.listener.listenerClass = getmetadata(conf.listener).name />
+				
+				<!--- /* if no id make a unique */ --->
+				<cfif not len(conf.id)>
+					<cfset conf.id = conf.listener.listenerClass & '.' & conf.method />
+				</cfif>
 
-		</cfscript>		
+				<cfset variables.instance.events[key]['listeners'].add(conf) />
+				
+				<cfset variables.instance.events[key]['listeners'] = sorter.sortArray(variables.instance.events[key]['listeners'],'LT') />	
+				
+				<cfif getDebug()>
+					<cfset getTracer().trace('Adding Listener','<ul><li>Added Listener id {#conf.id#}</li><li>Event #conf.event#</li><li>Priority : #conf.priority#</li></ul>') />				
+				</cfif>
+			</cfif>	
+		</cfloop>
 
 	</cffunction>
 	
@@ -201,6 +176,7 @@ limitations under the License.
 	</cffunction>	
 	<cffunction name="setevents" access="public" output="false" returntype="void">
 		<cfargument name="events" type="array" required="true"/>		
+		<cfset var i = "" />
 		<cfscript>
 			/* event is never overwritten, must be explicitly delated */
 			for(i = 1; i <= arraylen(arguments.events); i++){
@@ -288,7 +264,7 @@ limitations under the License.
 			getEvent(arguments.name);			
 		}
 		
-		if(arraylen(getlisteners(arguments.name))){
+		if(arraylen(getlisteners(arguments.name))){			
 			//if event object was not passed build it
 			if(not structKeyExists(local,'eventObj')){
 				local.eventObj = getFactory().createEvent(name=arguments.name,data=arguments.data,target=arguments.target,mode=arguments.mode);

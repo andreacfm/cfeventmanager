@@ -3,8 +3,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.2
-Build Date:  venerdì gen 29, 2010
-Build:		 120
+Build Date:  domenica feb 21, 2010
+Build:		 121
 
 Copyright 2010 Andrea Campolonghi
 
