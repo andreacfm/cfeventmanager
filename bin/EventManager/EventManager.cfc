@@ -103,7 +103,7 @@ limitations under the License.
 		<cfargument name="listener" required="true" type="any" />
 		<cfargument name="id" required="false" type="string" default=""/>
 		<cfargument name="method" required="false" type="string" default=""/>
-		<cfargument name="priority" required="false" type="numeric" default="1"/>
+		<cfargument name="priority" required="false" type="numeric" default="5"/>
 		<cfargument name="initMethod" required="false" type="string" default="init"/>
 		<!--- <cfargument name="cache" required="false" type="boolean" default="true"/> --->		
 

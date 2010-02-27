@@ -3,6 +3,7 @@
 - Removed Autowiring of the Dispatcher.
 - Removed the internal listeners cache repo. If needed pass the object.
 - Autowiring on listeners is now lazy. This gave big overheas on startup.
+- Default listener priority setted to 5.
 
 1.0.2 - 06/01/2010
 -------------------------------------------------------------
