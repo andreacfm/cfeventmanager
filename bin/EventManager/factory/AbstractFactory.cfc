@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  domenica mar 14, 2010
-Build:		 124
+Build:		 126
 
 Copyright 2010 Andrea Campolonghi
 
@@ -49,15 +49,13 @@ limitations under the License.
 	</cffunction>
 	
 	
-	<!--- autowireEvents --->
- 	<cffunction name="autowire" access="public" output="false" returntype="boolean">
+	<!--- autowire --->
+ 	<cffunction name="getautowire" access="public" output="false" returntype="boolean">
 		<cfreturn variables.instance.Autowire/>
 	</cffunction>
- 
-	<!---   setAutowireEvents   --->	
-	<cffunction name="setAutowire" access="public" output="false" returntype="void">
+	<cffunction name="setautowire" access="public" output="false" returntype="void">
 		<cfargument name="autowire" type="boolean" required="true"/>
-		<cfset variables.instance.Autowire = arguments.Autowire/>
+		<cfset variables.instance.autowire = arguments.autowire/>
 	</cffunction>
 
 </cfcomponent>

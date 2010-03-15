@@ -49,27 +49,28 @@ limitations under the License.
 			if(local.event.isActive()){
 				
 				/* lazy autowiring if needed*/
-				if(local.em.autowire){
-					if(not local.listeners[i].autowired){
+				if(local.listeners[i].getAutowire()){
+					if(not local.listeners[i].isautowired()){
 						local.em.getBeanFactory().getBean('beanInjector').autowire(local.listeners[i].listener);
 					}
-					local.listeners[i].autowired = true;
+					local.listeners[i].setAutowired(true);
 				}
 				
 				if(i==1){
 					local.event.updatePoint('before');
 				}
 				if(local.debug){
-					local.tracer.trace('Interception','<ul><li>Point : Before</li><li>Event : #local.event.getname()#</li></ul>',local.event);
+					local.tracer.trace("Interception","<ul><li>Point : Before</li><li>Event : #local.event.getname()#</li></ul>",local.event);
 				}		
-				local.listObj = local.listeners[i].listener;
-				local.method = local.listeners[i].method;
-				evaluate('local.listObj.#local.method#(local.event)');
+				
+				// call the listener
+				local.listeners[i].execute(local.event);
+				
 				local.event.updatePoint('each');
 				if(local.em.getDebug()){
-					local.em.getTracer().trace('Interception','<ul><li>Point : Each</li><li>Event : #local.event.getname()#</li></ul>',local.event);
+					local.em.getTracer().trace('Interception',"<ul><li>Point : Each</li><li>Event : #local.event.getname()#</li></ul>",local.event);
 					if(local.debug){
-						local.tracer.trace('Invoke Listener','Listener #getMetaData(local.listObj).name#',local.event);
+						local.tracer.trace('Invoke Listener','Listener #local.listObj.getClass()#',local.event);
 					}		
 				}		
 				if(i==arraylen(local.listeners)){

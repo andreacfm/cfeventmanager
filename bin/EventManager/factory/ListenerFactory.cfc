@@ -23,19 +23,20 @@ limitations under the License.
 
 <cfcomponent output="false" extends="EventManager.factory.AbstractFactory">
  
-	<!--- create --->
-	<cffunction name="create" output="false" returntype="EventManager.events.AbstractEventInterception">
-		<cfargument name="point" required="true" type="string"/>
-		<cfargument name="class" required="false" type="string" default="#getEventManager().getConfig('defaultInterceptionClass')#"/>
-		<cfargument name="condition" required="false" type="string" default=""/>
-		<cfscript>        
-		var result = createObject('component',arguments.class).init(getEventManager(),arguments.point,arguments.condition);
-		if(autowire()){
-			getEventManager().getBeanInjector().autowire(result);		
-		}	
-		return result;
+	<!--- createListener --->
+	<cffunction name="create" output="false" returntype="EventManager.listener.AbstractListener">
+		<cfargument name="listener" type="any" required="true"/>
+		<cfargument name="event" type="String" required="true"/>
+		<cfargument name="method" type="string" default="" />
+		<cfargument name="id" type="string" default="" />
+		<cfargument name="initMethod" type="string" default="init"/>
+		<cfscript>
+		var class = getEventManager().getConfig('defaultBaseListenerClass');
+		var obj = "";
+		arguments.factory = this;
+		obj = createObject('component',class).init(argumentCollection=arguments);
 		</cfscript>
-
+		<cfreturn obj />		
 	</cffunction>
 
 </cfcomponent>

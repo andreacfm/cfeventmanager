@@ -4,7 +4,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  domenica mar 14, 2010
-Build:		 124
+Build:		 126
 
 Copyright 2010 Andrea Campolonghi
 
@@ -42,6 +42,11 @@ limitations under the License.
 			Extends AbstractEvent and implement the init abstract method.
 		-->		
 		<config name="defaultBaseEventClass">EventManager.events.Event</config>
+
+		<!-- 
+			Default Listener Class
+		-->		
+		<config name="defaultBaseListenerClass">EventManager.listener.Listener</config>
 		
 		<!-- Event Interceptions Flows -->
 		<config name="eventInterceptionsPoints">before,each,after</config>		

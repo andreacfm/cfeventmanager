@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  domenica mar 14, 2010
-Build:		 124
+Build:		 126
 
 Copyright 2010 Andrea Campolonghi
 
@@ -49,17 +49,18 @@ limitations under the License.
 		var DispatcherFactory = createObject('component','EventManager.factory.DispatcherFactory').init(this,arguments.autowire);
 		var ActionFactory = createObject('component','EventManager.factory.ActionFactory').init(this,arguments.autowire);
 		var InterceptionFactory = createObject('component','EventManager.factory.InterceptionFactory').init(this,arguments.autowire);
+		var ListenerFactory = createObject('component','EventManager.factory.ListenerFactory').init(this,arguments.autowire);
 		
 		factory.addFactory('EventFactory',EventFactory);
 		factory.addFactory('DispatcherFactory',DispatcherFactory);
 		factory.addFactory('ActionFactory',ActionFactory);
 		factory.addFactory('InterceptionFactory',InterceptionFactory);
+		factory.addFactory('ListenerFactory',ListenerFactory);
 		
 		setFactory(factory);
 		
 		// trace the autowiring election
-		this.autowire = arguments.autowire;
-		
+		setAutowire(arguments.autowire);		
 		//Load System Configs
 		loadConfig('/EventManager/config/eventmanager.xml.cfm');
 		//save the debug option. The debug setter load the Tracer. 
@@ -108,17 +109,16 @@ limitations under the License.
 		<!--- <cfargument name="cache" required="false" type="boolean" default="true"/> --->		
 
 		<cfset var sorter = getSorter() />
-		<cfset var conf = {} />
 		<cfset var key = "" />
-		
-		<cfloop collection="#arguments#" item="key">
-			<cfset conf[key] = arguments[key] />
-		</cfloop>
-		
+		<cfset var listener = "" />
+				
 		<cfloop collection="#variables.instance.events#" item="key">
 			
 			<cfif findNocase(arguments.event,key) gt 0  >
 				
+				<cfset listener = getFactory().createListener(argumentCollection=arguments) />
+				
+<!--- 
 				<cfset conf.autowired = false />
 				
 				<cfif not isObject(conf.listener)>					
@@ -138,13 +138,14 @@ limitations under the License.
 				<cfif not len(conf.id)>
 					<cfset conf.id = conf.listener.listenerClass & '.' & conf.method />
 				</cfif>
+ --->
 
-				<cfset variables.instance.events[key]['listeners'].add(conf) />
+				<cfset variables.instance.events[key]['listeners'].add(listener) />
 				
 				<cfset variables.instance.events[key]['listeners'] = sorter.sortArray(variables.instance.events[key]['listeners'],'LT') />	
 				
 				<cfif getDebug()>
-					<cfset getTracer().trace('Adding Listener','<ul><li>Added Listener id {#conf.id#}</li><li>Event #conf.event#</li><li>Priority : #conf.priority#</li></ul>') />				
+					<cfset getTracer().trace('Adding Listener','<ul><li>Added Listener id {#listener.getid()#}</li><li>Event #key#</li><li>Priority : #arguments.priority#</li></ul>') />				
 				</cfif>
 			</cfif>	
 		</cfloop>
@@ -162,7 +163,7 @@ limitations under the License.
 		var item = "";
 		while(iterator.hasNext()){
 			item = iterator.next();
-			if(item.id eq arguments.id){
+			if(item.getId() eq arguments.id){
 				iterator.remove();
 			}
 		}
@@ -451,15 +452,13 @@ limitations under the License.
 		<cfset variables.instance.Factory = arguments.Factory/>
 	</cffunction>
 
-	<!---	beanInjector  --->
-	<cffunction name="getBeanInjector" access="public" returntype="any" output="false" hint="I return the BeanInjector.">
-		<cfreturn variables.instance['beanInjector'] />
-	</cffunction>		
-
- 	<!---	beanInjector  --->
-	<cffunction name="setBeanInjector" access="public" returntype="void" output="false" hint="I set the BeanInjector.">
-		<cfargument name="beanInjector" type="any" required="true" hint="BeanInjector" />
-		<cfset variables.instance['beanInjector'] = arguments.beanInjector />
+	<!--- autowire--->
+	<cffunction name="setAutowire" access="public" returntype="void">
+		<cfargument name="autowire" type="Boolean" required="true"/>
+		<cfset variables.instance.autowire = autowire />
+	</cffunction> 
+	<cffunction name="getAutowire" access="public" returntype="Boolean">
+		<cfreturn variables.instance.autowire/>
 	</cffunction>
 
    <!---   tracer   --->
@@ -504,8 +503,6 @@ limitations under the License.
 		<cfargument name="config" type="string" required="true" />
 		<cfreturn variables.instance.config[config] />
 	</cffunction> 
-
-	<!--- setConfig  --->
 	<cffunction name="setConfig" returntype="void" output="false">
 		<cfargument name="config" type="string" required="true" />
 		<cfargument name="value" type="any" required="true" />
@@ -517,13 +514,20 @@ limitations under the License.
 		<cfargument name="helper" type="any" required="true" />
 		<cfreturn variables.instance.helpers[helper] />
 	</cffunction> 
-
-	<!--- setHelper  --->
 	<cffunction name="setHelper" returntype="void" output="false">
 		<cfargument name="name" type="string" required="true" />
 		<cfargument name="value" type="any" required="true" />
 		<cfset variables.instance.helpers[arguments.name] = arguments.value />
 	</cffunction> 
+
+	<!---	beanInjector  --->
+	<cffunction name="getBeanInjector" access="public" returntype="any" output="false" hint="I return the BeanInjector.">
+		<cfreturn variables.instance['beanInjector'] />
+	</cffunction>		
+	<cffunction name="setBeanInjector" access="public" returntype="void" output="false" hint="I set the BeanInjector.">
+		<cfargument name="beanInjector" type="any" required="true" hint="BeanInjector" />
+		<cfset variables.instance['beanInjector'] = arguments.beanInjector />
+	</cffunction>
 
 	<!----	beanFactory	--->
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false" hint="Return the beanFactory instance">
@@ -555,23 +559,6 @@ limitations under the License.
 		<cfset var result = "" />
 		<cfinvoke component="#arguments.listener#" method="#arguments.method#" returnvariable="result"/>
 		<cfreturn result />
-	</cffunction>
-
-	<!---throw--->
-	<cffunction name="Throw" returntype="void" output="no" access="public" >   
-		<cfargument name="Message" type="string" required="false" default="" />
-		<cfargument name="type" type="string" required="false" default="any" />  
-		<cfthrow message="#arguments.Message#" type="#arguments.type#"/> 
-	</cffunction> 
-
-	<!---dump--->
-	<cffunction name="dump" returntype="void">
-		<cfargument name="variable" required="true">
-		<cfargument name="abort" required="false" default="false" type="boolean">
-		<cfdump var="#arguments.variable#">
-		<cfif abort>
-			<cfabort>
-		</cfif>
 	</cffunction>
 
 </cfcomponent>

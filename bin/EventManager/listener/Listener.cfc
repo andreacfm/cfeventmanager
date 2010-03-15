@@ -20,22 +20,27 @@ See the License for the specific language governing permissions and
 limitations under the License.	
 			
 */--->
-<cfcomponent extends="EventManager.events.AbstractEventInterception" output="false">
+<cfcomponent output="false" extends="EventManager.listener.AbstractListener">
 	
-	<cffunction name="update" access="public" returntype="void">
-		<cfargument name="event" type="EventManager.events.AbstractEvent" required="yes" />
+	<!---   constructor   --->
+	<cffunction name="init" output="false" returntype="EventManager.listener.AbstractListener">
+		<cfargument name="listener" type="any" required="true"/>
+		<cfargument name="event" type="String" required="true"/>
+		<cfargument name="method" type="string" default="" />
+		<cfargument name="id" type="string" default="" />
+		<cfargument name="initMethod" type="string" default="init"/>
+		<cfargument name="factory" type="EventManager.factory.AbstractFactory" default="init"/>
 		
-		<cfset var condition = getCondition() />
+		<cfscript>
+		setMethod(arguments.method, arguments.event);	
+		setListenerObject(arguments.listener,arguments.initmethod);
+		setId(arguments.id);
+		setAutowire(arguments.factory.getAutowire());
+		return this;
+		</cfscript>
 		
-		<!--- we have a condition --->
-		<cfif len(condition)>
-			<cfif isConditionTrue(event)>
-				<cfset runActions(event)/>
-			</cfif>
-		<cfelse>
-			<cfset runActions(event) />	
-		</cfif>
-				
+		
 	</cffunction>
+	
 	
 </cfcomponent>

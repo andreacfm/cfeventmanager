@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  domenica mar 14, 2010
-Build:		 124
+Build:		 126
 
 Copyright 2010 Andrea Campolonghi
 
@@ -63,6 +63,11 @@ limitations under the License.
 	<!---createInterception--->
     <cffunction name="createInterception" output="false" access="public" returntype="EventManager.events.AbstractEventInterception">
     	<cfreturn getFactory('InterceptionFactory').create(argumentCollection=arguments)/>
+    </cffunction>
+
+	<!---createListener--->
+    <cffunction name="createListener" output="false" access="public" returntype="EventManager.listener.AbstractListener">
+    	<cfreturn getFactory('ListenerFactory').create(argumentCollection=arguments)/>
     </cffunction>
 
 </cfcomponent>
