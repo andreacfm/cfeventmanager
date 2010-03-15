@@ -38,10 +38,6 @@ limitations under the License.
 		
 		<cfset result = createObject('component',#actionClass#).init(argumentCollection=arguments) />
 		
-		<cfif autowire()>
-			<cfset getEventManager().getBeanInjector().autowire(result) />
-		</cfif>
-		
 		<cfreturn result />		
 	</cffunction>
 

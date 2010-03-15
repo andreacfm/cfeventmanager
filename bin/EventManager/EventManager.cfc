@@ -46,9 +46,9 @@ limitations under the License.
 		//create factories
 		var factory = createObject('component','EventManager.factory.Factory').init();
 		var EventFactory = createObject('component','EventManager.factory.EventFactory').init(this,arguments.autowire);
-		var DispatcherFactory = createObject('component','EventManager.factory.DispatcherFactory').init(this,arguments.autowire);
-		var ActionFactory = createObject('component','EventManager.factory.ActionFactory').init(this,arguments.autowire);
-		var InterceptionFactory = createObject('component','EventManager.factory.InterceptionFactory').init(this,arguments.autowire);
+		var DispatcherFactory = createObject('component','EventManager.factory.DispatcherFactory').init(this);
+		var ActionFactory = createObject('component','EventManager.factory.ActionFactory').init(this);
+		var InterceptionFactory = createObject('component','EventManager.factory.InterceptionFactory').init(this);
 		var ListenerFactory = createObject('component','EventManager.factory.ListenerFactory').init(this,arguments.autowire);
 		
 		factory.addFactory('EventFactory',EventFactory);

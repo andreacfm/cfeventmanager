@@ -27,13 +27,9 @@ limitations under the License.
 	<cffunction name="create" output="false" returntype="EventManager.events.AbstractEventInterception">
 		<cfargument name="point" required="true" type="string"/>
 		<cfargument name="class" required="false" type="string" default="#getEventManager().getConfig('defaultInterceptionClass')#"/>
-		<cfargument name="condition" required="false" type="string" default=""/>
+		<cfargument name="condition" required="false" type="string" default="true"/>
 		<cfscript>        
-		var result = createObject('component',arguments.class).init(getEventManager(),arguments.point,arguments.condition);
-		if(autowire()){
-			getEventManager().getBeanInjector().autowire(result);		
-		}	
-		return result;
+		return createObject('component',arguments.class).init(getEventManager(),arguments.point,arguments.condition);
 		</cfscript>
 
 	</cffunction>

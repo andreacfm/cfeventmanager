@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  lunedì mar 15, 2010
-Build:		 127
+Build:		 128
 
 Copyright 2010 Andrea Campolonghi
 
@@ -45,7 +45,7 @@ limitations under the License.
     	<cfargument name="eventName" required="true" type="string"/>
 		<cfset variables.instance.eventName = arguments.eventName />
     </cffunction>
-    <cffunction name="getEventName" output="false" access="public" returntype="string">
+   <cffunction name="getEventName" output="false" access="public" returntype="string">
     	<cfreturn variables.instance.eventName />
     </cffunction>
 	
@@ -72,7 +72,7 @@ limitations under the License.
     	<cfargument name="data" required="true" type="any"/>
 		<cfset variables.instance.data = arguments.data />
     </cffunction>
-    <cffunction name="getData" output="false" access="public" returntype="struct">
+   <cffunction name="getData" output="false" access="public" returntype="struct">
     	<cfif isSimpleValue(variables.instance.data)>
  			<cfreturn deserializeJSON(variables.instance.data) />
 		</cfif>

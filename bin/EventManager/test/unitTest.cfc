@@ -6,10 +6,18 @@
 
 	<!--- setup--->
 	<cffunction name="setUp">
+		<cfscript>
+		variables.emMock = mockBox.createMock(classname = 'EventManager.EventManager');
+		variables.emMock.$("getConfig").$args("defaultInterceptionClass").$results('EventManager.events.EventInterception');		
+		variables.emMock.$("getConfig").$args("eventInterceptionsPoints").$results('before,each,after');				
+		variables.emMock.$("getConfig").$args("defaultBaseListenerClass").$results('EventManager.listener.Listener');		
+		</cfscript>
+		
 	</cffunction>
 
 	<!--- tearDown--->
 	<cffunction name="tearDown">
+	
 	</cffunction>
 
 
@@ -67,17 +75,16 @@
 					
 	</cffunction>
 	
-	<cffunction name="test_event_factory_return_event_with_defaults" returntype="void">
+	<cffunction name="test_event_factory_create" returntype="void">
 
 		<cfset var local = {} />		
-		<cfset local.emMock = mockBox.createMock(classname = 'EventManager.EventManager') />
-		<cfset local.emMock.$(method='getEvent',returns={
+		<cfset variables.emMock.$(method='getEvent',returns={
 				name = 'oneEvent', 
 				type ="EventManager.events.Event",
 				interceptions = []	
 				})>
 		
-		<cfset local.factory = createObject('component','EventManager.factory.EventFactory').init(local.emMock) />
+		<cfset local.factory = createObject('component','EventManager.factory.EventFactory').init(variables.emMock) />
 		
 		<!--- call create --->
 		<cfset local.result = local.factory.create('oneEvent') />
@@ -85,21 +92,7 @@
 				"Basic create failed.") />			
 		<cfset assertTrue(isInstanceOf(local.result.getEM(),'EventManager.EventManager'),
 				"EventManager is not injected into event") />
-					
-	</cffunction>
-	
-	<cffunction name="test_event_factory_return_event_with_arguments" returntype="void">
 
-		<cfset var local = {} />		
-		<cfset local.emMock = mockBox.createMock(classname = 'EventManager.EventManager') />
-		<cfset local.emMock.$(method='getEvent',returns={
-				name = 'oneEvent', 
-				type ="EventManager.events.Event",
-				interceptions = []	
-				})>
-		
-		<cfset local.factory = createObject('component','EventManager.factory.EventFactory').init(local.emMock) />
-		
 		<!--- create with arguments --->
 		<cfset local.result = local.factory.create('oneEvent', {test = true}, this, 'asynch') />
 		<cfset assertTrue(local.result.getData().test,
@@ -108,23 +101,20 @@
 				"Target not passed correctly")>		
 		<cfset assertTrue(local.result.getMode() eq 'Asynch',
 				"mode not passed correctly")>		
-		
-			
 					
 	</cffunction>
 	
-	<cffunction name="test_listener_factories_create" returntype="void" output="false" access="public">
+	<cffunction name="test_listener_factory_create" returntype="void" output="false" access="public">
 
 		<cfset var local = {} />		
-		<cfset local.emMock = mockBox.createMock(classname = 'EventManager.EventManager') />
-		<cfset local.emMock.$(method='getEvent',returns={
+		<cfset variables.emMock.$(method='getEvent',returns={
 				name = 'oneEvent', 
 				type ="EventManager.events.Event",
 				interceptions = []	
-				}).$(method = 'getConfig', returns = 'EventManager.listener.Listener')/>
+				})/>
 		
 		<!--- Autowire true --->
-		<cfset local.factory = createObject('component','EventManager.factory.ListenerFactory').init(local.emMock,true) />
+		<cfset local.factory = createObject('component','EventManager.factory.ListenerFactory').init(variables.emMock,true) />
 		
 		<!--- create an event :
 		 - listener class 
@@ -133,16 +123,119 @@
 		<cfset local.conf = { event="oneEvent", listener = 'EventManager.test.mocks.Listener'} />
 		<cfset local.result = local.factory.create(argumentCollection = local.conf)>
 		<cfset assertTrue(local.result.getmethod() eq 'oneEvent',"Incorrect method") />
-		<cfset assertTrue(isinstanceof(local.result.getListenerObject(),'EventManager.test.mocks.Listener'),"Incorrect listener object creation") />
-		<cfset assertTrue(local.result.getAutowire() eq 'true',"Incorrect autowiring setting.") />		
+		<cfset assertTrue(isinstanceof(local.result.getListenerObject(),'EventManager.test.mocks.Listener'),
+				"Incorrect listener object creation") />
+		<cfset assertTrue(local.result.getAutowire() eq 'true',"Incorrect autowiring setting.") />
+		<cfset assertTrue(local.result.getId() eq 'EventManager.test.mocks.Listener.oneEvent',
+				"Incorrect generated id.") />
+
+		<!--- Autowire default : false --->
+		<cfset local.factory = createObject('component','EventManager.factory.ListenerFactory').init(variables.emMock) />
 		
-				
+		<!--- create an event :
+		 - listener object 
+		 - custom event
+		 - custom id 
+		 --->
+		 <cfset local.listenerStub = mockBox.createStub()/>
+		 <cfset local.conf = { event="oneEvent", listener = local.listenerStub, method = 'customMethod', id ="customId"} />
+		 <cfset local.result = local.factory.create(argumentCollection = local.conf)>
+		 <cfset assertTrue(local.result.getmethod() eq 'customMethod',
+		 		"Incorrect method") />
+		 <cfset assertTrue(isinstanceof(local.result.getListenerObject(),'coldbox.system.testing.mockutils.Stub'),
+		 		"Incorrect listener object") />
+		 <cfset assertTrue(not local.result.getAutowire(),
+		 		"Incorrect autowiring setting.") />
+		 <cfset assertTrue(local.result.getId() eq 'customId',
+		 		"Incorrect generated id.") />
+		 
+		 				
 	</cffunction>
+
+	<cffunction name="test_interception_factory_create" returntype="void" output="false" access="public">
+
+		<cfset var local = {} />		
+		<!--- debug false --->
+		<cfset variables.emMock.$(method='getDebug',returns= false)/>
+		
+		<!--- factory --->
+		<cfset local.factory = createObject('component','EventManager.factory.InterceptionFactory').init(variables.emMock) />
+		<!--- event --->
+		<cfset local.event = variables.mockBox.createMock(classname = 'EventManager.events.Event') />		
+		
+		<!--- 
+		create with defaults: 
+		'before' interception 
+		condition : true
+		--->
+		<cfset local.result = local.factory.create('before') />
+		<cfset assertTrue(isInstanceOf(local.result,'EventManager.events.AbstractEventInterception'),
+				"Interception is not of the right class. #getMetaData(local.result).name#")>
+		<cfset assertTrue(local.result.isConditionTrue(local.event),
+				"Condition by default must be  true") />
+		<cfset assertTrue(not local.result.hasActions(),
+				"Actions array is not empty") />				
+		<cfset assertTrue(local.result.getPoint() eq 'before',
+				"Point is not properly setted")>
+				
+				
+		 				 		 				
+	</cffunction>
+
+	<cffunction name="test_interception_create_illegal_point" returntype="void" output="false" access="public"
+				mxunit:expectedException="EventManager.IllegalInterceptionPoint">
+		
+		<cfset var local = {} />		
+		<!--- debug false --->
+		<cfset variables.emMock.$(method='getDebug',returns= false)/>
+		
+		<!--- factory --->
+		<cfset local.factory = createObject('component','EventManager.factory.InterceptionFactory').init(variables.emMock) />
+		
+		<!--- exception --->		
+		<cfset local.factory.create('not_existing_point') />
+		
+	</cffunction>
+
+	<cffunction name="test_interception_create_failing_evaluation_condition" returntype="void" output="false" access="public"
+				mxunit:expectedException="EventManager.ConditionEvaluationError">
+		
+		<cfset var local = {} />		
+		<!--- debug false --->
+		<cfset variables.emMock.$(method='getDebug',returns= false)/>
+		<cfset local.factory = createObject('component','EventManager.factory.InterceptionFactory').init(variables.emMock) />
+		<cfset local.event = variables.mockBox.createMock(classname = 'EventManager.events.Event') />		
+					
+		<!--- exception --->					
+		<cfset local.result = local.factory.create( point = 'before', condition = ' a / b') />
+		<cfset local.result.isConditionTrue(local.event) />
+		
+	</cffunction>	
+
+	<cffunction name="test_interception_create_illegal_condition" returntype="void" output="false" access="public"
+				mxunit:expectedException="EventManager.IllegalConditionError">
+		
+		<cfset var local = {} />		
+		<!--- debug false --->
+		<cfset variables.emMock.$(method='getDebug',returns= false)/>
+		<cfset local.factory = createObject('component','EventManager.factory.InterceptionFactory').init(variables.emMock) />
+		<cfset local.event = variables.mockBox.createMock(classname = 'EventManager.events.Event') />		
+					
+		<!--- exception --->					
+		<cfset local.result = local.factory.create( point = 'before', condition = 'this') />
+		<cfset local.result.isConditionTrue(local.event) />
+		
+	</cffunction>	
+
+
+
 
 
 
 
 	<!--- EVENTS --->
+
+
 
 
 	

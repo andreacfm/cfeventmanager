@@ -1,3 +1,12 @@
+1.0.4
+------------------------------------------------------------
+- Listener have now a dedicated factory 
+	[http://code.google.com/p/cfeventmanager/issues/detail?id=4]
+- Autowiring can be resetted for single factory ( EM.getFactory().getFactory('name').setAtowire(Boolean)
+- Autowiring removed from Actions and Interceptions 
+	[http://code.google.com/p/cfeventmanager/issues/detail?id=9]
+
+
 1.0.3 - 14/03/2010 
 -------------------------------------------------------------
 - Removed Autowiring of the Dispatcher.

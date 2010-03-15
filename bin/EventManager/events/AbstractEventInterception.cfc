@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  lunedì mar 15, 2010
-Build:		 127
+Build:		 128
 
 Copyright 2010 Andrea Campolonghi
 
@@ -30,11 +30,11 @@ limitations under the License.
     <cffunction name="init" output="false" returntype="EventManager.events.AbstractEventInterception">
     	<cfargument name="eventManager" required="true" type="EventManager.eventManager"/>
     	<cfargument name="point" required="true" type="string"/>
-		<cfargument name="conditions" required="false" type="string" default="true"/>
+		<cfargument name="condition" required="false" type="string" default="true"/>
 		
 		<cfset setEventManager(arguments.eventManager)/>
 		<cfset setpoint(arguments.point) />
-		<cfset setCondition(arguments.conditions)/>
+		<cfset setCondition(arguments.condition)/>
 		
 		<cfreturn this />
     </cffunction>
@@ -62,7 +62,14 @@ limitations under the License.
 			<cfset action.execute(arguments.event) />
 		</cfloop>
     </cffunction>
-		
+
+	<!--- 
+	hasActions
+	 --->
+	<cffunction name="hasActions" returntype="Boolean" output="false" access="public">
+		<cfreturn javaCast("boolean",variables.instance.actions.size()) />
+	</cffunction>
+			
     <!---   EventManager   --->
 	<cffunction name="getEventManager" access="public" output="false" returntype="EventManager.EventManager">
 		<cfreturn variables.instance.EventManager/>
@@ -99,21 +106,26 @@ limitations under the License.
 		<cfthrow type="EventManager.AbstractMethodException" message="Abstract method [update] has not been implemented" />
 	</cffunction>
 
-	<!--- PRIVATE ------------------------------------------------------------------------------------------->
-
 	<!---	isConditionTrue	--->
-    <cffunction name="isConditionTrue" output="false" returntype="boolean" access="private">
+    <cffunction name="isConditionTrue" output="false" returntype="boolean" access="public">
     	<cfargument name="event" required="true" type="EventManager.events.Event" />
 		<cfset var result = "" />
 		<cfset var debug = getEventManager().getDebug() />
-		<cfset var tracer = getEventManager().getTracer() />
+		<cfset var tracer = "" />
+		
 		<cftry>
-			<cfset result = evaluate(getCondition()) />
+			<cfset result = evaluate(getCondition()) />			
 			<cfcatch type="any">            
 				<cfthrow type="EventManager.ConditionEvaluationError" message="#cfcatch.message#" />
 			</cfcatch>
 		</cftry>
+
+		<cfif not isBoolean(result)>
+			<cfthrow type="EventManager.IllegalConditionError" message="The evaluated condition is not a Boolean value."/>
+		</cfif>
+
 		<cfif debug>
+			<cfset tracer =  getEventManager().getTracer() />
 			<cfset tracer.trace('Condition','<ul><li>Evaluated : #getCondition()#</li><li>Result : #result#</li></ul>',arguments.event) />
 		</cfif>
 	   	<cfreturn result />
