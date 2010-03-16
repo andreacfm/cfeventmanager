@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  martedì mar 16, 2010
-Build:		 135
+Build:		 137
 
 Copyright 2010 Andrea Campolonghi
 
@@ -108,12 +108,10 @@ limitations under the License.
 	<cffunction name="isAutowired" returntype="Boolean" output="false" access="public">
 		<cfreturn variables.instance.autowired />
 	</cffunction>	
-
 	<cffunction name="setAutowired" returntype="Boolean" output="false" access="public">
 		<cfargument name="status" type="Boolean">
 		<cfreturn variables.instance.autowired = arguments.status />
 	</cffunction>	
-
 	
 	<!--- 
 	getClass
@@ -127,7 +125,9 @@ limitations under the License.
 		</cfscript>
 	</cffunction>
 
-	<!---invokeObject--->
+	<!---
+	invokeObject
+	--->
 	<cffunction name="invokeObject" output="false" returntype="any">
 		<cfargument name="listener" type="string" required="true" />
 		<cfargument name="method" type="string" required="true" />		

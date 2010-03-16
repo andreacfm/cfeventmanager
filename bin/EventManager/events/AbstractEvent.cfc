@@ -3,7 +3,7 @@ Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
 Build Date:  martedì mar 16, 2010
-Build:		 135
+Build:		 137
 
 Copyright 2010 Andrea Campolonghi
 
@@ -96,6 +96,24 @@ limitations under the License.
 		<cfreturn createObject("java", "java.lang.System").identityHashCode(this)/>
 	</cffunction>
 
+
+
+	<!--- INTERCEPTIONS SUPPORT --->
+	
+	<!--- 
+	isObserved
+	 --->
+	<cffunction name="isObserved" returntype="Boolean" output="false" access="public">
+		<cfreturn javaCast("boolean",variables.instance.observers.size()) />
+	</cffunction>
+	
+	<!--- 
+	getObservers
+	 --->
+	<cffunction name="getObservers" returntype="Array" output="false" access="public">
+		<cfreturn variables.instance.observers />
+	</cffunction>
+	
 	<!---updatePoint--->
 	<cffunction name="updatePoint" output="false" returntype="void">
 		<cfargument name="point" type="String" />
@@ -103,20 +121,24 @@ limitations under the License.
 		<cfset notifyObservers(this) />
 	</cffunction>
 
+	<!---getPoint--->
 	<cffunction name="getPoint" returntype="string" output="false">
 		<cfreturn variables.instance.point />
 	</cffunction>
 	
-	<!---   implement IObservable   --->
-	<cffunction name="notifyObservers" access="public">
-		<cfloop array="#variables.instance.observers#" index="int">
+
+	
+	<!--- IMPLEMENT IOBSERVABLE --->
+
+	<cffunction name="notifyObservers" output="false" access="public">
+		<cfloop array="#getObservers()#" index="int">
 			<cfif int.getPoint() eq getPoint()>
 				<cfset int.update(this) />
 			</cfif>
 		</cfloop>
 	</cffunction>
 
-	<cffunction name="registerObserver" access="public">
+	<cffunction name="registerObserver" output="false" access="public">
 		<cfargument name="observer" type="EventManager.util.IObserver"/>
 		<cfset variables.instance.observers.add(observer) />
 	</cffunction>
