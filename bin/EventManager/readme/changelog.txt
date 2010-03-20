@@ -5,7 +5,9 @@
 - Autowiring can be resetted for single factory ( EM.getFactory().getFactory('name').setAtowire(Boolean)
 - Autowiring removed from Actions and Interceptions 
 	[http://code.google.com/p/cfeventmanager/issues/detail?id=9]
-
+- Added init arguments : xml ( String ) , xmlObject ( cf xml object )
+- Added methods loadFromXmlRaw() , loadFromXmlObject(), loadFromXmlPath()
+- Method loadXml is now private.
 
 1.0.3 - 14/03/2010 
 -------------------------------------------------------------

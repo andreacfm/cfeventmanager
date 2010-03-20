@@ -39,6 +39,8 @@ limitations under the License.
 		<cfargument name="events" required="false" type="array" default="#arrayNew(1)#"/>
 		<cfargument name="listeners" required="false" type="array" default="#arrayNew(1)#"/>
 		<cfargument name="xmlPath" required="false" type="string" default="" hint="relative path"/>
+		<cfargument name="xml" required="false" type="string" default="" hint="xml string"/>
+		<cfargument name="xmlObject" required="false" type="Array" hint="xml parsed object"/>
 		<cfargument name="autowire" required="false" type="boolean" default="false"/>
 		<cfargument name="debug" required="false" type="boolean" default="false"/>
 		<cfargument name="scope" required="false" type="string" default="request"/>
@@ -67,8 +69,18 @@ limitations under the License.
 		setDebug(arguments.debug,arguments.scope);
 		//Load events
 		setEvents(arguments.events);
-		//Load xml
-		loadXml(arguments.xmlPath);
+		
+		//Load from xml
+		if(len(arguments.xmlPath)){
+			loadFromXmlPath(arguments.xmlPath);
+		}
+		if(len(arguments.xml)){
+			loadFromXmlRaw(arguments.xml)
+		}
+		if(structKeyExists(arguments,'xmlObject')){
+			loadFromXmlObject(arguments.xmlObject)
+		}
+		
 		//load listeners (listeners are always at final)
 		setListeners(arguments.listeners);
 		
@@ -179,14 +191,11 @@ limitations under the License.
 		<cfargument name="events" type="array" required="true"/>		
 		<cfset var i = "" />
 		<cfscript>
-			/* event is never overwritten, must be explicitly delated */
 			for(i = 1; i <= arraylen(arguments.events); i++){
-				if(not eventExists(arguments.events[i].name)){
-					if(structKeyExists(arguments.events[i],'type')){
-						this.addEvent(arguments.events[i].name,arguments.events[i].type);
-					}else{
-						this.addEvent(arguments.events[i].name);
-					}
+				if(structKeyExists(arguments.events[i],'type')){
+					this.addEvent(arguments.events[i].name,arguments.events[i].type);
+				}else{
+					this.addEvent(arguments.events[i].name);
 				}
 			}			
 		</cfscript>
@@ -314,106 +323,57 @@ limitations under the License.
 		}
 		</cfscript>
 	</cffunction>
-		
-	<!---loadXml--->
-	<cffunction name="loadXml" output="false" returntype="void">
+	
+	<!--- 
+	loadFromXmlPath
+	 --->
+	<cffunction name="loadFromXmlPath" returntype="void" output="false" access="public">
 		<cfargument name="path" required="true" type="string" />
 		<cfscript>
-		var i = "";
-		var j = "";
-		var t = "";
 		var local = structNew();	
 		local.path = expandPath(arguments.path);
 		
 		if(fileExists(local.path)){
 			local.output = fileRead(local.path);
 			if(isXml(local.output)){
-				local.xml = xmlParse(local.output);
-				// if there are configs load them
-				local.configs = xmlSearch(local.xml,'/event-manager/configs/config');
-				if(arraylen(local.configs)){
-					loadConfig(arguments.path);
-				}
-				// add Events
-				local.events = xmlSearch(local.xml,'/event-manager/events/event');
-				if(arraylen(local.events)){
-					for(i=1; i <= arraylen(local.events); i++){
-						if(structKeyExists(local.events[i].xmlAttributes,'type')){
-							addEvent(local.events[i].xmlAttributes.name,local.events[i].xmlAttributes.type);
-						}else{
-							addEvent(local.events[i].xmlAttributes.name);
-						}
-						if(arrayLen(local.events[i].xmlChildren) gt 0){
-							local.interceptions = local.events[i].xmlChildren;
-							for(j=1; j <= arraylen(local.interceptions); j++){
-								if(local.interceptions[j].xmlName eq 'interception'){
-									
-									local.collection = {};
-									local.collection.condition = "";
-									local.collection.class = getConfig('defaultInterceptionClass');
-									local.collection.point = local.interceptions[j].xmlAttributes.point;
-									
-									/*check if is passed a custom class*/
-									if(structKeyExists(local.interceptions[j].xmlAttributes,'class')){
-										local.collection.class = local.interceptions[j].xmlAttributes.class;
-									}
-									if(arrayLen(local.interceptions[j].xmlChildren) eq 0){
-										throw('EventManager.InterceptionEmpty','An interception must declare at least one action');
-									}else{
-										local.interChd = local.interceptions[j].xmlChildren;
-										for(t=1; t <= arraylen(local.interChd); t++){
-											if(local.interChd[t].xmlName eq 'condition'){
-												local.collection.condition = local.interChd[t].xmlText;
-											}
-										}	
-										local.interception = getFactory().createInterception(argumentCollection=local.collection);
-										for(t=1; t <= arraylen(local.interChd); t++){										
-											if(local.interChd[t].xmlName eq 'action'){
-												local.interception.addAction(getFactory().createAction(argumentCollection=local.interChd[t].xmlAttributes));
-											}
-										}
-										getEvent(local.events[i].xmlAttributes.name).interceptions.add(local.interception);
-									}
-								}
-							}
-						}	
-					}
-				}
-
-				// add listeners
-				local.lists = xmlSearch(local.xml,'/event-manager/listeners/listener');
-				if(arraylen(local.lists)){
-					for(i=1; i <= arraylen(local.lists); i++){
-							local.args = {
-								event = local.lists[i].xmlAttributes.event,
-								listener = local.lists[i].xmlAttributes.listener
-							};
-							if(structKeyExists(local.lists[i].xmlAttributes,'method')){
-								local.args['method'] = local.lists[i].xmlAttributes.method;
-							};
-							if(structKeyExists(local.lists[i].xmlAttributes,'id')){
-								local.args['id'] = local.lists[i].xmlAttributes.id;
-							};
-							if(structKeyExists(local.lists[i].xmlAttributes,'priority')){
-								local.args['priority'] = local.lists[i].xmlAttributes.priority;
-							};
-							if(structKeyExists(local.lists[i].xmlAttributes,'initMethod')){
-								local.args['initMethod'] = local.lists[i].xmlAttributes.initMethod;
-							};
-							if(structKeyExists(local.lists[i].xmlAttributes,'cache')){
-								local.args['cache'] = local.lists[i].xmlAttributes.cache;
-							};							
-						addEventListener(argumentCollection=local.args);
-					}
-				}
-					
-			}else{					
-					throw('Xml file #local.Path# is not valid.','EventManager.xmlInvalidException');
-			} 
+				loadXmlData(xmlParse(local.output));
+			}else{
+				throw('File [#path#] does not contain a valid xml format.','EventManager.illegalXmlFormat');
+			}
+		}else{
+			throw('File [#path#] cannot be found.','EventManager.fileNotFound');	
 		}
 		</cfscript>
+				
 	</cffunction>
 
+	<!--- 
+	loadFromXmlRaw
+	 --->
+	<cffunction name="loadFromXmlRaw" returntype="void" output="false" access="public">
+		<cfargument name="xml" required="true" type="string" />
+		<cfscript>
+
+		if(isXml(arguments.xml)){
+			loadXmlData(xmlParse(arguments.xml));
+		}else{
+			throw('Variable [xml] does not contain a valid xml format.','EventManager.illegalXmlFormat');
+		}
+
+		</cfscript>
+				
+	</cffunction>
+
+	<!--- 
+	loadFromXmlObject
+	 --->
+	<cffunction name="loadFromXmlObject" returntype="void" output="false" access="public">
+		<cfargument name="xml" required="true" type="array" />
+		<cfscript>
+		loadXmlData(arguments.xml);
+		</cfscript>
+	</cffunction>
+		
 	<!---listenerExists--->
 	<cffunction name="listenerExists" access="public" output="false" returntype="boolean" hint="check from a class path if exist a listener cached in memory">
 		<cfargument name="class" type="string" required="true"/>
@@ -540,6 +500,96 @@ limitations under the License.
 
 	<!------------------------------------------- PRIVATE ------------------------------------------->		
 
+	<!---loadXmlData--->
+	<cffunction name="loadXmlData" output="false" returntype="void" access="private">
+		<cfargument name="data" required="true" type="array" />
+		<cfscript>
+		var i = "";
+		var j = "";
+		var t = "";
+		var local = structNew();
+		local.xml = arguments.data;	
+
+		local.configs = xmlSearch(local.xml,'/event-manager/configs/config');
+		if(arraylen(local.configs)){
+			loadConfig(arguments.path);
+		}
+		// add Events
+		local.events = xmlSearch(local.xml,'/event-manager/events/event');
+		if(arraylen(local.events)){
+			for(i=1; i <= arraylen(local.events); i++){
+				if(structKeyExists(local.events[i].xmlAttributes,'type')){
+					addEvent(local.events[i].xmlAttributes.name,local.events[i].xmlAttributes.type);
+				}else{
+					addEvent(local.events[i].xmlAttributes.name);
+				}
+				if(arrayLen(local.events[i].xmlChildren) gt 0){
+					local.interceptions = local.events[i].xmlChildren;
+					for(j=1; j <= arraylen(local.interceptions); j++){
+						if(local.interceptions[j].xmlName eq 'interception'){
+							
+							local.collection = {};
+							local.collection.condition = "";
+							local.collection.class = getConfig('defaultInterceptionClass');
+							local.collection.point = local.interceptions[j].xmlAttributes.point;
+							
+							/*check if is passed a custom class*/
+							if(structKeyExists(local.interceptions[j].xmlAttributes,'class')){
+								local.collection.class = local.interceptions[j].xmlAttributes.class;
+							}
+							if(arrayLen(local.interceptions[j].xmlChildren) eq 0){
+								throw('EventManager.InterceptionEmpty','An interception must declare at least one action');
+							}else{
+								local.interChd = local.interceptions[j].xmlChildren;
+								for(t=1; t <= arraylen(local.interChd); t++){
+									if(local.interChd[t].xmlName eq 'condition'){
+										local.collection.condition = local.interChd[t].xmlText;
+									}
+								}	
+								local.interception = getFactory().createInterception(argumentCollection=local.collection);
+								for(t=1; t <= arraylen(local.interChd); t++){										
+									if(local.interChd[t].xmlName eq 'action'){
+										local.interception.addAction(getFactory().createAction(argumentCollection=local.interChd[t].xmlAttributes));
+									}
+								}
+								getEvent(local.events[i].xmlAttributes.name).interceptions.add(local.interception);
+							}
+						}
+					}
+				}
+			}
+		}	
+
+		// add listeners
+		local.lists = xmlSearch(local.xml,'/event-manager/listeners/listener');
+		if(arraylen(local.lists)){
+			for(i=1; i <= arraylen(local.lists); i++){
+					local.args = {
+						event = local.lists[i].xmlAttributes.event,
+						listener = local.lists[i].xmlAttributes.listener
+					};
+					if(structKeyExists(local.lists[i].xmlAttributes,'method')){
+						local.args['method'] = local.lists[i].xmlAttributes.method;
+					};
+					if(structKeyExists(local.lists[i].xmlAttributes,'id')){
+						local.args['id'] = local.lists[i].xmlAttributes.id;
+					};
+					if(structKeyExists(local.lists[i].xmlAttributes,'priority')){
+						local.args['priority'] = local.lists[i].xmlAttributes.priority;
+					};
+					if(structKeyExists(local.lists[i].xmlAttributes,'initMethod')){
+						local.args['initMethod'] = local.lists[i].xmlAttributes.initMethod;
+					};
+					if(structKeyExists(local.lists[i].xmlAttributes,'cache')){
+						local.args['cache'] = local.lists[i].xmlAttributes.cache;
+					};							
+				addEventListener(argumentCollection=local.args);
+			}
+		}
+					
+		</cfscript>
+	</cffunction>
+
 	<!---   Sorter   --->
 	<cffunction name="setSorter" access="private" output="false" returntype="void">
 		<cfargument name="Sorter" type="EventManager.util.AbstractSortable" required="true"/>
@@ -560,5 +610,12 @@ limitations under the License.
 		<cfinvoke component="#arguments.listener#" method="#arguments.method#" returnvariable="result"/>
 		<cfreturn result />
 	</cffunction>
+
+	<!---throw--->
+	<cffunction name="Throw" returntype="void" output="no" access="public" >   
+		<cfargument name="Message" type="string" required="false" default="" />
+		<cfargument name="type" type="string" required="false" default="any" />  
+		<cfthrow message="#arguments.Message#" type="#arguments.type#"/> 
+	</cffunction> 
 
 </cfcomponent>
