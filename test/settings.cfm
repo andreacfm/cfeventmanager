@@ -1,0 +1,1 @@
+<cfset cfcroot = 'cfeventmanager.test' />
