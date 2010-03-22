@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <event-manager xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="../../src/EventManager/resources/event-manager.xsd">
-    
-    <!-- 
-        Events:
-        Add here the events you want to register in the EventManager.
-        Attribute Name is required
-    -->
+  
     <events>
         
         <event name="oneEvent" />
@@ -36,14 +31,7 @@
        -->
         
     </events>
-   
-    <!-- 
-        Listeners:
-        Register the listeners. 
-        An instance of the object will be created calling the init method. 
-        Use init-method to set a different method to be called on instance creation. Default : init.
-        Set cache to true if you want EventManager cache and reuse the craeted listener instance. Default : false.
-    -->   
+
     <listeners>
         
         <listener 

@@ -21,7 +21,7 @@
 			throw = 'EventManager.events.actions.Throw',
 			dispatch = 'EventManager.events.actions.Dispatch'
 			});				
-
+			
 		</cfscript>
 	</cffunction>
 
@@ -170,6 +170,15 @@
 		
 	<!--- xml --->
 	<cffunction name="testLoadFromXmlPath" returntype="void" output="false" access="public">
+		<cfset var xml = getXml(1) />
+		<cfset var path = '#siteroot#/test/temp/emXml.cfm'>
+		<cffile action="write" file="#expandPath(path)#" output="#trim(xml)#" />
+		
+		<cfset local.em = createObject('component','EventManager.EventManager').init(xmlPath = path) />
+		
+		<cfdump var="#local.em.getEvents()#">
+		<cfabort>
+
 		
 	</cffunction>
 
@@ -468,7 +477,7 @@
 	
 
 
-		
+		siteroot
 
 	
 	<!--- Dispacth --->
@@ -535,5 +544,57 @@
 		
 	</cffunction>
 	
+
+	<!--- 
+	*************************************************************************************************
+	PRIVATE 
+	*************************************************************************************************
+	--->	
+
+	<!--- 
+	getXml
+	 --->
+	<cffunction name="getXml" returntype="String" output="false" access="private">
+		<cfargument name="version" required="false" default="1" />
+		
+		<cfswitch expression="#arguments.version#">
+			
+			<cfcase value="1">
+				
+				<cfxml variable="xml"><cfoutput>
+				<event-manager>
+
+		    		<events>
+		        		
+		        		<event name="oneEvent" />
+		        		
+		        		<event name="anotherEvent" type="#cfcroot#.mocks.Event" />
+		        		
+				      	<event name="oneMoreEvent">
+				            
+				            <interception type="before">
+				                <action name="dispatch" event="oneEvent" />   
+				            </interception>
+				
+				            <interception type="each" class="#cfcroot#.mocks.Interception"/>
+				            
+				            <interception type="end">
+				                <condition><![CDATA[arraylen(event.getItems()) eq 0]]></condition>
+				                <action name="dispatch" eventAlias="true" event="anotherEvent"/>
+				            </interception>
+				            
+				        </event>
+		        		
+		    		</events>
+				</event-manager>
+				</cfoutput></cfxml>
+			
+			</cfcase>
+		
+		</cfswitch>
+		
+		
+		<cfreturn xml />
+	</cffunction>
 	
 </cfcomponent>	
