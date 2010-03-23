@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
-Build Date:  Sunday Mar 21, 2010
-Build:		 138
+Build Date:  Tuesday Mar 23, 2010
+Build:		 139
 
 Copyright 2010 Andrea Campolonghi
 
@@ -47,8 +47,14 @@ limitations under the License.
     	<cfset variables.instance.actions.add(action) />
     </cffunction>
 
-	<!---runActions--->
-    <cffunction name="runActions" output="false" access="public" returntype="void">
+	<!---addActions--->
+    <cffunction name="addActions" output="false" access="public" returntype="void">
+    	<cfargument name="actions" required="true" type="Array" />
+    	<cfset variables.instance.actions.addAll(arguments.actions) />
+    </cffunction>
+
+	<!---execute--->
+    <cffunction name="execute" output="false" access="public" returntype="void">
     	<cfargument name="event" type="EventManager.events.AbstractEvent" required="true" />
     	<cfset var iterator = variables.instance.actions.iterator() />
 		<cfset var debug = getEventManager().getDebug() />

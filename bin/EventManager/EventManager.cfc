@@ -235,6 +235,47 @@ limitations under the License.
 		</cfscript>
 	</cffunction>
 
+	<!--- 
+	addInterception
+	 --->
+	<cffunction name="addInterception" returntype="void" output="false" access="public">
+		<cfargument name="name" required="true" type="string" />
+		<cfargument name="interception" required="false" type="EventManager.events.AbstractEventInterception"/>
+		
+		<cfscript>
+		var event = getEvent(arguments.name);	
+		event.interceptions.add(arguments.interception);
+		</cfscript>
+				
+	</cffunction>
+
+	<!--- 
+	createInterception
+	 --->
+	<cffunction name="createInterception" returntype="EventManager.events.AbstractEventInterception" output="false" access="public">
+		<cfargument name="point" required="true" type="string"/>
+		<cfargument name="class" required="false" type="string" default="#getConfig('defaultInterceptionClass')#"/>
+		<cfargument name="condition" required="false" type="string" default="true"/>
+		<cfargument name="actions" required="false" type="array"/>
+		
+		<cfscript>
+		var int = getFactory().createInterception(argumentCollection=arguments);
+		return int;
+		</cfscript>
+	</cffunction>
+	
+	<!--- 
+	createAction
+	 --->
+	<cffunction name="createAction" returntype="EventManager.events.actions.AbstractAction" output="false" access="public">
+		<cfargument name="name" required="true" type="string"/>		
+		<cfscript>
+		var action = getFactory().createAction(argumentCollection=arguments);
+		return action;
+		</cfscript>
+	</cffunction>
+	
+
 	<!---getEvent--->
 	<cffunction name="getEvent" output="false" returntype="struct">
 		<cfargument name="eventname" type="string" required="true"/>
@@ -536,24 +577,25 @@ limitations under the License.
 							/*check if is passed a custom class*/
 							if(structKeyExists(local.interceptions[j].xmlAttributes,'class')){
 								local.collection.class = local.interceptions[j].xmlAttributes.class;
-							}
-							if(arrayLen(local.interceptions[j].xmlChildren) eq 0){
-								throw('EventManager.InterceptionEmpty','An interception must declare at least one action');
-							}else{
-								local.interChd = local.interceptions[j].xmlChildren;
-								for(t=1; t <= arraylen(local.interChd); t++){
-									if(local.interChd[t].xmlName eq 'condition'){
-										local.collection.condition = local.interChd[t].xmlText;
-									}
-								}	
-								local.interception = getFactory().createInterception(argumentCollection=local.collection);
-								for(t=1; t <= arraylen(local.interChd); t++){										
-									if(local.interChd[t].xmlName eq 'action'){
-										local.interception.addAction(getFactory().createAction(argumentCollection=local.interChd[t].xmlAttributes));
-									}
+								if(arrayLen(local.interceptions[j].xmlChildren) eq 0){
+									throw('EventManager.InterceptionEmpty','The default interception type must declare at least one action');
 								}
-								getEvent(local.events[i].xmlAttributes.name).interceptions.add(local.interception);
 							}
+							local.interChd = local.interceptions[j].xmlChildren;
+							for(t=1; t <= arraylen(local.interChd); t++){
+								if(local.interChd[t].xmlName eq 'condition'){
+									local.collection.condition = local.interChd[t].xmlText;
+								}
+							}	
+
+							local.interception = getFactory().createInterception(argumentCollection=local.collection);
+
+							for(t=1; t <= arraylen(local.interChd); t++){										
+								if(local.interChd[t].xmlName eq 'action'){
+									local.interception.addAction(getFactory().createAction(argumentCollection=local.interChd[t].xmlAttributes));
+								}
+							}
+							getEvent(local.events[i].xmlAttributes.name).interceptions.add(local.interception);
 						}
 					}
 				}

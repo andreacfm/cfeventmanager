@@ -23,6 +23,8 @@ limitations under the License.
 
 <cfcomponent>
 	
+	<cfset variables.instance = {} />
+	
 	<!---init--->
     <cffunction name="init" output="false" access="public" returntype="EventManager.factory.AbstractFactory">
     	<cfargument name="EventManager" type="EventManager.EventManager" required="true" />
