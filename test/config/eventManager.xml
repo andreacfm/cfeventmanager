@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <event-manager xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="../../src/EventManager/resources/event-manager.xsd">
-  
     <events>
         
         <event name="oneEvent" />
         
-        <event name="anotherEvent" type="EventManager.test.mocks.Event" />
+        <event name="anotherEvent" type="Event" />
 
-       <!--  <event 
-            name="beforeSidebarBegin">
+        <event name="oneMoreEvent">
             
-            <interception type="before">
+            <interception point="before">
                 <action name="dispatch" event="addDefaultSidebar" />   
             </interception>
-
-            <interception type="each" class="EventManager.test.customInterceptor"/>
             
-            <interception type="end">
+            <interception point="each" class="Interception"/>
+
+            <interception point="after">
+                <action name="dispatch"/>
+                <condition></condition> 
+            </interception>
+            
+            <interception point="after">
                 <condition><![CDATA[arraylen(event.getItems()) eq 0]]></condition>
                 <action name="dispatch" eventAlias="true" event="onSidebarMissingItems"/>
             </interception>
+
             
         </event>
-        
-        <event 
-            name="onSidebarMissingItems" 
-            type="EventManager.test.sidebarBuildingEvent"/>
-
-       -->
         
     </events>
 

@@ -176,17 +176,72 @@
 		
 		<cfset local.em = createObject('component','EventManager.EventManager').init(xmlPath = path) />
 		
-		<cfdump var="#local.em.getEvents()#">
-		<cfabort>
-
+		<!--- oneevent --->
+		<cfset local.event = local.em.getEvent('oneEvent') />
+		<cfset assertTrue(local.event.type eq 'EventManager.events.Event',
+				"Event Type not saved correctly") />
+		
+		<!--- anotherevent --->
+		<cfset local.event = local.em.getEvent('anotherEvent') />
+		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
+				"Event Type not saved correctly") />
+		
+		<!--- onemoreevent --->		
+		<cfset local.event = local.em.getEvent('oneMoreEvent') />
+		<cfset assertTrue(local.event.type eq 'EventManager.events.Event',
+				"Event Type not saved correctly") />	
+		<cfset assertTrue(local.event.interceptions.size() eq 3,
+				"Interceptions not loaded.")>
+			
 		
 	</cffunction>
 
 	<cffunction name="testLoadFromXmlObject" returntype="void" output="false" access="public">
+
+		<cfset var xml = xmlParse(getXml(1)) />
+		<cfset local.em = createObject('component','EventManager.EventManager').init(xmlObject = xml) />
+		
+		<!--- oneevent --->
+		<cfset local.event = local.em.getEvent('oneEvent') />
+		<cfset assertTrue(local.event.type eq 'EventManager.events.Event',
+				"Event Type not saved correctly") />
+		
+		<!--- anotherevent --->
+		<cfset local.event = local.em.getEvent('anotherEvent') />
+		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
+				"Event Type not saved correctly") />
+		
+		<!--- onemoreevent --->		
+		<cfset local.event = local.em.getEvent('oneMoreEvent') />
+		<cfset assertTrue(local.event.type eq 'EventManager.events.Event',
+				"Event Type not saved correctly") />	
+		<cfset assertTrue(local.event.interceptions.size() eq 3,
+				"Interceptions not loaded.")>
+
 		
 	</cffunction>
 
 	<cffunction name="testLoadFromXmlRaw" returntype="void" output="false" access="public">
+
+		<cfset var xml = getXml(1) />
+		<cfset local.em = createObject('component','EventManager.EventManager').init(xml = xml) />
+		
+		<!--- oneevent --->
+		<cfset local.event = local.em.getEvent('oneEvent') />
+		<cfset assertTrue(local.event.type eq 'EventManager.events.Event',
+				"Event Type not saved correctly") />
+		
+		<!--- anotherevent --->
+		<cfset local.event = local.em.getEvent('anotherEvent') />
+		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
+				"Event Type not saved correctly") />
+		
+		<!--- onemoreevent --->		
+		<cfset local.event = local.em.getEvent('oneMoreEvent') />
+		<cfset assertTrue(local.event.type eq 'EventManager.events.Event',
+				"Event Type not saved correctly") />	
+		<cfset assertTrue(local.event.interceptions.size() eq 3,
+				"Interceptions not loaded.")>
 		
 	</cffunction>
 	
@@ -476,9 +531,6 @@
 
 	
 
-
-		siteroot
-
 	
 	<!--- Dispacth --->
 	<cffunction name="test_dispatcher_factory_create" returntype="void" output="false" access="public">
@@ -572,15 +624,15 @@
 		        		
 				      	<event name="oneMoreEvent">
 				            
-				            <interception type="before">
-				                <action name="dispatch" event="oneEvent" />   
+				            <interception point="before">
+				                <action name="dispatch" event="addDefaultSidebar" />   
 				            </interception>
 				
-				            <interception type="each" class="#cfcroot#.mocks.Interception"/>
+				            <interception point="each" class="#cfcroot#.mocks.Interception"/>
 				            
-				            <interception type="end">
+				            <interception point="after">
 				                <condition><![CDATA[arraylen(event.getItems()) eq 0]]></condition>
-				                <action name="dispatch" eventAlias="true" event="anotherEvent"/>
+				                <action name="dispatch" eventAlias="true" event="onSidebarMissingItems"/>
 				            </interception>
 				            
 				        </event>

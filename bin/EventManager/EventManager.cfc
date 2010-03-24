@@ -571,17 +571,27 @@ limitations under the License.
 							
 							local.collection = {};
 							local.collection.condition = "";
-							local.collection.class = getConfig('defaultInterceptionClass');
-							local.collection.point = local.interceptions[j].xmlAttributes.point;
 							
-							/*check if is passed a custom class*/
-							if(structKeyExists(local.interceptions[j].xmlAttributes,'class')){
+							// class
+							if(structkeyExists(local.interceptions[j].xmlAttributes,'class')){
 								local.collection.class = local.interceptions[j].xmlAttributes.class;
-								if(arrayLen(local.interceptions[j].xmlChildren) eq 0){
-									throw('EventManager.InterceptionEmpty','The default interception type must declare at least one action');
+							}else{
+								local.collection.class = getConfig('defaultInterceptionClass');
+							}
+							
+							// point
+							local.collection.point = local.interceptions[j].xmlAttributes.point;
+
+							local.interChd = local.interceptions[j].xmlChildren;
+							
+							//actions
+							local.collection.actions = [];							
+							for(t=1; t <= arraylen(local.interChd); t++){										
+								if(local.interChd[t].xmlName eq 'action'){
+									local.collection.actions.add(getFactory().createAction(argumentCollection=local.interChd[t].xmlAttributes));
 								}
 							}
-							local.interChd = local.interceptions[j].xmlChildren;
+
 							for(t=1; t <= arraylen(local.interChd); t++){
 								if(local.interChd[t].xmlName eq 'condition'){
 									local.collection.condition = local.interChd[t].xmlText;
@@ -589,13 +599,10 @@ limitations under the License.
 							}	
 
 							local.interception = getFactory().createInterception(argumentCollection=local.collection);
-
-							for(t=1; t <= arraylen(local.interChd); t++){										
-								if(local.interChd[t].xmlName eq 'action'){
-									local.interception.addAction(getFactory().createAction(argumentCollection=local.interChd[t].xmlAttributes));
-								}
-							}
+							
+							// post to event repo
 							getEvent(local.events[i].xmlAttributes.name).interceptions.add(local.interception);
+
 						}
 					}
 				}
