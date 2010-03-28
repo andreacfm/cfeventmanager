@@ -275,7 +275,6 @@ limitations under the License.
 		</cfscript>
 	</cffunction>
 	
-
 	<!---getEvent--->
 	<cffunction name="getEvent" output="false" returntype="struct">
 		<cfargument name="eventname" type="string" required="true"/>
