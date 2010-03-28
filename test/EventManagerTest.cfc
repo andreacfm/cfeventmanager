@@ -32,7 +32,6 @@
 
 
 
-
 	<cffunction name="test_init" returntype="void">
 
 		<cfset var local = {} />
@@ -53,6 +52,44 @@
 					
 	</cffunction>
 
+
+	
+	<!--- MetaScanner  --->
+	<cffunction name="testMetaScanner_init" returntype="void" output="false" access="public">
+		<cfset var obj = createObject('component','EventManager.listener.MetaScanner').init(
+				variables.emMock,'/') />
+		<cfset assertTrue(not obj.getRecurse(),"Recurse default error.") />		
+				
+	</cffunction>
+
+	<cffunction name="testMetaScanner_illegal_path" returntype="void" output="false" access="public"
+				mxunit:expectedException="eventmanager.directoryDoesNotExists">
+		<cfset var obj = createObject('component','EventManager.listener.MetaScanner').init(
+				variables.emMock,'/notexists') />
+				
+	</cffunction>
+
+	<cffunction name="testMetaScanner_FindListeners" returntype="void" output="false" access="public">
+		
+		<cfset var local = {} />
+		<cfset local.factory = createObject('component','EventManager.factory.Factory').init() />
+		<cfset local.listfactory = createObject('component','EventManager.factory.ListenerFactory').init(variables.emMock) />
+		<cfset local.factory.addFactory('listenerFactory',local.listfactory) />
+		<cfset variables.emMock.$(method='getDebug',returns=false)>
+		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
+		
+		<cfset var obj = createObject('component','EventManager.listener.MetaScanner').init(
+				variables.emMock,'#siteroot#/test/mocks/scan/') />
+		
+		
+		<cfset obj.findListeners() />
+		
+		<cfdump var="#variables.emMock.getEvents()#">
+		<cfabort>
+
+	
+		
+	</cffunction>
 
 
 
