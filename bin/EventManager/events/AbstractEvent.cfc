@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
-Build Date:  Sunday Mar 28, 2010
-Build:		 143
+Build Date:  Sunday Apr 04, 2010
+Build:		 147
 
 Copyright 2010 Andrea Campolonghi
 
@@ -21,7 +21,7 @@ limitations under the License.
 			
 */--->
 
-<cfcomponent name="AbstractEvent" implements="EventManager.util.IObservable">
+<cfcomponent name="AbstractEvent" extends="EventManager.util.IObservable">
 
 	<cfproperty name="name" type="string"/>
 	<cfproperty name="data" type="struct"/>
@@ -129,7 +129,6 @@ limitations under the License.
 
 	
 	<!--- IMPLEMENT IOBSERVABLE --->
-
 	<cffunction name="notifyObservers" output="false" access="public">
 		<cfloop array="#getObservers()#" index="int">
 			<cfif int.getPoint() eq getPoint()>

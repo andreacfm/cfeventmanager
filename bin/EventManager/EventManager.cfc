@@ -118,7 +118,6 @@ limitations under the License.
 		<cfargument name="method" required="false" type="string" default=""/>
 		<cfargument name="priority" required="false" type="numeric" default="5"/>
 		<cfargument name="initMethod" required="false" type="string" default="init"/>
-		<!--- <cfargument name="cache" required="false" type="boolean" default="true"/> --->		
 
 		<cfset var sorter = getSorter() />
 		<cfset var key = "" />
@@ -130,28 +129,6 @@ limitations under the License.
 				
 				<cfset listener = getFactory().createListener(argumentCollection=arguments) />
 				
-<!--- 
-				<cfset conf.autowired = false />
-				
-				<cfif not isObject(conf.listener)>					
-					<cfset conf.listener = invokeObject(arguments.listener,conf.initMethod) />
-				</cfif>
-				
-				<!--- /* if the method has not been passed set eventName as default*/ --->
-				<cfif conf.method eq "">
-					<cfset conf.method = key />
-				</cfif>
-				
-				<!--- /* save explicitly the class path for the listener object. 
-				This will make easier unsubscribe operations when implemented */	 --->
-				<cfset conf.listener.listenerClass = getmetadata(conf.listener).name />
-				
-				<!--- /* if no id make a unique */ --->
-				<cfif not len(conf.id)>
-					<cfset conf.id = conf.listener.listenerClass & '.' & conf.method />
-				</cfif>
- --->
-
 				<cfset variables.instance.events[key]['listeners'].add(listener) />
 				
 				<cfset variables.instance.events[key]['listeners'] = sorter.sortArray(variables.instance.events[key]['listeners'],'LT') />	

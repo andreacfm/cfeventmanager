@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
-Build Date:  Sunday Mar 28, 2010
-Build:		 143
+Build Date:  Sunday Apr 04, 2010
+Build:		 147
 
 Copyright 2010 Andrea Campolonghi
 
@@ -27,14 +27,16 @@ limitations under the License.
 		<cfargument name="listener" type="any" required="true"/>
 		<cfargument name="event" type="String" required="true"/>
 		<cfargument name="method" type="string" default="" />
+		<cfargument name="priority" required="false" type="numeric" default="5"/>
 		<cfargument name="id" type="string" default="" />
 		<cfargument name="initMethod" type="string" default="init"/>
-		<cfargument name="factory" type="EventManager.factory.AbstractFactory" default="init"/>
+		<cfargument name="factory" type="EventManager.factory.AbstractFactory"/>
 		
 		<cfscript>
 		setMethod(arguments.method, arguments.event);	
 		setListenerObject(arguments.listener,arguments.initmethod);
 		setId(arguments.id);
+		setPriority(arguments.priority);
 		setAutowire(arguments.factory.getAutowire());
 		return this;
 		</cfscript>

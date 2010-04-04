@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
-Build Date:  Sunday Mar 28, 2010
-Build:		 143
+Build Date:  Sunday Apr 04, 2010
+Build:		 147
 
 Copyright 2010 Andrea Campolonghi
 
@@ -93,11 +93,11 @@ limitations under the License.
 					<cfset event = em.getEvent(f.event) />
 					<cfcatch type="EventManager.noSuchEventExeption">
 						<cfset em .addEvent(f.event) />
-						<cfset params = duplicate(f) />
-						<cfset params.listener = class />
-						<cfset em.addEventListener(argumentCollection=params) />
 					</cfcatch>
 				</cftry>
+				<cfset params = duplicate(f) />
+				<cfset params.listener = class />
+				<cfset em.addEventListener(argumentCollection=params) />
 			</cfif>
 			
 		</cfloop>

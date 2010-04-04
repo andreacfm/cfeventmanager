@@ -1,4 +1,4 @@
-<cfinterface>
+<cfcomponent>
 
 	<cffunction name="init" access="public" output="false" returntype="EventManager.caching.ICacheAdapter">
 		<cfargument name="EventManager" type="EventManager.EventManager" />		
@@ -31,4 +31,4 @@
 	</cffunction>
 		
 
-</cfinterface>
+</cfcomponent>

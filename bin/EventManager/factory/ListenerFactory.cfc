@@ -27,6 +27,7 @@ limitations under the License.
 	<cffunction name="create" output="false" returntype="EventManager.listener.AbstractListener">
 		<cfargument name="listener" type="any" required="true"/>
 		<cfargument name="event" type="String" required="true"/>
+		<cfargument name="priority" required="false" type="numeric" default="5"/>
 		<cfargument name="method" type="string" default="" />
 		<cfargument name="id" type="string" default="" />
 		<cfargument name="initMethod" type="string" default="init"/>

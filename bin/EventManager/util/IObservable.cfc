@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
-Build Date:  Sunday Mar 28, 2010
-Build:		 143
+Build Date:  Sunday Apr 04, 2010
+Build:		 147
 
 Copyright 2010 Andrea Campolonghi
 
@@ -21,15 +21,15 @@ limitations under the License.
 			
 */--->
 
-<cfinterface>
+<cfcomponent name="IObservable">
 
 	<cffunction name="notifyObservers" access="public" output="false">
-
+		<cfthrow type="EventManager.AbstractMethodException" message="Abstract Method [notifyObservers] must be implemented" />	
 	</cffunction>
 
 	<cffunction name="registerObserver" access="public" output="false">
 		<cfargument name="observer" type="EventManager.util.IObserver"/>
-		
+		<cfthrow type="EventManager.AbstractMethodException" message="Abstract Method [registerObserver] must be implemented" />	
 	</cffunction>
 	
-</cfinterface>
+</cfcomponent>
