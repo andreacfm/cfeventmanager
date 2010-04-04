@@ -6,7 +6,9 @@
 	</cffunction>
 
 	<cffunction name="onScanTestCase" event="onTestCase" returntype="void">
-		
+	</cffunction>
+
+	<cffunction name="onScanTestCaseSecondListener" event="onTestCase" returntype="void">
 	</cffunction>
 
 </cfcomponent>

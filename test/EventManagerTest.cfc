@@ -83,10 +83,9 @@
 		
 		
 		<cfset obj.findListeners() />
-		
-		<cfdump var="#variables.emMock.getEvents()#">
-		<cfabort>
-
+		<cfset local.event = variables.emMock.getEvent('onTestCase') />
+				
+		<cfset assertEquals(2, local.event.listeners.size(), "Listener not registered") />
 	
 		
 	</cffunction>
