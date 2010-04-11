@@ -2,8 +2,8 @@
 Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
 Author:      Andrea Campolonghi <andrea@getrailo.org>
 Version:     1.0.3
-Build Date:  Monday Apr 05, 2010
-Build:		 155
+Build Date:  Sunday Apr 11, 2010
+Build:		 156
 
 Copyright 2010 Andrea Campolonghi
 
@@ -302,6 +302,9 @@ limitations under the License.
 		}
 		
 		if(local.debug){
+			if(not structKeyExists(local,'eventObj')){
+				local.eventObj = getFactory().createEvent(name=arguments.name,data=arguments.data,target=arguments.target,mode=arguments.mode);
+			}
 			getTracer().trace('Dispatching Event','Dispatched Event #arguments.name#',local.eventObj,'dispatch');
 		}				
 		</cfscript>	
