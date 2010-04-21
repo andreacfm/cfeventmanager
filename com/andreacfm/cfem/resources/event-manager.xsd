@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="event-manager">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="events"/>
+        <xs:element maxOccurs="unbounded" ref="listeners"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="events">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="event"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="event">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="interception"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="interception">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="action"/>
+        <xs:element ref="condition"/>
+      </xs:choice>
+      <xs:attribute name="class" type="xs:NCName"/>
+      <xs:attribute name="point" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="action">
+    <xs:complexType>
+      <xs:attribute name="event" type="xs:NCName"/>
+      <xs:attribute name="eventAlias" type="xs:boolean"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="condition" type="xs:string"/>
+  <xs:element name="listeners">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="listener"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="listener">
+    <xs:complexType>
+      <xs:attribute name="cache" type="xs:boolean"/>
+      <xs:attribute name="event" use="required" type="xs:NCName"/>
+      <xs:attribute name="init-method" type="xs:NCName"/>
+      <xs:attribute name="listener" use="required"/>
+      <xs:attribute name="method" type="xs:NCName"/>
+      <xs:attribute name="priority" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

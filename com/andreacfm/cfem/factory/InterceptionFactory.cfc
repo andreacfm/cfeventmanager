@@ -1,0 +1,50 @@
+<!--- /*		
+Project:     Cf Event Manager  http://code.google.com/p/cfeventmanager/
+Author:      Andrea Campolonghi <andrea@getrailo.org>
+Version:     1.0.3
+Build Date:  domenica mar 14, 2010
+Build:		 126
+
+Copyright 2010 Andrea Campolonghi
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.	
+			
+*/--->
+
+<cfcomponent output="false" extends="com.andreacfm.cfem.factory.AbstractFactory">
+
+	<!--- create --->
+	<cffunction name="create" output="false" returntype="com.andreacfm.cfem.events.AbstractEventInterception">
+		<cfargument name="point" required="true" type="string"/>
+		<cfargument name="class" required="false" type="string" default="#getEventManager().getConfig('defaultInterceptionClass')#"/>
+		<cfargument name="condition" required="false" type="string" default="true"/>
+		<cfargument name="actions" required="false" type="array" default="#arrayNew(1)#"/>
+		
+		<cfscript>
+		var result = "";
+		
+		// a default interception type must have at least one action	
+		if(arguments.class eq getEventManager().getConfig('defaultInterceptionClass')){
+			if(not arguments.actions.size()){
+				getEventManager().throw('A default interception type must declare at least one action','com.andreacfm.cfem.InterceptionEmpty');		
+			}
+		}
+		result = createObject('component',arguments.class).init(getEventManager(),arguments.point,arguments.condition);
+		result.addActions(arguments.actions);
+			        
+		return result;
+		</cfscript>
+
+	</cffunction>
+
+</cfcomponent>
