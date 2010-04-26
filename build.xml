@@ -29,11 +29,6 @@
 
 	<target name="runtests" description="Make output directories and run the MXUnit task">
 
-		<!--
-		<mkdir dir="${junit.out.dir.html}" />
-	    <mkdir dir="${output.dir}" />
- 		-->
-
 	    <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"/>
 	   	
 		<mxunittask server="${server.name}" port="${server.port}"
