@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EventManager" default="compile">
+	
+	<!-- update build properties -->
+	<propertyfile file="buildprops/build.properties">
+		<entry key="build.number" type="int" operation="+" value="1" pattern="00"/>
+		<entry key="build.date" type="date" pattern="EEEE MMM dd, yyyy" value="now"/>
+		<entry key="build.time" type="date" pattern="kk:mm:ss" value="now"/>
+		<entry key="build.timestamp" type="date" pattern="yyyy-MM-dd'T'HH:mm:ss" value="now"/>
+		<entry key="build.year" type="date" pattern="yyyy" value="now"/>
+	</propertyfile>	
+		
+	<!-- build properties -->	
+	<property file="buildprops/build.properties"/>
+	<property file="buildprops/project.properties"/>
+	<property file="buildprops/unames.properties"/>	
+
+	
+	<path id="project.classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- setup -->
+	<target name="setup">
+		<mkdir dir="${basedir}/temp/com" />		
+	</target>
+
+	<target name="runtests" description="Make output directories and run the MXUnit task">
+
+		<!--
+		<mkdir dir="${junit.out.dir.html}" />
+	    <mkdir dir="${output.dir}" />
+ 		-->
+
+	    <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"/>
+	   	
+		<mxunittask server="${server.name}" port="${server.port}"
+        	defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+           	verbose="true"
+           	haltonfailure="true"
+           	haltonerror="true">
+
+	        <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                 remoteMethod="run"
+                 path="${component.path}"
+                 packageName="cfeventmanager.com.andreacfm.cfem.test"
+                 componentPath="cfeventmanager.com.andreacfm.cfem.test"
+                 recurse="true"
+                />
+
+	    </mxunittask>
+
+	</target>
+
+	<target name="commit">
+		<echo level="info">Committing Cfem</echo>
+	   	<input message="SVN Commit Comment:" addproperty="commit.comment" defaultvalue="Periodic Commit From Ant Task" />
+	    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="project.classpath"/>
+	    <svn username="${svn.username}" password="${svn.password}">
+	    	<commit message="${commit.comment}" dir="${basedir}" recurse="true" />
+	   	</svn>
+	</target>
+
+	
+	<!-- deploy the demo site -->
+	<target name="deploy">
+		
+		<echo message="Copy to temp"/>		
+		
+		<copy todir="${basedir}/temp/com">
+			<fileset dir="${basedir}/com" excludes="**/samples/**"/>
+		</copy>
+
+		<echo message="Replacing properties in license"/>		
+		
+		<replace dir="${basedir}/temp/com/andreacfm/cfem">
+			<replacefilter token="@number" value="${build.number}"/>
+			<replacefilter token="@projectName" value="${build.projectName}"/>
+			<replacefilter token="@date" value="${build.date}"/>
+			<replacefilter token="@projectUrl" value="${build.projectUrl}"/>
+			<replacefilter token="@projectVersion" value="${build.projectVersion}"/>
+			<replacefilter token="@authorEmail" value="${build.authorEmail}"/>
+			<replacefilter token="@author" value="${build.author}"/>
+			<replacefilter token="@year" value="${build.year}"/>
+		</replace>
+
+		<echo message="Copy to Server Location"/>		
+		<copy todir="${project.www}/com" overwrite="true">
+			<fileset dir="${basedir}/temp/com" />
+		</copy>
+
+		<echo message="Prepare the zip"/>
+		<zip basedir="${basedir}/temp" destfile="${basedir}/zip/EM-${build.projectVersion}.zip" update="true"/>
+
+		<echo message="Make docs"/>	
+		<get src="http://localhost/cfeventmanager/colddoc/run.cfm" dest="${basedir}/temp/docs_response.txt"/>
+
+	</target>
+	
+	<!-- teardown -->
+	<target name="teardown">
+		<delete dir="${basedir}/temp"/>	
+	</target>
+
+		
+	<target 
+		name="compile" 
+		depends="setup,runtests,commit,deploy,teardown" />
+	
+
+</project>
+
+
+
+
