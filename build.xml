@@ -107,7 +107,7 @@
 		
 	<target 
 		name="compile" 
-		depends="setup,runtests,commit,deploy,teardown" />
+		depends="setup,runtests,deploy,commit,teardown" />
 	
 
 </project>
