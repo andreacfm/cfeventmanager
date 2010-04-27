@@ -9,7 +9,7 @@
 Callable
 </TITLE>
 
-<META NAME="keywords" CONTENT="com.andreacfm.cfem.events.concurrent.Callable interface">
+<META NAME="keywords" CONTENT="com.andreacfm.cfem.util.concurrent.Callable interface">
 
 
 
@@ -18,7 +18,7 @@ Callable
 <SCRIPT type="text/javascript">
 function windowTitle()
 {
-    parent.document.title="AbstractEventInterception";
+    parent.document.title="SimpleAppender";
 }
 </SCRIPT>
 <NOSCRIPT>
@@ -73,7 +73,7 @@ CF Event Manager - 1.0.3 [Tuesday Apr 27, 2010]</EM>
 
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 	
-	  <A HREF="../../../../index.html?com/andreacfm/cfem/events/AbstractEventInterception.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+	  <A HREF="../../../../index.html?com/andreacfm/cfem/util/SimpleAppender.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 	
 </FONT></TD>
 
@@ -86,9 +86,9 @@ CF Event Manager - 1.0.3 [Tuesday Apr 27, 2010]</EM>
 <!-- ======== START OF CLASS DATA ======== -->
 <H2>
 <FONT SIZE="-1">
-com.andreacfm.cfem.events</FONT>
+com.andreacfm.cfem.util</FONT>
 <BR>
-Class AbstractEventInterception</H2>
+Class SimpleAppender</H2>
 
 
 
@@ -97,14 +97,6 @@ Class AbstractEventInterception</H2>
 
 
 	
-		
-	
-	
-
-	
-		
-		
-			
 		
 	
 	
@@ -119,20 +111,9 @@ Class AbstractEventInterception</H2>
 
 
 <PRE>railo-context.Component
-        <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><a href="../../../..//com/andreacfm/cfem/util/IObserver.html" title="class in com.andreacfm.cfem.util">com.andreacfm.cfem.util.IObserver</a>
-            <IMG SRC="../../../../resources/inherit.gif" ALT="extended by ">com.andreacfm.cfem.events.AbstractEventInterception
+        <IMG SRC="../../../../resources/inherit.gif" ALT="extended by ">com.andreacfm.cfem.util.SimpleAppender
 </PRE>
 
-
-<DL>
-<DT><B>Direct Known Subclasses:</B>
-<DD>
-	
-		
-		<A HREF="../../../..//com/andreacfm/cfem/events/EventInterception.html" title="class in com.andreacfm.cfem.events">EventInterception</A>
-	
-</DD>
-</DL>
 
 
 <HR>
@@ -141,8 +122,8 @@ Class AbstractEventInterception</H2>
 
 
 
-<PRE>public class <B>AbstractEventInterception</B>
-<DT>extends <a href="../../../..//com/andreacfm/cfem/util/IObserver.html" title="class in com.andreacfm.cfem.util">IObserver</a></DT></PRE>
+<PRE>public class <B>SimpleAppender</B>
+<DT>extends railo-context.Component</DT></PRE>
 </DT>
 </DL>
 
@@ -168,7 +149,7 @@ Class AbstractEventInterception</H2>
 	<TR BGCOLOR="white" CLASS="TableRowColor">
 	
 	<TD>
-		<CODE><B><A HREF="AbstractEventInterception.html#init()">init</A></B>(<a href="../../../..//com/andreacfm/cfem/EventManager.html" title="class in com.andreacfm.cfem">EventManager</a> eventManager, string point, [string condition='true'])</CODE>
+		<CODE><B><A HREF="SimpleAppender.html#init()">init</A></B>([String out='file'], [String filepath='/cfem.log'], [String minLevel='info'], [Numeric maxSize='10485760'])</CODE>
 	<BR>
 	
 	</TD>
@@ -195,7 +176,18 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#addAction()">addAction</A></B>(<a href="../../../..//com/andreacfm/cfem/events/actions/AbstractAction.html" title="class in com.andreacfm.cfem.events.actions">AbstractAction</a> action)</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#debug()">debug</A></B>(String msg)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>private&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#doZipFile()">doZipFile</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -206,7 +198,7 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#addActions()">addActions</A></B>(Array actions)</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#error()">error</A></B>(String msg)</CODE>
 <BR>
 
 </TD>
@@ -217,7 +209,18 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#execute()">execute</A></B>(<a href="../../../..//com/andreacfm/cfem/events/AbstractEvent.html" title="class in com.andreacfm.cfem.events">AbstractEvent</a> event)</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#fatal()">fatal</A></B>(String msg)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;any</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#getFile()">getFile</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -228,7 +231,7 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;string</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#getcondition()">getcondition</A></B>()</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#getFilePath()">getFilePath</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -238,8 +241,8 @@ Class AbstractEventInterception</H2>
 
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;<a href="../../../..//com/andreacfm/cfem/EventManager.html" title="class in com.andreacfm.cfem">EventManager</a></CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#getEventManager()">getEventManager</A></B>()</CODE>
+<CODE>&nbsp;numeric</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#getmaxSize()">getmaxSize</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -250,7 +253,7 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;string</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#getpoint()">getpoint</A></B>()</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#getminLevel()">getminLevel</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -260,8 +263,8 @@ Class AbstractEventInterception</H2>
 
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#hasActions()">hasActions</A></B>()</CODE>
+<CODE>&nbsp;string</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#getout()">getout</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -271,19 +274,8 @@ Class AbstractEventInterception</H2>
 
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#isConditionTrue()">isConditionTrue</A></B>(<a href="../../../..//com/andreacfm/cfem/events/Event.html" title="class in com.andreacfm.cfem.events">Event</a> event)</CODE>
-<BR>
-
-</TD>
-</TR>
-
-
-
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#setcondition()">setcondition</A></B>(string condition)</CODE>
+<CODE>&nbsp;com.andreacfm.cfem.util.datetime</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#getSize()">getSize</A></B>()</CODE>
 <BR>
 
 </TD>
@@ -294,7 +286,18 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#setEventManager()">setEventManager</A></B>(<a href="../../../..//com/andreacfm/cfem/EventManager.html" title="class in com.andreacfm.cfem">EventManager</a> EventManager)</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#info()">info</A></B>(String msg)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>private&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#logMessage()">logMessage</A></B>(string severity, String msg)</CODE>
 <BR>
 
 </TD>
@@ -305,7 +308,7 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#setpoint()">setpoint</A></B>(string point)</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#setFilePath()">setFilePath</A></B>([String path])</CODE>
 <BR>
 
 </TD>
@@ -316,7 +319,51 @@ Class AbstractEventInterception</H2>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="AbstractEventInterception.html#update()">update</A></B>(<a href="../../../..//com/andreacfm/cfem/events/AbstractEvent.html" title="class in com.andreacfm.cfem.events">AbstractEvent</a> event)</CODE>
+<TD><CODE><B><A HREF="SimpleAppender.html#setmaxSize()">setmaxSize</A></B>(Numeric maxSize)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#setminLevel()">setminLevel</A></B>(String minLevel)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#setout()">setout</A></B>(String out)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#warn()">warn</A></B>(String msg)</CODE>
+<BR>
+
+</TD>
+</TR>
+
+
+
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>private&nbsp;any</CODE></FONT></TD>
+<TD><CODE><B><A HREF="SimpleAppender.html#writeLog()">writeLog</A></B>(string msg)</CODE>
 <BR>
 
 </TD>
@@ -329,30 +376,6 @@ Class AbstractEventInterception</H2>
 
 
 
-
-	
-
-	
-
-	&nbsp;
-	<a name="methods_inherited_from_class_com.andreacfm.cfem.util.IObserver"><!-- --></a>
-	<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
-	<tbody><tr class="TableSubHeadingColor" bgcolor="#eeeeff">
-	<th align="left"><b>Methods inherited from class <a href="../../../..//com/andreacfm/cfem/util/IObserver.html" title="class in com.andreacfm.cfem.util">com.andreacfm.cfem.util.IObserver</a></b></th>
-	</tr>
-	<tr class="TableRowColor" bgcolor="white">
-	<td>
-		
-		
-		
-			
-			
-		
-
-		<code></code>
-	</td>
-	</tr>
-	</tbody></table>
 
 	
 
@@ -394,7 +417,7 @@ Class AbstractEventInterception</H2>
 <a name="init()"><!-- --></a><h3>
 
 init</h3>
-<CODE>public <B>init</B>(<a href="../../../..//com/andreacfm/cfem/EventManager.html" title="class in com.andreacfm.cfem">EventManager</a> eventManager, string point, [string condition='true'])</CODE>
+<CODE>public <B>init</B>([String out='file'], [String filepath='/cfem.log'], [String minLevel='info'], [Numeric maxSize='10485760'])</CODE>
 <dl>
 <dd>
 
@@ -404,11 +427,13 @@ init</h3>
 <dl>
 <dt><b>Parameters:</b></dt>
 
-<dd><code>eventManager</code></dd>
+<dd><code>out</code></dd>
 
-<dd><code>point</code></dd>
+<dd><code>filepath</code></dd>
 
-<dd><code>condition</code></dd>
+<dd><code>minLevel</code></dd>
+
+<dd><code>maxSize</code></dd>
 
 </dl>
 
@@ -433,9 +458,9 @@ init</h3>
 </tbody></table>
 
 	
-	<a name="addAction()"><!-- --></a><h3>
-	addAction</h3>
-	<code>public void <B>addAction</B>(<a href="../../../..//com/andreacfm/cfem/events/actions/AbstractAction.html" title="class in com.andreacfm.cfem.events.actions">AbstractAction</a> action)</code>
+	<a name="debug()"><!-- --></a><h3>
+	debug</h3>
+	<code>public void <B>debug</B>(String msg)</code>
 
 	<dl>
 	<dd>
@@ -450,7 +475,7 @@ init</h3>
 	<dl>
 	<dt><b>Parameters:</b></dt>
 	
-	<dd><code>action</code></dd>
+	<dd><code>msg</code></dd>
 	
 	</dl>
 	
@@ -460,9 +485,29 @@ init</h3>
 	<hr>
 
 	
-	<a name="addActions()"><!-- --></a><h3>
-	addActions</h3>
-	<code>public void <B>addActions</B>(Array actions)</code>
+	<a name="doZipFile()"><!-- --></a><h3>
+	doZipFile</h3>
+	<code>private void <B>doZipFile</B>()</code>
+
+	<dl>
+	<dd>
+	
+	<p>
+	</p></dd>
+
+	
+	
+
+	
+
+	</dd>
+	</dl>
+	<hr>
+
+	
+	<a name="error()"><!-- --></a><h3>
+	error</h3>
+	<code>public void <B>error</B>(String msg)</code>
 
 	<dl>
 	<dd>
@@ -477,7 +522,7 @@ init</h3>
 	<dl>
 	<dt><b>Parameters:</b></dt>
 	
-	<dd><code>actions</code></dd>
+	<dd><code>msg</code></dd>
 	
 	</dl>
 	
@@ -487,9 +532,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="execute()"><!-- --></a><h3>
-	execute</h3>
-	<code>public void <B>execute</B>(<a href="../../../..//com/andreacfm/cfem/events/AbstractEvent.html" title="class in com.andreacfm.cfem.events">AbstractEvent</a> event)</code>
+	<a name="fatal()"><!-- --></a><h3>
+	fatal</h3>
+	<code>public void <B>fatal</B>(String msg)</code>
 
 	<dl>
 	<dd>
@@ -504,7 +549,7 @@ init</h3>
 	<dl>
 	<dt><b>Parameters:</b></dt>
 	
-	<dd><code>event</code></dd>
+	<dd><code>msg</code></dd>
 	
 	</dl>
 	
@@ -514,9 +559,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="getcondition()"><!-- --></a><h3>
-	getcondition</h3>
-	<code>public string <B>getcondition</B>()</code>
+	<a name="getFile()"><!-- --></a><h3>
+	getFile</h3>
+	<code>public any <B>getFile</B>()</code>
 
 	<dl>
 	<dd>
@@ -534,9 +579,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="getEventManager()"><!-- --></a><h3>
-	getEventManager</h3>
-	<code>public <a href="../../../..//com/andreacfm/cfem/EventManager.html" title="class in com.andreacfm.cfem">EventManager</a> <B>getEventManager</B>()</code>
+	<a name="getFilePath()"><!-- --></a><h3>
+	getFilePath</h3>
+	<code>public string <B>getFilePath</B>()</code>
 
 	<dl>
 	<dd>
@@ -554,9 +599,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="getpoint()"><!-- --></a><h3>
-	getpoint</h3>
-	<code>public string <B>getpoint</B>()</code>
+	<a name="getmaxSize()"><!-- --></a><h3>
+	getmaxSize</h3>
+	<code>public numeric <B>getmaxSize</B>()</code>
 
 	<dl>
 	<dd>
@@ -574,9 +619,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="hasActions()"><!-- --></a><h3>
-	hasActions</h3>
-	<code>public boolean <B>hasActions</B>()</code>
+	<a name="getminLevel()"><!-- --></a><h3>
+	getminLevel</h3>
+	<code>public string <B>getminLevel</B>()</code>
 
 	<dl>
 	<dd>
@@ -594,9 +639,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="isConditionTrue()"><!-- --></a><h3>
-	isConditionTrue</h3>
-	<code>public boolean <B>isConditionTrue</B>(<a href="../../../..//com/andreacfm/cfem/events/Event.html" title="class in com.andreacfm.cfem.events">Event</a> event)</code>
+	<a name="getout()"><!-- --></a><h3>
+	getout</h3>
+	<code>public string <B>getout</B>()</code>
 
 	<dl>
 	<dd>
@@ -608,22 +653,15 @@ init</h3>
 	
 
 	
-	<dl>
-	<dt><b>Parameters:</b></dt>
-	
-	<dd><code>event</code></dd>
-	
-	</dl>
-	
 
 	</dd>
 	</dl>
 	<hr>
 
 	
-	<a name="setcondition()"><!-- --></a><h3>
-	setcondition</h3>
-	<code>public void <B>setcondition</B>(string condition)</code>
+	<a name="getSize()"><!-- --></a><h3>
+	getSize</h3>
+	<code>public com.andreacfm.cfem.util.datetime <B>getSize</B>()</code>
 
 	<dl>
 	<dd>
@@ -635,22 +673,15 @@ init</h3>
 	
 
 	
-	<dl>
-	<dt><b>Parameters:</b></dt>
-	
-	<dd><code>condition</code></dd>
-	
-	</dl>
-	
 
 	</dd>
 	</dl>
 	<hr>
 
 	
-	<a name="setEventManager()"><!-- --></a><h3>
-	setEventManager</h3>
-	<code>public void <B>setEventManager</B>(<a href="../../../..//com/andreacfm/cfem/EventManager.html" title="class in com.andreacfm.cfem">EventManager</a> EventManager)</code>
+	<a name="info()"><!-- --></a><h3>
+	info</h3>
+	<code>public void <B>info</B>(String msg)</code>
 
 	<dl>
 	<dd>
@@ -665,7 +696,7 @@ init</h3>
 	<dl>
 	<dt><b>Parameters:</b></dt>
 	
-	<dd><code>EventManager</code></dd>
+	<dd><code>msg</code></dd>
 	
 	</dl>
 	
@@ -675,9 +706,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="setpoint()"><!-- --></a><h3>
-	setpoint</h3>
-	<code>public void <B>setpoint</B>(string point)</code>
+	<a name="logMessage()"><!-- --></a><h3>
+	logMessage</h3>
+	<code>private void <B>logMessage</B>(string severity, String msg)</code>
 
 	<dl>
 	<dd>
@@ -692,7 +723,9 @@ init</h3>
 	<dl>
 	<dt><b>Parameters:</b></dt>
 	
-	<dd><code>point</code></dd>
+	<dd><code>severity</code></dd>
+	
+	<dd><code>msg</code></dd>
 	
 	</dl>
 	
@@ -702,9 +735,9 @@ init</h3>
 	<hr>
 
 	
-	<a name="update()"><!-- --></a><h3>
-	update</h3>
-	<code>public void <B>update</B>(<a href="../../../..//com/andreacfm/cfem/events/AbstractEvent.html" title="class in com.andreacfm.cfem.events">AbstractEvent</a> event)</code>
+	<a name="setFilePath()"><!-- --></a><h3>
+	setFilePath</h3>
+	<code>public void <B>setFilePath</B>([String path])</code>
 
 	<dl>
 	<dd>
@@ -714,24 +747,147 @@ init</h3>
 
 	
 	
+
+	
 	<dl>
-		<dt><b>Overrides:</b></dt>
-		<dd>
-		<code>
-		<a href="../../../..//com/andreacfm/cfem/util/IObserver.html#update()">update</a></code>
-		in class
-		<code>
-			<a href="../../../..//com/andreacfm/cfem/util/IObserver.html" title="class in com.andreacfm.cfem.util">IObserver</a>
-		</code>
-		</dd>
+	<dt><b>Parameters:</b></dt>
+	
+	<dd><code>path</code></dd>
+	
 	</dl>
+	
+
+	</dd>
+	</dl>
+	<hr>
+
+	
+	<a name="setmaxSize()"><!-- --></a><h3>
+	setmaxSize</h3>
+	<code>public void <B>setmaxSize</B>(Numeric maxSize)</code>
+
+	<dl>
+	<dd>
+	
+	<p>
+	</p></dd>
+
+	
 	
 
 	
 	<dl>
 	<dt><b>Parameters:</b></dt>
 	
-	<dd><code>event</code></dd>
+	<dd><code>maxSize</code></dd>
+	
+	</dl>
+	
+
+	</dd>
+	</dl>
+	<hr>
+
+	
+	<a name="setminLevel()"><!-- --></a><h3>
+	setminLevel</h3>
+	<code>public void <B>setminLevel</B>(String minLevel)</code>
+
+	<dl>
+	<dd>
+	
+	<p>
+	</p></dd>
+
+	
+	
+
+	
+	<dl>
+	<dt><b>Parameters:</b></dt>
+	
+	<dd><code>minLevel</code></dd>
+	
+	</dl>
+	
+
+	</dd>
+	</dl>
+	<hr>
+
+	
+	<a name="setout()"><!-- --></a><h3>
+	setout</h3>
+	<code>public void <B>setout</B>(String out)</code>
+
+	<dl>
+	<dd>
+	
+	<p>
+	</p></dd>
+
+	
+	
+
+	
+	<dl>
+	<dt><b>Parameters:</b></dt>
+	
+	<dd><code>out</code></dd>
+	
+	</dl>
+	
+
+	</dd>
+	</dl>
+	<hr>
+
+	
+	<a name="warn()"><!-- --></a><h3>
+	warn</h3>
+	<code>public void <B>warn</B>(String msg)</code>
+
+	<dl>
+	<dd>
+	
+	<p>
+	</p></dd>
+
+	
+	
+
+	
+	<dl>
+	<dt><b>Parameters:</b></dt>
+	
+	<dd><code>msg</code></dd>
+	
+	</dl>
+	
+
+	</dd>
+	</dl>
+	<hr>
+
+	
+	<a name="writeLog()"><!-- --></a><h3>
+	writeLog</h3>
+	<code>private any <B>writeLog</B>(string msg)</code>
+
+	<dl>
+	<dd>
+	
+	<p>
+	</p></dd>
+
+	
+	
+
+	
+	<dl>
+	<dt><b>Parameters:</b></dt>
+	
+	<dd><code>msg</code></dd>
 	
 	</dl>
 	
@@ -786,7 +942,7 @@ CF Event Manager - 1.0.3 [Tuesday Apr 27, 2010]</EM>
 
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 	
-	  <A HREF="../../../../index.html?com/andreacfm/cfem/events/AbstractEventInterception.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+	  <A HREF="../../../../index.html?com/andreacfm/cfem/util/SimpleAppender.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 	
 </FONT></TD>
 

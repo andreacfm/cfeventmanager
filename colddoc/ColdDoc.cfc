@@ -59,7 +59,6 @@
 
 <cffunction name="buildMetaDataCollection" hint="builds the searchable meta data collection" access="private" returntype="query" output="false">
 	<cfargument name="inputSource" hint="an array of structs containing inputDir and inputMapping" type="array" required="yes"> <!--- of struct --->
-
 	<cfscript>
 		var qFile = 0;
 		var qMetaData = QueryNew("package,name,extends,metadata");
@@ -68,11 +67,14 @@
 		var cfcName = 0;
 		var meta = 0;
 		var i = 0;
+		var recurse = "";
 	</cfscript>
 
     <cfloop index="i" from="1" to="#ArrayLen(arguments.inputSource)#">
+	
+		<cfset recurse = structkeyExists(arguments.inputSource[i],'recurse') ? arguments.inputSource[i].recurse : true />
 
-        <cfdirectory action="list" directory="#arguments.inputSource[i].inputDir#" recurse="true" name="qFiles" filter="*.cfc">
+        <cfdirectory action="list" directory="#arguments.inputSource[i].inputDir#" recurse="#recurse#" name="qFiles" filter="*.cfc">
 
         <cfloop query="qFiles">
             <cfscript>

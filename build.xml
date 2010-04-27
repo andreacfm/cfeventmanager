@@ -24,7 +24,7 @@
 	
 	<!-- setup -->
 	<target name="setup">
-		<mkdir dir="${basedir}/temp/com" />		
+			
 	</target>
 
 	<target name="runtests" description="Make output directories and run the MXUnit task">
@@ -62,8 +62,9 @@
 	<!-- deploy the demo site -->
 	<target name="deploy">
 		
-		<echo message="Copy to temp"/>		
+		<mkdir dir="${basedir}/temp/com" />	
 		
+		<echo message="Copy to temp"/>		
 		<copy todir="${basedir}/temp/com">
 			<fileset dir="${basedir}/com" excludes="**/samples/**"/>
 		</copy>
@@ -88,21 +89,38 @@
 
 		<echo message="Prepare the zip"/>
 		<zip basedir="${basedir}/temp" destfile="${basedir}/zip/EM-${build.projectVersion}.zip" update="true"/>
-
-		<echo message="Make docs"/>	
-		<get src="http://localhost/cfeventmanager/colddoc/run.cfm" dest="${basedir}/temp/docs_response.txt"/>
+		
+		<delete dir="${basedir}/temp"/>	
 
 	</target>
 	
+	<target name="updateDocs">
+		
+		<mkdir dir="${basedir}/temp/com" />
+		
+		<echo message="Make docs"/>	
+		<get src="http://localhost/cfeventmanager/colddoc/run.cfm" dest="${basedir}/temp/docs_response.txt"/>
+
+		<replace dir="${basedir}/docs">
+			<replacefilter token="@number" value="${build.number}"/>
+			<replacefilter token="@projectName" value="${build.projectName}"/>
+			<replacefilter token="@date" value="${build.date}"/>
+			<replacefilter token="@projectVersion" value="${build.projectVersion}"/>
+		</replace>
+		
+		<delete dir="${basedir}/temp"/>	
+		
+	</target>	
+	
 	<!-- teardown -->
 	<target name="teardown">
-		<delete dir="${basedir}/temp"/>	
+		
 	</target>
 
 		
 	<target 
 		name="compile" 
-		depends="setup,runtests,deploy,commit,teardown" />
+		depends="runtests,deploy,commit,updateDocs" />
 	
 
 </project>
