@@ -1,2 +1,2 @@
-<cfset cfcroot = 'cfeventmanager.com.andreacfm.cfem.test' />
-<cfset siteroot = '/cfeventmanager/com/andreacfm/cfem' />
+<cfset cfcroot = 'com.andreacfm.cfem.test' />
+<cfset siteroot = '/com/andreacfm/cfem' />

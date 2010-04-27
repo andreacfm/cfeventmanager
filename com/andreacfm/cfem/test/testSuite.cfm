@@ -3,6 +3,7 @@
 <cfscript>	
  testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
  testSuite.addAll("#cfcroot#.EventManagerTest");
+ testSuite.addAll("#cfcroot#.AppenderTest");
  results = testSuite.run();
 </cfscript>
 <cfoutput>#results.getResultsOutput(URL.output)#</cfoutput>  
