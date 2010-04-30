@@ -98,11 +98,11 @@
 
 	<!--- minLevel--->
 	<cffunction name="setminLevel" access="public" returntype="void">
-	<cfargument name="minLevel" type="String" required="true"/>
+		<cfargument name="minLevel" type="String" required="true"/>
 	
 		<cfif not structKeyExists(variables.severityScale,arguments.minLevel)>
 			<cfthrow type="com.andreacfm.logging.MinLevelDoNotExists" message="The min level logging [#arguments.minLevel#] is not valid.">
-			<cfset variables.instance.minLevel = 3>
+			<cfset variables.instance.minLevel = 2>
 		<cfelse>
 			<cfset variables.instance.minLevel = variables.severityScale[arguments.minLevel] />	
 		</cfif>
@@ -110,6 +110,16 @@
 	</cffunction>
 	<cffunction name="getminLevel" access="public" returntype="String">
 		<cfreturn variables.instance.minLevel/>
+	</cffunction>	
+	<cffunction name="getTranslatedMinLevel" access="public" returntype="String">
+		<cfset var key = "" />
+		<cfset var min = getMinLevel() />	
+		<cfloop collection="#variables.severityScale#" item="key">
+			<cfif variables.severityScale[key] eq min>
+				<cfreturn key />
+			</cfif>
+		</cfloop>
+		<cfreturn "" />
 	</cffunction>	
 
 	<!--- maxSize--->

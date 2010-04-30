@@ -326,7 +326,10 @@
 						variables.instance.config[local.configs[i].xmlAttributes.name] = {};
 						variables.instance.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value)
 						variables.instance.config[local.configs[i].xmlAttributes.name].props = {};
-						var props = xmlSearch(local.xml,'/event-manager/configs/config[#i#]/property');						
+						var props = xmlSearch(local.xml,'/event-manager/configs/config[#i#]/property');
+						for(p=1; p <= arraylen(props); p++){
+							variables.instance.config[local.configs[i].xmlAttributes.name].props[props[p].xmlAttributes.name] = props[p].xmlAttributes.value;
+						}	
 					}
 				}					
 				local.actions = xmlSearch(local.xml,'/event-manager/actions/action');
@@ -336,13 +339,11 @@
 						variables.instance.config.actions[local.actions[i].xmlAttributes.name] = local.actions[i].xmlAttributes.class;
 					}
 				}					
-
 			}else{					
 					throw('Xml file #local.Path# is not valid.','com.andreacfm.cfem.xmlInvalidException');
 			} 
 		}
 		</cfscript>
-
 	</cffunction>
 	
 	<!--- 

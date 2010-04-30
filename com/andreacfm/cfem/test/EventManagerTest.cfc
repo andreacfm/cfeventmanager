@@ -200,7 +200,6 @@
 
 
 
-
 		
 	<!--- xml --->
 	<cffunction name="testLoadFromXmlPath" returntype="void" output="false" access="public">
@@ -281,8 +280,6 @@
 	
 
 
-
-	
 		
 	<!--- Factory --->
 	<cffunction name="test_getFactory" returntype="void">
@@ -313,8 +310,6 @@
 
 					
 	</cffunction>
-
-
 
 
 
@@ -366,8 +361,6 @@
 		 
 		 				
 	</cffunction>
-
-
 
 
 
@@ -520,8 +513,6 @@
 		<cfset local.result.isConditionTrue(local.event) />
 		
 	</cffunction>	
-
-
 
 
 
