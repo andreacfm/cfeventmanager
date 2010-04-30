@@ -19,8 +19,8 @@
 		local.event = getEvent();
 		local.em = getEventManager();
 		local.listeners = local.em.getListeners(local.event.getName());
-		local.debug = local.em.getDebug();
-		local.tracer = local.em.getTracer();
+		local.isLogging = local.em.isLogging();
+		local.logger = local.em.getLogger();
 
 		for(i=1; i lte arraylen(local.listeners); i++){
 			if(local.event.isActive()){
@@ -36,24 +36,23 @@
 				if(i==1){
 					local.event.updatePoint('before');
 				}
-				if(local.debug){
-					local.tracer.trace("Interception","<ul><li>Point : Before</li><li>Event : #local.event.getname()#</li></ul>",local.event);
+				if(local.isLogging){
+					local.logger.debug("Event: #local.event.getname()# - Interception point BEFORE");
 				}		
 				
 				// call the listener
 				local.listeners[i].execute(local.event);
 				
 				local.event.updatePoint('each');
-				if(local.em.getDebug()){
-					local.em.getTracer().trace('Interception',"<ul><li>Point : Each</li><li>Event : #local.event.getname()#</li></ul>",local.event);
-					if(local.debug){
-						local.tracer.trace('Invoke Listener','Listener #local.listObj.getClass()#',local.event);
-					}		
+				if(local.isLogging){
+					local.logger.debug("Event: #local.event.getname()# - Interception point EACH");
+					local.logger.info("Event: #local.event.getname()# - Invoke Listener #local.listObj.getClass()#");
 				}		
+
 				if(i==arraylen(local.listeners)){
 					local.event.updatePoint('after');
-					if(local.debug){
-						local.tracer.trace('Interception','<ul><li>Point : After</li><li>Event : #local.event.getname()#</li></ul>',local.event);
+					if(local.isLogging){
+						local.logger.debug("Event: #local.event.getname()# - Interception point AFTER");
 					}		
 				}
 			}

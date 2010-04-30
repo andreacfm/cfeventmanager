@@ -3,39 +3,52 @@
 <event-manager>
 	
 	<configs>
-		
+
+		<!-- Add any property
+		<property name="out" value="file" />
+		Are injected into init mode.
+		-->
+
 		<!-- 
 			Class used to dispatch asynch events.
 			Must Extend AbstractDispatcher and implement the abstract dispatch method.
 		-->
-		<config name="asynchDispatcher">com.andreacfm.cfem.dispatch.AsynchDispatcher</config>	
+		<config name="asynchDispatcher" value="com.andreacfm.cfem.dispatch.AsynchDispatcher"/>	
 		
 		<!-- 
 			Class used to dispatch synch events.
 			Must Extend AbstractDispatcher and implement the abstract dispatch method.
 		-->		
-		<config name="synchDispatcher">com.andreacfm.cfem.dispatch.SynchDispatcher</config>		
+		<config name="synchDispatcher" value="com.andreacfm.cfem.dispatch.SynchDispatcher"/>		
 		
 		<!-- 
 			Base Event Class used if no other type specified.
 			Extends AbstractEvent and implement the init abstract method.
 		-->		
-		<config name="defaultBaseEventClass">com.andreacfm.cfem.events.Event</config>
+		<config name="defaultBaseEventClass" value="com.andreacfm.cfem.events.Event"/>
 
 		<!-- 
 			Default Listener Class
 		-->		
-		<config name="defaultBaseListenerClass">com.andreacfm.cfem.listener.Listener</config>
+		<config name="defaultBaseListenerClass" value="com.andreacfm.cfem.listener.Listener"/>
 		
 		<!-- Event Interceptions Flows -->
-		<config name="eventInterceptionsPoints">before,each,after</config>		
+		<config name="eventInterceptionsPoints" value="before,each,after"/>		
 		
 		<!-- Class used to create event interceptions -->
-		<config name="defaultInterceptionClass">com.andreacfm.cfem.events.EventInterception</config>
+		<config name="defaultInterceptionClass" value="com.andreacfm.cfem.events.EventInterception"/>
 
 		<!-- Cache Adapter -->
-		<config name="cacheAdapter">com.andreacfm.cfem.caching.BasicCacheAdapter</config>
-	
+		<config name="cacheAdapter" value="com.andreacfm.cfem.caching.BasicCacheAdapter"/>
+
+		<!-- defaultLoggerClass -->
+		<config name="defaultLoggerClass" value="com.andreacfm.cfem.util.SimpleAppender">
+			<property name="out" value="file" />		
+			<property name="filepath" value="/cfem.log" />
+			<property name="minLevel" value="info" />
+			<property name="maxSize" value="10485760" />
+		</config>
+		
 	</configs>	
 	
 	<actions>			

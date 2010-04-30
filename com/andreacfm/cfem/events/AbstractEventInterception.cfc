@@ -34,13 +34,12 @@
     <cffunction name="execute" output="false" access="public" returntype="void">
     	<cfargument name="event" type="com.andreacfm.cfem.events.AbstractEvent" required="true" />
     	<cfset var iterator = variables.instance.actions.iterator() />
-		<cfset var debug = getEventManager().getDebug() />
-		<cfset var tracer = getEventManager().getTracer() />
+		<cfset var em = getEventManager() />
 		<cfset var action = "" />
     	<cfloop condition="#iterator.hasNext()#">
     		<cfset action = iterator.next() />
- 			<cfif debug>
-				<cfset tracer.trace('Running Action','<ul><li>Action #action.getName()#</li><li>Event : #arguments.event.getname()#</li>',arguments.event) />
+ 			<cfif em.islogging()>
+				<cfset em.getLogger().debug("Event:#arguments.event.getname()# - Action #action.getName()#") />
 			</cfif>       
 			<cfset action.execute(arguments.event) />
 		</cfloop>

@@ -16,12 +16,13 @@
 		variables.emMock.$("getConfig").$args("SynchDispatcher").$results('com.andreacfm.cfem.dispatch.SynchDispatcher');
 		variables.emMock.$("getConfig").$args("AsynchDispatcher").$results('com.andreacfm.cfem.dispatch.AsynchDispatcher');
 		variables.emMock.$("getConfig").$args("defaultBaseEventClass").$results('com.andreacfm.cfem.events.Event');
-		variables.emMock.$("getConfig").$args("Actions").$results({
+		variables.emMock.$("getActions").$results({
 			stop = 'com.andreacfm.cfem.events.actions.Stop',
 			throw = 'com.andreacfm.cfem.events.actions.Throw',
 			dispatch = 'com.andreacfm.cfem.events.actions.Dispatch'
 			});				
-			
+
+		variables.emMock.$("isLogging").$results(false);			
 		</cfscript>
 	</cffunction>
 
@@ -45,10 +46,7 @@
 		<cfset assertTrue(local.em.getAutowire() eq false,"Error in default autowire ")/> 
 
 		<!--- Debug false --->
-		<cfset assertTrue(local.em.getDebug() eq false,"Error in default debug.")/> 
-
-		<!--- Scope 'request' --->
-		<cfset assertTrue(local.em.getScope() eq 'request',"Error in default scope")/> 
+		<cfset assertTrue(local.em.isLogging() eq true,"Error in logging default.")/> 
 					
 	</cffunction>
 

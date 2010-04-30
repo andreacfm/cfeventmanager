@@ -3,7 +3,7 @@
 	<!--- createAction --->
 	<cffunction name="create" output="false" returntype="com.andreacfm.cfem.events.actions.AbstractAction">
 		<cfargument name="name" required="true" type="string"/>
-		<cfset var actions = getEventManager().getConfig('Actions') />
+		<cfset var actions = getEventManager().getActions() />
 		<cfset var actionClass = "" />
 		<cfset var result = "" />
 		<cftry>

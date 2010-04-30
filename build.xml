@@ -34,7 +34,7 @@
 		<mxunittask server="${server.name}" port="${server.port}"
         	defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
            	verbose="true"
-           	haltonfailure="false"
+           	haltonfailure="true"
            	haltonerror="true">
 
 	        <directory runner="/mxunit/runner/HttpAntRunner.cfc"

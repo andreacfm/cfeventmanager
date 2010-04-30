@@ -1,7 +1,7 @@
 <cfcomponent output="false">
 	
 	<cfset variables.instance = {} />
-	<cfset variables.severityScale = {debug:1,info:2,warn:3,error:4,fatal:5} />
+	<cfset variables.severityScale = {debug=1,info=2,warn=3,error=4,fatal=5} />
 	
 	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.util.SimpleAppender">		
 		<cfargument name="out" type="String" default="file" />		
@@ -65,7 +65,6 @@
 			return variables.instance.FilePath;
 		</cfscript>
 	</cffunction>
-	
 	<cffunction name="setFilePath" output="false" returntype="void">
 		<cfargument name="path" type="String">
 		<cfscript> 
