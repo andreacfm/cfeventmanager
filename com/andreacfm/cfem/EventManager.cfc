@@ -6,7 +6,6 @@
 	<cfscript>
 	variables.instance.events = structNew();
 	variables.instance.config = structNew();
-	variables.instance.cachedListeners = structNew();
 	variables.instance.helpers = structNew();
 	variables.instance.Sorter = createObject('component','com.andreacfm.cfem.util.SortableListeners').init();
 	variables.instance.islogging = true;
@@ -22,6 +21,9 @@
 		<cfargument name="autowire" required="false" type="boolean" default="false"/>
 		<cfargument name="logging" required="false" type="boolean" default="true"/>
 		<cfargument name="logger" required="false" type="any" default=""/>
+		<cfargument name="dir" required="false" type="any"/>
+		<cfargument name="recurseOnDir" required="false" type="Boolean" default="false"/>
+		
 		<cfscript>		
 		//create factories
 		var factory = createObject('component','com.andreacfm.cfem.factory.Factory').init();
@@ -30,12 +32,15 @@
 		var ActionFactory = createObject('component','com.andreacfm.cfem.factory.ActionFactory').init(this);
 		var InterceptionFactory = createObject('component','com.andreacfm.cfem.factory.InterceptionFactory').init(this);
 		var ListenerFactory = createObject('component','com.andreacfm.cfem.factory.ListenerFactory').init(this,arguments.autowire);
+		var ListenerParserFactory = createObject('component','com.andreacfm.cfem.factory.ListenerParserFactory').init(this);
 		
 		factory.addFactory('EventFactory',EventFactory);
 		factory.addFactory('DispatcherFactory',DispatcherFactory);
 		factory.addFactory('ActionFactory',ActionFactory);
 		factory.addFactory('InterceptionFactory',InterceptionFactory);
 		factory.addFactory('ListenerFactory',ListenerFactory);
+		factory.addFactory('ListenerFactory',ListenerFactory);
+		factory.addFactory('ListenerParserFactory',ListenerParserFactory);
 		
 		setFactory(factory);
 		
@@ -305,6 +310,34 @@
 		</cfscript>	
 
 	</cffunction>
+
+	<!---
+	listenerExists
+	--->
+	<cffunction name="listenerExists" access="public" output="false" returntype="boolean" hint="check from a class path if exist a listener cached in memory">
+		<cfargument name="class" type="string" required="true"/>
+		<cfscript>
+			var result = true;
+			if(not structKeyExists(variables.instance.cachedListeners,arguments.class)){
+				result = false;
+			}
+			return result;
+		</cfscript>		
+	</cffunction>
+
+	<!---
+	eventExists
+	--->
+	<cffunction name="eventExists" output="false" returntype="boolean" access="public">
+		<cfargument name="eventname" type="string" required="true"/>
+		<cfscript>
+			var result = true;
+			if(not structKeyExists(variables.instance.events,arguments.eventname)){
+				result = false;
+			}
+			return result;
+		</cfscript>		
+	</cffunction>
 	
 	<!---
 	loadConfig
@@ -396,33 +429,21 @@
 		</cfscript>
 	</cffunction>
 		
-	<!---
-	listenerExists
-	--->
-	<cffunction name="listenerExists" access="public" output="false" returntype="boolean" hint="check from a class path if exist a listener cached in memory">
-		<cfargument name="class" type="string" required="true"/>
-		<cfscript>
-			var result = true;
-			if(not structKeyExists(variables.instance.cachedListeners,arguments.class)){
-				result = false;
-			}
-			return result;
-		</cfscript>		
-	</cffunction>
 
-	<!---
-	eventExists
-	--->
-	<cffunction name="eventExists" output="false" returntype="boolean" access="public">
-		<cfargument name="eventname" type="string" required="true"/>
+	<!--- 
+	parseDirectory
+	 --->
+	<cffunction name="parseDirectory" returntype="void" output="false" access="public">
+		<cfargument name="dir" type="String" required="true" hint="relative path to the directory that contains the listeners to scan">
+		<cfargument name="recurse" type="Boolean" required="false" default="false">
+		
 		<cfscript>
-			var result = true;
-			if(not structKeyExists(variables.instance.events,arguments.eventname)){
-				result = false;
-			}
-			return result;
-		</cfscript>		
+		var parser = getFactory().createListenerParser(argumentCollection=arguments);
+		parser.run(); 			
+		</cfscript>
+		
 	</cffunction>
+	
 
     <!---   
 	Sorter  

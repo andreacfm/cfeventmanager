@@ -147,8 +147,8 @@
 		// log only over the fixed minimum
 		if(variables.severityScale[arguments.severity] gte getminLevel()){
 			if(out eq 'file'){
-				writeLog(entry);
-			}else{
+				writeLogFile(entry);
+			}else if(out eq 'console'){
 				variables.instance.console.println(entry);
 			}		
 		}
@@ -157,7 +157,7 @@
 	</cffunction>	
 
 	<!--- writeLog --->
-	<cffunction name="writeLog" output="false" access="private">
+	<cffunction name="writeLogFile" output="false" access="private">
 		<cfargument name="msg" required="true" type="string"/>
 
 		<cfif getSize() gt getmaxSize()>

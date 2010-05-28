@@ -3,7 +3,7 @@
 	
 	<cfset variables.instance = {} />
 	
-	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.listener.MetaScanner">
+	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.listener.Parser">
 		<cfargument name="eventManager" required="true" type="com.andreacfm.cfem.EventManager">
 		<cfargument name="path" required="true" type="string" hint="relative path to the directory to be scanned">
 		<cfargument name="recurse" required="false" type="Boolean" default="false">
@@ -18,24 +18,23 @@
 	<!--- 
 	findListeners
 	 --->
-	<cffunction name="addListeners" returntype="void" output="false" access="public">
+	<cffunction name="run" returntype="void" output="false" access="public">
 		
 		<cfset var dir = getPath() />
 		<cfset var recurse = getRecurse() />
-		<cfset scanDirectory(directory = dir, recurse = recurse) />
+		<cfset _scanDirectory(directory = dir, recurse = recurse) />
 		
 	</cffunction>
 
 	<!--- 
 	scanDirectory
 	 --->
-	<cffunction name="scanDirectory" returntype="void" output="false" access="private">
+	<cffunction name="_scanDirectory" returntype="void" output="false" access="private">
 		<cfargument name="directory" required="true" type="string" >
 		<cfargument name="recurse" required="true" type="Boolean" >
 		
 		<cfset var q = "" />
-		<cfset var obj = "" />
-		<cfset var mapping = "" />
+		<cfset var class = "" />
 		
 		<cfdirectory action="list" name="q" directory="#expandPath(arguments.directory)#" filter="*.cfc" />
 
@@ -43,9 +42,9 @@
 			<cfif q.type eq "file">
 				<cfset class = reReplaceNocase(arguments.directory,'^/','') />
 				<cfset class = reReplaceNocase(class,'/','.','All') & reReplaceNocase(q.name,'.cfc','','All') />
-				<cfset processObject(class)/>
+				<cfset _processObject(class)/>
 			<cfelseif q.type eq "dir" and arguments.recurse>
-				<cfset scanDirectory(directory:"#d.directory#/#q.name#",recurse:true)/>
+				<cfset _scanDirectory(directory:"#d.directory#/#q.name#",recurse:true)/>
 			</cfif>
 		</cfloop>
 			
@@ -54,7 +53,7 @@
 	<!--- 
 	processObject
 	 --->
-	<cffunction name="processObject" returntype="void" output="false" access="private">
+	<cffunction name="_processObject" returntype="void" output="false" access="private">
 		<cfargument name="class" required="true" type="String">
 		
 		<cfset var em = getEventManager() />

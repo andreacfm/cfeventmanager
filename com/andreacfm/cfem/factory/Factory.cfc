@@ -47,4 +47,9 @@
     	<cfreturn getFactory('ListenerFactory').create(argumentCollection=arguments)/>
     </cffunction>
 
+	<!---createListenerParser--->
+    <cffunction name="createListenerParser" output="false" access="public" returntype="com.andreacfm.cfem.listener.Parser">
+    	<cfreturn getFactory('ListenerParserFactory').create(argumentCollection=arguments)/>
+    </cffunction>
+
 </cfcomponent>

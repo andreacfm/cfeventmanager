@@ -52,22 +52,22 @@
 
 
 	
-	<!--- MetaScanner  --->
-	<cffunction name="testMetaScanner_init" returntype="void" output="false" access="public">
-		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.MetaScanner').init(
+	<!--- Parser  --->
+	<cffunction name="testParser_init" returntype="void" output="false" access="public">
+		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
 				variables.emMock,'/') />
 		<cfset assertTrue(not obj.getRecurse(),"Recurse default error.") />		
 				
 	</cffunction>
 
-	<cffunction name="testMetaScanner_illegal_path" returntype="void" output="false" access="public"
+	<cffunction name="testParser_illegal_path" returntype="void" output="false" access="public"
 				mxunit:expectedException="com.andreacfm.cfem.directoryDoesNotExists">
-		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.MetaScanner').init(
+		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
 				variables.emMock,'/notexists') />
 				
 	</cffunction>
 
-	<cffunction name="testMetaScanner_FindListeners" returntype="void" output="false" access="public">
+	<cffunction name="testParser_FindListeners" returntype="void" output="false" access="public">
 		
 		<cfset var local = {} />
 		<cfset local.factory = createObject('component','com.andreacfm.cfem.factory.Factory').init() />
@@ -76,11 +76,11 @@
 		<cfset variables.emMock.$(method='getDebug',returns=false)>
 		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
 		
-		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.MetaScanner').init(
+		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
 				variables.emMock,'#siteroot#/test/mocks/scan/') />
 		
 		
-		<cfset obj.addListeners() />
+		<cfset obj.run() />
 		<cfset local.event = variables.emMock.getEvent('onTestCase') />
 				
 		<cfset assertEquals(2, local.event.listeners.size(), "Listener not registered") />
