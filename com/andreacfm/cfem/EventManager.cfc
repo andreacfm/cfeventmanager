@@ -434,12 +434,23 @@
 	parseDirectory
 	 --->
 	<cffunction name="parseDirectory" returntype="void" output="false" access="public">
-		<cfargument name="dir" type="String" required="true" hint="relative path to the directory that contains the listeners to scan">
+		<cfargument name="dir" type="any" required="true" hint="relative path ( or an array of ) to the directory that contains the listeners to scan">
 		<cfargument name="recurse" type="Boolean" required="false" default="false">
 		
 		<cfscript>
-		var parser = getFactory().createListenerParser(argumentCollection=arguments);
-		parser.run(); 			
+		var parser = "";
+			
+		if(isSimpleValue(arguments.dir)){
+			parser = getFactory().createListenerParser(argumentCollection=arguments);
+			parser.run(); 					
+		}else if(isArray(arguments.dir)){
+			for(var i=1; i <= arraylen(arguments.dir); i++){
+				parser = getFactory().createListenerParser(dir = arguments.dir[i], recurse = arguments.recurse);
+				parser.run(); 								
+			}
+		}else{
+			throw(type="com.andreacfm.cfem.IllegalDirType",message="The arguments [dir] passed to function parseDirectoty must be a string or an array of strings")
+		}	
 		</cfscript>
 		
 	</cffunction>

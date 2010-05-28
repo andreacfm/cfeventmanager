@@ -2,6 +2,8 @@
 	hint="Look for listener into a specified directory.Add listeners and implicit events.">
 	
 	<cfset variables.instance = {} />
+	<cfset out = createObject('java','java.lang.System').out />
+
 	
 	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.listener.Parser">
 		<cfargument name="eventManager" required="true" type="com.andreacfm.cfem.EventManager">
@@ -36,15 +38,17 @@
 		<cfset var q = "" />
 		<cfset var class = "" />
 		
-		<cfdirectory action="list" name="q" directory="#expandPath(arguments.directory)#" filter="*.cfc" />
-
+		<cfdirectory action="list" name="q" directory="#expandPath(arguments.directory)#" sort="type desc"/>
+		
 		<cfloop query="q">
-			<cfif q.type eq "file">
+			<cfif q.type eq "File" and listLast(q.name,'.') eq 'cfc'>
 				<cfset class = reReplaceNocase(arguments.directory,'^/','') />
 				<cfset class = reReplaceNocase(class,'/','.','All') & reReplaceNocase(q.name,'.cfc','','All') />
 				<cfset _processObject(class)/>
-			<cfelseif q.type eq "dir" and arguments.recurse>
-				<cfset _scanDirectory(directory:"#d.directory#/#q.name#",recurse:true)/>
+				<cfset out.println('processing file : #class#')>
+			<cfelseif q.type eq "Dir" and arguments.recurse>
+				<cfset out.println('processing dir : #q.directory#/#q.name#')>
+				<cfset _scanDirectory(directory="#q.directory#/#q.name#",recurse=true )/>
 			</cfif>
 		</cfloop>
 			
@@ -57,7 +61,7 @@
 		<cfargument name="class" required="true" type="String">
 		
 		<cfset var em = getEventManager() />
-		<cfset var obj = createObject('component',class) />
+		<cfset var obj = createObject('component',arguments.class) />
 		<cfset var meta = getmetadata(obj) />
 		<cfset var functions = meta.functions />
 		<cfset var event = "" />
@@ -69,11 +73,12 @@
 				<cftry>
 					<cfset event = em.getEvent(f.event) />
 					<cfcatch type="com.andreacfm.cfem.noSuchEventExeption">
-						<cfset em .addEvent(f.event) />
+						<cfset em.addEvent(f.event) />
 					</cfcatch>
 				</cftry>
 				<cfset params = duplicate(f) />
-				<cfset params.listener = class />
+				<cfset params.listener = arguments.class />
+				<cfset params.method = f.name />
 				<cfset em.addEventListener(argumentCollection=params) />
 			</cfif>
 			

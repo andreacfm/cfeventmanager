@@ -28,7 +28,11 @@
 
 	<!--- tearDown--->
 	<cffunction name="tearDown">
-	
+		<cfscript>
+		if(fileExists(expandPath('/cfem.log'))){
+			fileDelete(expandPath('/cfem.log'));
+		}
+		</cfscript>
 	</cffunction>
 
 
@@ -67,7 +71,7 @@
 				
 	</cffunction>
 
-	<cffunction name="testParser_FindListeners" returntype="void" output="false" access="public">
+	<cffunction name="testParser_run" returntype="void" output="false" access="public">
 		
 		<cfset var local = {} />
 		<cfset local.factory = createObject('component','com.andreacfm.cfem.factory.Factory').init() />
@@ -76,19 +80,41 @@
 		<cfset variables.emMock.$(method='getDebug',returns=false)>
 		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
 		
+<!--- 
 		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
 				variables.emMock,'#siteroot#/test/mocks/scan/') />
-		
-		
 		<cfset obj.run() />
-		<cfset local.event = variables.emMock.getEvent('onTestCase') />
-				
+		<cfset local.event = variables.emMock.getEvent('onTestCase') />			
 		<cfset assertEquals(2, local.event.listeners.size(), "Listener not registered") />
-	
+		<cfset assertTrue(local.event.listeners[1].getMethod() eq 'onScanTestCase','Expected onScanTestCase - #local.event.listeners[1].getMethod()#')>
+		<cfset assertTrue(local.event.listeners[2].getMethod() eq 'onScanTestCaseSecondListener','Expected onScanTestCaseSecondListener - #local.event.listeners[1].getMethod()#')>
+ --->
+			
+		<!--- recurse --->
+		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
+				variables.emMock,'#siteroot#/test/mocks/scan/',true) />
+		<cfset obj.run() />
+		<cfset local.event = variables.emMock.getEvent('onTestCase') />			
+		<cfset assertEquals(5, local.event.listeners.size()) />
 		
 	</cffunction>
 
+	<cffunction name="test_listenerParser_factory_create" returntype="void">
 
+		<cfset var local = {} />	
+		<cfset local.path = '/cfeventmanager' />	
+		<cfset variables.emMock>
+		
+		<cfset local.factory = createObject('component','com.andreacfm.cfem.factory.ListenerParserFactory').init(variables.emMock) />
+		
+		<!--- call create --->
+		<cfset local.result = local.factory.create(local.path,true) />
+		<cfset assertTrue(isInstanceOf(local.result,'com.andreacfm.cfem.listener.Parser'),
+				"Basic create failed.") />			
+		<cfset assertTrue(local.result.getPath() eq local.path,"Path not correctly setted. [#local.result.getPath()#]")>
+		<cfset assertTrue(local.result.getRecurse(),"Recurse not correctly setted")>
+					
+	</cffunction>
 
 
 	<!--- Events --->
@@ -197,87 +223,6 @@
 	<cffunction name="test_add_event_with_interceptions_and_actions" returntype="void" output="false" access="public">
 				
 	</cffunction>	
-
-
-
-		
-	<!--- xml --->
-	<cffunction name="testLoadFromXmlPath" returntype="void" output="false" access="public">
-		<cfset var xml = getXml(1) />
-		<cfset var path = '#siteroot#/test/temp/emXml.cfm'>
-		<cffile action="write" file="#expandPath(path)#" output="#trim(xml)#" />
-		
-		<cfset local.em = createObject('component','com.andreacfm.cfem.EventManager').init(xmlPath = path) />
-		
-		<!--- oneevent --->
-		<cfset local.event = local.em.getEvent('oneEvent') />
-		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.events.Event',
-				"Event Type not saved correctly") />
-		
-		<!--- anotherevent --->
-		<cfset local.event = local.em.getEvent('anotherEvent') />
-		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
-				"Event Type not saved correctly") />
-		
-		<!--- onemoreevent --->		
-		<cfset local.event = local.em.getEvent('oneMoreEvent') />
-		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.events.Event',
-				"Event Type not saved correctly") />	
-		<cfset assertTrue(local.event.interceptions.size() eq 3,
-				"Interceptions not loaded.")>
-			
-		
-	</cffunction>
-
-	<cffunction name="testLoadFromXmlObject" returntype="void" output="false" access="public">
-
-		<cfset var xml = xmlParse(getXml(1)) />
-		<cfset local.em = createObject('component','com.andreacfm.cfem.EventManager').init(xmlObject = xml) />
-		
-		<!--- oneevent --->
-		<cfset local.event = local.em.getEvent('oneEvent') />
-		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.events.Event',
-				"Event Type not saved correctly") />
-		
-		<!--- anotherevent --->
-		<cfset local.event = local.em.getEvent('anotherEvent') />
-		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
-				"Event Type not saved correctly") />
-		
-		<!--- onemoreevent --->		
-		<cfset local.event = local.em.getEvent('oneMoreEvent') />
-		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.events.Event',
-				"Event Type not saved correctly") />	
-		<cfset assertTrue(local.event.interceptions.size() eq 3,
-				"Interceptions not loaded.")>
-
-		
-	</cffunction>
-
-	<cffunction name="testLoadFromXmlRaw" returntype="void" output="false" access="public">
-
-		<cfset var xml = getXml(1) />
-		<cfset local.em = createObject('component','com.andreacfm.cfem.EventManager').init(xml = xml) />
-		
-		<!--- oneevent --->
-		<cfset local.event = local.em.getEvent('oneEvent') />
-		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.events.Event',
-				"Event Type not saved correctly") />
-		
-		<!--- anotherevent --->
-		<cfset local.event = local.em.getEvent('anotherEvent') />
-		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
-				"Event Type not saved correctly") />
-		
-		<!--- onemoreevent --->		
-		<cfset local.event = local.em.getEvent('oneMoreEvent') />
-		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.events.Event',
-				"Event Type not saved correctly") />	
-		<cfset assertTrue(local.event.interceptions.size() eq 3,
-				"Interceptions not loaded.")>
-		
-	</cffunction>
-	
 
 
 		
@@ -581,46 +526,6 @@
 				
 		
 	</cffunction>
-
-	<cffunction name="test_dispatch_Asynch_Events" returntype="void" hint="">
-		
-		
-		<cfset var local = {} />
-		
-		<!--- Event --->
-		<cfset local.eventsArray = [
-				{name = 'asynchTest', type = 'com.andreacfm.cfem.events.CollectDataEvent'}
-				] />
-				
-		<!--- Listener --->
-		<cfset local.listenerArray=[
-				{event='asynchTest',listener = '#cfcroot#.mocks.AsynchListener', method = "addItem"}
-			]/>
-			
-		<!--- Em --->	
-		<cfset local.EM = createObject('component','com.andreacfm.cfem.EventManager').init(
-				events = local.eventsArray, 
-				listeners = local.listenerArray
-				)/>	
-
-		<cfset local.event = local.EM.createEvent(name = 'asynchTest', mode = "asynch") />		
-		
-		<!--- Before dispatch item len == 0 --->
-		<cfset assertTrue(local.event.getItems().size() eq 0,'Items count fail before dispatch.') />
-		
-		<cfset local.EM.dispatchEvent(event=local.event) />
-
-		<!--- Just After dispatch item len == 0 --->
-		<cfset assertTrue(local.event.getItems().size() eq 0,'Items count fail just after asynch dispatch. Listeners sleep 1000.') />
-		
-		<cfset sleep(3000) />
-		
-		<!--- Sleep 3000 to give time to the thread to execute --->
-		<cfset assertTrue(local.event.getItems().size() eq 100,'Items count fails.') />		
-		
-		
-	</cffunction>
-	
 
 	<!--- 
 	*************************************************************************************************

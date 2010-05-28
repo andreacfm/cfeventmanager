@@ -2,6 +2,7 @@
 <cfinclude template="settings.cfm">
 <cfscript>	
  testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+ testSuite.addAll("#cfcroot#.RegressionTest");
  testSuite.addAll("#cfcroot#.EventManagerTest");
  testSuite.addAll("#cfcroot#.AppenderTest");
  testSuite.addAll("#cfcroot#.LoggingTest");
