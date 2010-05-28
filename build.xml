@@ -59,7 +59,6 @@
 	</target>
 
 	
-	<!-- deploy the demo site -->
 	<target name="deploy">
 		
 		<mkdir dir="${basedir}/temp/com" />	

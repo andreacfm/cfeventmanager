@@ -5,7 +5,7 @@ Let's generate our default HTML documentation on myself:
 <cfapplication action="update" mappings="#mappings#" />
 <cfscript>
 	colddoc = createObject("component", "ColdDoc").init();
-	strategy = createObject("component", "colddoc.strategy.api.HTMLAPIStrategy").init(expandPath("/cfeventmanager/docs"), "CF Event Manager - @projectVersion [@date]");
+	strategy = createObject("component", "colddoc.strategy.api.HTMLAPIStrategy").init(expandPath("/cfeventmanager/docs"), "CF Event Manager - @projectVersion.@build [@date]");
 	colddoc.setStrategy(strategy);
 	colddoc.generate([
 		{inputDir=expandPath("/cfeventmanager/com/andreacfm/cfem"), inputMapping="com.andreacfm.cfem", recurse = false},
