@@ -2,14 +2,13 @@
 	hint="Look for listener into a specified directory.Add listeners and implicit events.">
 	
 	<cfset variables.instance = {} />
-	<cfset out = createObject('java','java.lang.System').out />
-
 	
 	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.listener.Parser">
 		<cfargument name="eventManager" required="true" type="com.andreacfm.cfem.EventManager">
 		<cfargument name="path" required="true" type="string" hint="relative path to the directory to be scanned">
 		<cfargument name="recurse" required="false" type="Boolean" default="false">
 		
+		<cfset variables.instance.basecfcpath = arguments.path />
 		<cfset setEventManager(arguments.eventManager) />
 		<cfset setPath(arguments.path) />
 		<cfset setRecurse(arguments.recurse) />
@@ -34,21 +33,25 @@
 	<cffunction name="_scanDirectory" returntype="void" output="false" access="private">
 		<cfargument name="directory" required="true" type="string" >
 		<cfargument name="recurse" required="true" type="Boolean" >
+		<cfargument name="cfcPathMapping" required="false" type="String" default="">
 		
 		<cfset var q = "" />
 		<cfset var class = "" />
+		<cfset var basecfcpath = getbasecfcpath()>
 		
-		<cfdirectory action="list" name="q" directory="#expandPath(arguments.directory)#" sort="type desc"/>
+		<cfdirectory action="list" name="q" directory="#arguments.directory#" sort="type desc"/>
 		
 		<cfloop query="q">
 			<cfif q.type eq "File" and listLast(q.name,'.') eq 'cfc'>
-				<cfset class = reReplaceNocase(arguments.directory,'^/','') />
+				<cfset var fullPath = basecfcpath & arguments.cfcPathMapping />
+				<cfset class = reReplaceNocase(fullPath,'//','/') />
+				<cfset class = reReplaceNocase(fullPath,'^/','') />
 				<cfset class = reReplaceNocase(class,'/','.','All') & reReplaceNocase(q.name,'.cfc','','All') />
 				<cfset _processObject(class)/>
-				<cfset out.println('processing file : #class#')>
 			<cfelseif q.type eq "Dir" and arguments.recurse>
-				<cfset out.println('processing dir : #q.directory#/#q.name#')>
-				<cfset _scanDirectory(directory="#q.directory#/#q.name#",recurse=true )/>
+				<cfset var dir = "#q.directory#/#q.name#" />
+				<cfset var diff = replace(dir,expandPath(basecfcpath),'') & '/' />
+				<cfset _scanDirectory(dir,true,diff)/>
 			</cfif>
 		</cfloop>
 			
@@ -105,14 +108,19 @@
 		<cfreturn variables.instance.Recurse/>
 	</cffunction>	
 	
-	<!--- path--->
+	<!--- base--->
+	<cffunction name="getbasecfcpath" access="public" returntype="String">
+		<cfreturn variables.instance.basecfcpath/>
+	</cffunction>
+		
+	<!--- path ( store the expanded base path )--->
 	<cffunction name="setpath" access="public" returntype="void">
 		<cfargument name="path" type="String" required="true"/>
 		<cfscript>
 		if(not directoryexists(expandPath(arguments.path))){
 			getEventManager().throw(message = "Directory [#arguments.path#] does not exists", type="com.andreacfm.cfem.directoryDoesNotExists");
 		}
-		variables.instance.path = path;
+		variables.instance.path = expandPath(path);
 		</cfscript>
 	</cffunction> 
 	<cffunction name="getpath" access="public" returntype="String">

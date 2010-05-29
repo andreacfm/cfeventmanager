@@ -80,7 +80,6 @@
 		<cfset variables.emMock.$(method='getDebug',returns=false)>
 		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
 		
-<!--- 
 		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
 				variables.emMock,'#siteroot#/test/mocks/scan/') />
 		<cfset obj.run() />
@@ -88,14 +87,27 @@
 		<cfset assertEquals(2, local.event.listeners.size(), "Listener not registered") />
 		<cfset assertTrue(local.event.listeners[1].getMethod() eq 'onScanTestCase','Expected onScanTestCase - #local.event.listeners[1].getMethod()#')>
 		<cfset assertTrue(local.event.listeners[2].getMethod() eq 'onScanTestCaseSecondListener','Expected onScanTestCaseSecondListener - #local.event.listeners[1].getMethod()#')>
- --->
-			
-		<!--- recurse --->
+
+	</cffunction>
+
+	<cffunction name="testParser_run_recurse" returntype="void" output="false" access="public">
+		
+		<cfset var local = {} />
+		<cfset local.factory = createObject('component','com.andreacfm.cfem.factory.Factory').init() />
+		<cfset local.listfactory = createObject('component','com.andreacfm.cfem.factory.ListenerFactory').init(variables.emMock) />
+		<cfset local.factory.addFactory('listenerFactory',local.listfactory) />
+		<cfset variables.emMock.$(method='getDebug',returns=false)>
+		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
+		
 		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
 				variables.emMock,'#siteroot#/test/mocks/scan/',true) />
 		<cfset obj.run() />
 		<cfset local.event = variables.emMock.getEvent('onTestCase') />			
 		<cfset assertEquals(5, local.event.listeners.size()) />
+		<cfset assertTrue(local.event.listeners[1].getMethod() eq 'onScanTestCase','Expected onScanTestCase - #local.event.listeners[1].getMethod()#')>
+		<cfset assertTrue(local.event.listeners[2].getMethod() eq 'onScanTestCaseSecondListener','Expected onScanTestCaseSecondListener - #local.event.listeners[1].getMethod()#')>
+		<cfset assertTrue(local.event.listeners[3].getMethod() eq 'onScanTestCaseSub1','Expected onScanTestCaseSub1 - #local.event.listeners[1].getMethod()#')>
+		<cfset assertTrue(local.event.listeners[4].getMethod() eq 'onScanTestCaseSecondListenerSub1','Expected onScanTestCaseSecondListenerSub1 - #local.event.listeners[1].getMethod()#')>
 		
 	</cffunction>
 
@@ -111,7 +123,7 @@
 		<cfset local.result = local.factory.create(local.path,true) />
 		<cfset assertTrue(isInstanceOf(local.result,'com.andreacfm.cfem.listener.Parser'),
 				"Basic create failed.") />			
-		<cfset assertTrue(local.result.getPath() eq local.path,"Path not correctly setted. [#local.result.getPath()#]")>
+		<cfset assertTrue(local.result.getPath() eq expandPath(local.path),"Path not correctly setted. [#local.result.getPath()#]")>
 		<cfset assertTrue(local.result.getRecurse(),"Recurse not correctly setted")>
 					
 	</cffunction>

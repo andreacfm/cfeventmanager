@@ -26,16 +26,25 @@
 		<cfset var event = em.getEvent('onTestCase')>		
 		<!--- non recurse solo 2 listener --->				
 		<cfset assertEquals(2, event.listeners.size()) />
+		<cfset assertTrue(event.listeners[1].getMethod() eq 'onScanTestCase','Expected onScanTestCase - #event.listeners[1].getMethod()#')>
+		<cfset assertTrue(event.listeners[2].getMethod() eq 'onScanTestCaseSecondListener','Expected onScanTestCaseSecondListener - #event.listeners[1].getMethod()#')>
+		
+	</cffunction>
+
+	<cffunction name="test_parse_listener_programmatically_recurse" returntype="void" output="false" access="public">
 	
 		<cfset var em = createObject('component','com.andreacfm.cfem.EventManager').init() />
 		<cfset em.getLogger().setOut('console') />		
 		<cfset em.parseDirectory(dir = "#siteroot#/test/mocks/scan/",recurse = true) />
 		<cfset var event = em.getEvent('onTestCase')>		
 		<!--- recurse 4 listener --->				
-		<cfset assertEquals(4, event.listeners.size()) />
+		<cfset assertEquals(5, event.listeners.size()) />
+		<cfset assertTrue(event.listeners[1].getMethod() eq 'onScanTestCase','Expected onScanTestCase - #event.listeners[1].getMethod()#')>
+		<cfset assertTrue(event.listeners[2].getMethod() eq 'onScanTestCaseSecondListener','Expected onScanTestCaseSecondListener - #event.listeners[1].getMethod()#')>
+		<cfset assertTrue(event.listeners[3].getMethod() eq 'onScanTestCaseSub1','Expected onScanTestCaseSub1 - #event.listeners[1].getMethod()#')>
+		<cfset assertTrue(event.listeners[4].getMethod() eq 'onScanTestCaseSecondListenerSub1','Expected onScanTestCaseSecondListenerSub1 - #event.listeners[1].getMethod()#')>
 		
 	</cffunction>
-
 
 		
 	<!--- xml --->
