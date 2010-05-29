@@ -23,6 +23,7 @@
 	 --->
 	<cffunction name="debug" returntype="void" output="false" access="public">
 		<cfargument name="msg" required="true" type="String">
+		<cfargument name="async" required="false" type="Boolean" default="false">
 		<cfset logMessage('debug',arguments.msg) />
 	</cffunction>
 	
@@ -31,6 +32,7 @@
 	 --->
 	<cffunction name="info" returntype="void" output="false" access="public">
 		<cfargument name="msg" required="true" type="String">
+		<cfargument name="async" required="false" type="Boolean" default="false">
 		<cfset logMessage('info',arguments.msg) />
 	</cffunction>
 	
@@ -39,6 +41,7 @@
 	 --->
 	<cffunction name="warn" returntype="void" output="false" access="public">
 		<cfargument name="msg" required="true" type="String">
+		<cfargument name="async" required="false" type="Boolean" default="false">
 		<cfset logMessage('warn',arguments.msg) />
 	</cffunction>
 
@@ -47,6 +50,7 @@
 	 --->
 	<cffunction name="error" returntype="void" output="false" access="public">
 		<cfargument name="msg" required="true" type="String">
+		<cfargument name="async" required="false" type="Boolean" default="false">
 		<cfset logMessage('error',arguments.msg) />		
 	</cffunction>
 
@@ -55,6 +59,7 @@
 	 --->
 	<cffunction name="fatal" returntype="void" output="false" access="public">
 		<cfargument name="msg" required="true" type="String">
+		<cfargument name="async" required="false" type="Boolean" default="false">
 		<cfset logMessage('fatal',arguments.msg) />		
 	</cffunction>
 
@@ -138,6 +143,7 @@
 	<cffunction name="logMessage" returntype="void" output="false" access="private">
 		<cfargument name="severity" required="true" type="string">
 		<cfargument name="msg" required="true" type="String">
+		<cfargument name="async" required="false" type="Boolean" default="false">
 		
 		<cfscript>
 		var timestamp = now();	
@@ -147,7 +153,7 @@
 		// log only over the fixed minimum
 		if(variables.severityScale[arguments.severity] gte getminLevel()){
 			if(out eq 'file'){
-				writeLogFile(entry);
+				writeLogFile(entry,arguments.async);
 			}else if(out eq 'console'){
 				variables.instance.console.println(entry);
 			}		
@@ -159,22 +165,33 @@
 	<!--- writeLog --->
 	<cffunction name="writeLogFile" output="false" access="private">
 		<cfargument name="msg" required="true" type="string"/>
+		<cfargument name="async" required="true" type="Boolean">
 
 		<cfif getSize() gt getmaxSize()>
 			<cfset doZipFile() />
 			<cfset fileDelete(getFilePath()) />	
 			<cfset fileWrite(getFilePath(),'') />		
 		</cfif>
-			
-		<cfthread name="#createUUID()#" action="run" msg="#arguments.msg#">
+
+		<cfif arguments.async>
+			<cfthread name="#createUUID()#" action="run" msg="#arguments.msg#">
+				<cfscript>
+				var fileObj = "" ;
+				// open file buffer	
+				fileObj = fileOpen(getFilePath(),'append','utf-8');
+				fileWriteLine(fileObj,attributes.msg);
+				fileClose(fileObj);
+				</cfscript>					
+			</cfthread>
+		<cfelse>
 			<cfscript>
 			var fileObj = "" ;
 			// open file buffer	
 			fileObj = fileOpen(getFilePath(),'append','utf-8');
-			fileWriteLine(fileObj,attributes.msg);
+			fileWriteLine(fileObj,arguments.msg);
 			fileClose(fileObj);
-			</cfscript>					
-		</cfthread>
+			</cfscript>								
+		</cfif>
 			
 	</cffunction>
 
