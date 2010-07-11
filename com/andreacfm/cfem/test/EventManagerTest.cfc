@@ -3,7 +3,7 @@
 	<cfinclude template="settings.cfm">
 
 	<cfscript>		
-	variables.mockBox = createObject("component","coldbox.system.testing.MockBox").init();
+	variables.mockBox = createObject("component","mockbox.system.testing.MockBox").init();
 	</cfscript>
 
 	<!--- setup--->
@@ -114,7 +114,7 @@
 	<cffunction name="test_listenerParser_factory_create" returntype="void">
 
 		<cfset var local = {} />	
-		<cfset local.path = '/cfeventmanager' />	
+		<cfset local.path = '/' />	
 		<cfset variables.emMock>
 		
 		<cfset local.factory = createObject('component','com.andreacfm.cfem.factory.ListenerParserFactory').init(variables.emMock) />
@@ -309,7 +309,7 @@
 		 <cfset local.result = local.factory.create(argumentCollection = local.conf)>
 		 <cfset assertTrue(local.result.getmethod() eq 'customMethod',
 		 		"Incorrect method") />
-		 <cfset assertTrue(isinstanceof(local.result.getListenerObject(),'coldbox.system.testing.mockutils.Stub'),
+		 <cfset assertTrue(isinstanceof(local.result.getListenerObject(),'mockbox.system.testing.mockutils.Stub'),
 		 		"Incorrect listener object") />
 		 <cfset assertTrue(not local.result.getAutowire(),
 		 		"Incorrect autowiring setting.") />
