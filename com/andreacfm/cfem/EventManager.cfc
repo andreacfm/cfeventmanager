@@ -499,6 +499,7 @@
 	<cffunction name="islogging" access="public" returntype="Boolean">
 		<cfreturn variables.instance.islogging/>
 	</cffunction>
+	
 
 	<!--- 
 	logger

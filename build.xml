@@ -82,7 +82,7 @@
 		</replace>
 
 		<echo message="Copy to Server Location"/>		
-		<copy todir="${project.www}/com" overwrite="true">
+		<copy todir="${project.www}/lib/com" overwrite="true">
 			<fileset dir="${basedir}/temp/com" />
 		</copy>
 

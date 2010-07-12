@@ -1,7 +1,7 @@
 <!---
 Let's generate our default HTML documentation on myself: 
  --->
-<cfset mappings = { '/com' = '/home/andrea/dev/www/cfeventmanager/com'}/>
+<cfset mappings = { '/com' = '/Users/andrea/dev/www/cfeventmanager/com'}/>
 <cfapplication action="update" mappings="#mappings#" />
 <cfscript>
 	colddoc = createObject("component", "ColdDoc").init();
