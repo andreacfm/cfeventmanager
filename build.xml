@@ -81,8 +81,8 @@
 			<replacefilter token="@year" value="${build.year}"/>
 		</replace>
 
-		<echo message="Copy to Server Location"/>		
-		<copy todir="${project.www}/lib/com" overwrite="true">
+		<echo message="Copy to build"/>		
+		<copy todir="${basedir}/build/com" overwrite="true">
 			<fileset dir="${basedir}/temp/com" />
 		</copy>
 
@@ -111,11 +111,6 @@
 		
 	</target>	
 	
-	<!-- teardown -->
-	<target name="teardown">
-		
-	</target>
-
 		
 	<target 
 		name="compile" 

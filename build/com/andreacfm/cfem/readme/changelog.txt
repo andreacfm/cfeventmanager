@@ -1,0 +1,44 @@
+1.0.4
+------------------------------------------------------------
+- Listener have now a dedicated factory 
+	[http://code.google.com/p/cfeventmanager/issues/detail?id=4]
+- Autowiring can be resetted for single factory ( EM.getFactory().getFactory('name').setAtowire(Boolean)
+- Autowiring removed from Actions and Interceptions 
+	[http://code.google.com/p/cfeventmanager/issues/detail?id=9]
+- Added init arguments : xml ( String ) , xmlObject ( cf xml object )
+- Added methods loadFromXmlRaw() , loadFromXmlObject(), loadFromXmlPath()
+- Method loadXml is now private.
+
+1.0.3 - 14/03/2010 
+-------------------------------------------------------------
+- Removed Autowiring of the Dispatcher.
+- Removed the internal listeners cache repo. If needed pass the object.
+- Autowiring on listeners is now lazy. This gave big overheas on startup.
+- Default listener priority setted to 5.
+
+1.0.2 - 06/01/2010
+-------------------------------------------------------------
+- Dispatch Event by name do not create the event object correctly
+- All internals array are now ArrayLists to avoid ACF pass by value issue. 
+- Listener id as ( listener class + method ). Improved listener removing.
+- Data arguments for dispatching and event creation is wrapped into a struct if needed. Arguments accept any type.
+
+19/12/2009 1.0.1.1
+-----------------------------------------------------------------
+[http://code.google.com/p/cfeventmanager/issues/detail?id=2]
+[http://code.google.com/p/cfeventmanager/issues/detail?id=3]
+
+18/12/2009 1.0.1
+-----------------------------------------------------------------
+- Added adItems() in collectDatEvent interface
+- EventManager.cfc : beanInjector setter is now public.
+- EventManager.cfc : tracer object is created only when debug is enabled.
+- EventManager.cfc : added beanfactory getter setter for coldspring autowiring.
+
+
+03/07/2009 -- 1.0
+------------------------------------------------------------------
+- Tracer do not collect items in adobe
+- Add mapping control for css resources.
+- Added Id to eventListeners.
+

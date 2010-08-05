@@ -48,7 +48,7 @@
 				<cfset LOCAL.Method = THIS[ ARGUMENTS.Method ] />
  
 				<!--- Compare to next object using the requested method. --->
-				<cfif evaluate("#LOCAL.Method#( ARGUMENTS.Data[ LOCAL.InnerIndex + 1 ]")>
+				<cfif LOCAL.Method( ARGUMENTS.Data[ LOCAL.InnerIndex + 1 ] )>
  
 					<!--- Swap the two indexed objects. --->
 					<cfset ArraySwap(ARGUMENTS.Data,LOCAL.InnerIndex,(LOCAL.InnerIndex + 1)) />
