@@ -15,6 +15,7 @@
 	<property file="buildprops/project.properties"/>
 	<property file="buildprops/unames.properties"/>	
 
+	<property name="tmpdir" value="${java.io.tmpdir}/${build.projectName}/" />	
 	
 	<path id="project.classpath">
 		<fileset dir="lib">
@@ -61,16 +62,16 @@
 	
 	<target name="deploy">
 		
-		<mkdir dir="${basedir}/temp/com" />	
+		<mkdir dir="${tmpdir}/com" />	
 		
 		<echo message="Copy to temp"/>		
-		<copy todir="${basedir}/temp/com">
+		<copy todir="${tmpdir}/com">
 			<fileset dir="${basedir}/com" excludes="**/samples/**"/>
 		</copy>
 
 		<echo message="Replacing properties in license"/>		
 		
-		<replace dir="${basedir}/temp/com/andreacfm/cfem">
+		<replace dir="${tmpdir}/com/andreacfm/cfem">
 			<replacefilter token="@number" value="${build.number}"/>
 			<replacefilter token="@projectName" value="${build.projectName}"/>
 			<replacefilter token="@date" value="${build.date}"/>
@@ -83,22 +84,19 @@
 
 		<echo message="Copy to build"/>		
 		<copy todir="${basedir}/build/com" overwrite="true">
-			<fileset dir="${basedir}/temp/com" />
+			<fileset dir="${tmpdir}/com" />
 		</copy>
 
-		<echo message="Prepare the zip"/>
-		<zip basedir="${basedir}/temp" destfile="${basedir}/zip/EM-${build.projectVersion}.zip" update="true"/>
-		
-		<delete dir="${basedir}/temp"/>	
+		<delete dir="${tmpdir}/com"/>	
 
 	</target>
 	
 	<target name="updateDocs">
 		
-		<mkdir dir="${basedir}/temp/com" />
+		<mkdir dir="${tmpdir}/" />
 		
 		<echo message="Make docs"/>	
-		<get src="http://localhost/cfeventmanager/colddoc/run.cfm" dest="${basedir}/temp/docs_response.txt"/>
+		<get src="http://localhost/cfeventmanager/colddoc/run.cfm" dest="${tmpdir}/docs_response.txt"/>
 
 		<replace dir="${basedir}/docs">
 			<replacefilter token="@number" value="${build.number}"/>
@@ -107,7 +105,7 @@
 			<replacefilter token="@projectVersion" value="${build.projectVersion}"/>
 		</replace>
 		
-		<delete dir="${basedir}/temp"/>	
+		<delete dir="${tmpdir}/com"/>	
 		
 	</target>	
 	
