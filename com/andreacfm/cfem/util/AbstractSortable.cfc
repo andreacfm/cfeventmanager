@@ -48,12 +48,13 @@
 				<cfset LOCAL.Method = THIS[ ARGUMENTS.Method ] />
  
 				<!--- Compare to next object using the requested method. --->
-				<cfif evaluate("#LOCAL.Method#( ARGUMENTS.Data[ LOCAL.InnerIndex + 1 ]")>
- 
-					<!--- Swap the two indexed objects. --->
-					<cfset ArraySwap(ARGUMENTS.Data,LOCAL.InnerIndex,(LOCAL.InnerIndex + 1)) />
- 
-				</cfif>
+				<!--- 
+				TODO:LT is hardcoded		
+				https://jira.jboss.org/browse/RAILO-877
+				 --->
+				<cfinvoke component="#this#" method="LT" returnvariable="res"> 
+					<cfinvokeargument name="comparable" value="#ARGUMENTS.Data[ LOCAL.InnerIndex + 1 ]#"> 
+				</cfinvoke> 
  
 			</cfloop>
  

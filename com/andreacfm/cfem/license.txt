@@ -1,10 +1,7 @@
-Project:     @projectName  @projectUrl
-Author:      @author <@authorEmail>
-Version:     @projectVersion
-Build Date:  @date
-Build:		 @number
+Project:     CfEventManager  http://wiki.github.com/andreacfm/cfeventmanager/
+Author:      Andrea Campolonghi <andrea@getrailo.org>
 
-Copyright @year @author
+Copyright 2010 Andrea Campolonghi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

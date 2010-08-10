@@ -1,2 +1,5 @@
 /.project
 /WEB-INF
+/templates
+/colddoc
+*.Ds_Store

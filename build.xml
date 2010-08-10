@@ -17,32 +17,25 @@
 
 	<property name="tmpdir" value="${java.io.tmpdir}/${build.projectName}/" />	
 	
-	<path id="project.classpath">
-		<fileset dir="lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- setup -->
-	<target name="setup">
-			
-	</target>
-
 	<target name="runtests" description="Make output directories and run the MXUnit task">
+
+		<mkdir dir="${mxunit.output}" />
 
 	    <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"/>
 	   	
-		<mxunittask server="${server.name}" port="${server.port}"
+		<echo message="Runnig Datax tests"/>
+		<mxunittask server="${server.host}" port="${server.port}"
         	defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
            	verbose="true"
+			outputdir="testresults"
            	haltonfailure="true"
-           	haltonerror="true">
-
-	        <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+           	haltonerror="false">
+			
+	        <directory runner="${mxunit.httprunner}"
                  remoteMethod="run"
-                 path="${component.path}"
-                 packageName="cfeventmanager.com.andreacfm.cfem.test"
-                 componentPath="cfeventmanager.com.andreacfm.cfem.test"
+                 path="${test.component.path}"
+                 packageName="${test.component.packagename}"
+                 componentPath="${test.component.componentpath}"
                  recurse="true"
                 />
 
@@ -50,28 +43,29 @@
 
 	</target>
 
-	<target name="commit">
+	<!--<target name="commit">
 		<echo level="info">Committing Cfem</echo>
 	   	<input message="SVN Commit Comment:" addproperty="commit.comment" defaultvalue="Periodic Commit From Ant Task" />
 	    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="project.classpath"/>
 	    <svn username="${svn.username}" password="${svn.password}">
 	    	<commit message="${commit.comment}" dir="${basedir}" recurse="true" />
 	   	</svn>
-	</target>
+	</target>-->
 
 	
 	<target name="deploy">
 		
-		<mkdir dir="${tmpdir}/com" />	
+		<mkdir dir="${tmpdir}" />	
 		
 		<echo message="Copy to temp"/>		
-		<copy todir="${tmpdir}/com">
-			<fileset dir="${basedir}/com" excludes="**/samples/**"/>
+		<copy todir="${tmpdir}">
+			<fileset dir="${basedir}/templates" includes="framework.properties"/>
+			<fileset dir="${basedir}/templates" includes="license.txt"/>
 		</copy>
 
-		<echo message="Replacing properties in license"/>		
+		<echo message="Replacing properties "/>		
 		
-		<replace dir="${tmpdir}/com/andreacfm/cfem">
+		<replace dir="${tmpdir}">
 			<replacefilter token="@number" value="${build.number}"/>
 			<replacefilter token="@projectName" value="${build.projectName}"/>
 			<replacefilter token="@date" value="${build.date}"/>
@@ -82,18 +76,19 @@
 			<replacefilter token="@year" value="${build.year}"/>
 		</replace>
 
-		<echo message="Copy to build"/>		
-		<copy todir="${basedir}/build/com" overwrite="true">
-			<fileset dir="${tmpdir}/com" />
+		<echo message="Copy files"/>		
+		<copy todir="${basedir}/com/andreacfm/cfem/" overwrite="true">
+			<fileset dir="${tmpdir}" includes="license.txt"/>
+			<fileset dir="${tmpdir}" includes="framework.properties"/>
 		</copy>
 
-		<delete dir="${tmpdir}/com"/>	
+		<delete dir="${tmpdir}"/>	
 
 	</target>
 	
 	<target name="updateDocs">
 		
-		<mkdir dir="${tmpdir}/" />
+		<mkdir dir="${tmpdir}" />
 		
 		<echo message="Make docs"/>	
 		<get src="http://localhost/cfeventmanager/colddoc/run.cfm" dest="${tmpdir}/docs_response.txt"/>
@@ -105,14 +100,14 @@
 			<replacefilter token="@projectVersion" value="${build.projectVersion}"/>
 		</replace>
 		
-		<delete dir="${tmpdir}/com"/>	
+		<delete dir="${tmpdir}"/>	
 		
 	</target>	
 	
 		
 	<target 
 		name="compile" 
-		depends="runtests,deploy,commit,updateDocs" />
+		depends="runtests,deploy,updateDocs" />
 	
 
 </project>
