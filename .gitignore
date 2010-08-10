@@ -3,4 +3,4 @@
 /templates
 /testresults
 /colddoc
-*.Ds_Store
+*.DS_Store
