@@ -669,9 +669,6 @@
 					if(structKeyExists(local.lists[i].xmlAttributes,'initMethod')){
 						local.args['initMethod'] = local.lists[i].xmlAttributes.initMethod;
 					};
-					if(structKeyExists(local.lists[i].xmlAttributes,'cache')){
-						local.args['cache'] = local.lists[i].xmlAttributes.cache;
-					};							
 				addEventListener(argumentCollection=local.args);
 			}
 		}

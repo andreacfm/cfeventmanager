@@ -22,7 +22,7 @@
             
             <interception point="after">
                 <condition><![CDATA[arraylen(event.getItems()) eq 0]]></condition>
-                <action name="dispatch" eventAlias="true" event="onSidebarMissingItems"/>
+                <action name="dispatch" persists="true" event="onSidebarMissingItems"/>
             </interception>
 
             

@@ -1,65 +1,45 @@
-<!--- /*		
-Project:     @projectName  @projectUrl
-Author:      @author <@authorEmail>
-Version:     @projectVersion
-Build Date:  @date
-Build:		 @number
+<cfcomponent 
+		extends="com.andreacfm.cfem.events.actions.AbstractAction" 
+		output="false"
+		accessors="true">
 
-Copyright @year @author
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.	
-			
-*/--->
-
-<cfcomponent extends="com.andreacfm.cfem.events.actions.AbstractAction" output="false">
-	
 	<cfset variables.instance.name = 'Dispatch' />
 	
 	<!---   Constructor --->
     <cffunction name="init" output="false"returntype="com.andreacfm.cfem.events.actions.AbstractAction" >
 		<cfargument name="event" required="true" type="string"/>
-		<cfargument name="alias" required="false" type="boolean" default="false"/>
+		<cfargument name="persists" required="false" type="boolean" default="false"/>
 		<cfargument name="mode" required="false" type="string" default="synch"/>		
 		<cfargument name="data" required="false" type="any" default="{}"/>	
 								
-		<cfset setEventName(arguments.event)/>
-		<cfset setAlias(arguments.alias)/>	
+		<cfset setEvent(arguments.event)/>
+		<cfset setPersists(arguments.persists)/>	
 		<cfset setMode(arguments.mode)/>
 		<cfset setData(arguments.data) />	
 		
 	    <cfreturn this/>
     </cffunction>
 	
-   <!---EventName--->
-   <cffunction name="setEventName" output="false" access="public" returntype="void">
-    	<cfargument name="eventName" required="true" type="string"/>
-		<cfset variables.instance.eventName = arguments.eventName />
+   <!---Event--->
+   <cffunction name="setEvent" output="false" access="public" returntype="void">
+    	<cfargument name="Event" required="true" type="string"/>
+		<cfset variables.instance.Event = arguments.Event />
     </cffunction>
-   <cffunction name="getEventName" output="false" access="public" returntype="string">
-    	<cfreturn variables.instance.eventName />
+   <cffunction name="getEvent" output="false" access="public" returntype="string">
+    	<cfreturn variables.instance.Event />
     </cffunction>
 	
-   <!---Alias--->
-   <cffunction name="setAlias" output="false" access="public" returntype="void">
-    	<cfargument name="alias" required="true" type="boolean"/>
-		<cfset variables.instance.alias = arguments.alias />
+   <!---persist--->
+   <cffunction name="setpersists" output="false" access="public" returntype="void">
+    	<cfargument name="persists" required="true" type="boolean"/>
+		<cfset variables.instance.persists = arguments.persists />
     </cffunction>
-    <cffunction name="getAlias" output="false" access="public" returntype="boolean">
-    	<cfreturn variables.instance.alias />
+    <cffunction name="eventPersists" output="false" access="public" returntype="boolean">
+    	<cfreturn variables.instance.persists />
     </cffunction>
 	
 	<!---Mode--->
-   <cffunction name="setMode" output="false" access="public" returntype="void">
+    <cffunction name="setMode" output="false" access="public" returntype="void">
     	<cfargument name="mode" required="true" type="string"/>
 		<cfset variables.instance.mode = arguments.mode />
     </cffunction>	
@@ -81,17 +61,17 @@ limitations under the License.
 	
 	<!---execute--->
     <cffunction name="execute" output="false" returntype="void">
-    	<cfargument name="event" type="com.andreacfm.cfem.events.Event" required="true"/>   	
+    	<cfargument name="event" type="com.andreacfm.cfem.events.AbstractEvent" required="true"/>   	
 		<cfset var eventManager = event.getEM() />
 		
-		<cfif getAlias() and arguments.event.getMode() eq 'asynch'>
-			<cfthrow type="com.andreacfm.cfem.ActionExeption" message="Cannot alias an event thrown in asynch mode" />
+		<cfif eventPersists() and arguments.event.getMode() eq 'asynch'>
+			<cfthrow type="com.andreacfm.cfem.ActionExeption" message="Cannot persists an event thrown in asynch mode" />
 		</cfif>
 
-		<cfif getAlias()>
-			<cfset com.andreacfm.cfem.dispatchEvent(getEventName(),arguments.event.getData(),this,getMode()) />			
+		<cfif eventPersists()>
+			<cfset com.andreacfm.cfem.dispatchEvent(getEvent(),arguments.event.getData(),this,getMode()) />			
 		<cfelse>
-			<cfset com.andreacfm.cfem.dispatchEvent(getEventName(),getData(),this,getMode()) />				
+			<cfset com.andreacfm.cfem.dispatchEvent(getEvent(),getData(),this,getMode()) />				
 		</cfif>		
 		
     </cffunction>
