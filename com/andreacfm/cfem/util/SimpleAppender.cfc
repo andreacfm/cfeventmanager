@@ -71,9 +71,9 @@
 		</cfscript>
 	</cffunction>
 	<cffunction name="setFilePath" output="false" returntype="void">
-		<cfargument name="path" type="String">
+		<cfargument name="filepath" type="String">
 		<cfscript> 
-			var path = expandPath(arguments.path);
+			var path = expandPath(arguments.filepath);
 			if(not fileExists(path)){
 				fileWrite(path,'');
 			}

@@ -1,6 +1,4 @@
 <cfcomponent extends="mxunit.framework.TestCase">
-	
-	<cfinclude template="settings.cfm">
 
 	<!--- setup--->
 	<cffunction name="setUp">		
@@ -22,7 +20,7 @@
 	<cffunction name="test_parse_listener_programmatically" returntype="void" output="false" access="public">
 		
 		<cfset var em = createObject('component','com.andreacfm.cfem.EventManager').init() />		
-		<cfset em.parseDirectory(dir = "#siteroot#/test/mocks/scan/") />
+		<cfset em.parseDirectory(dir = "/cfeventmanager/com/andreacfm/cfem/test/mocks/scan/") />
 		<cfset var event = em.getEvent('onTestCase')>		
 		<!--- non recurse solo 2 listener --->				
 		<cfset assertEquals(2, event.listeners.size()) />
@@ -35,7 +33,7 @@
 	
 		<cfset var em = createObject('component','com.andreacfm.cfem.EventManager').init() />
 		<cfset em.getLogger().setOut('console') />		
-		<cfset em.parseDirectory(dir = "#siteroot#/test/mocks/scan/",recurse = true) />
+		<cfset em.parseDirectory(dir = "/cfeventmanager/com/andreacfm/cfem/test/mocks/scan/",recurse = true) />
 		<cfset var event = em.getEvent('onTestCase')>		
 		<!--- recurse 4 listener --->				
 		<cfset assertEquals(5, event.listeners.size()) />
@@ -50,7 +48,7 @@
 	<!--- xml --->
 	<cffunction name="testLoadFromXmlPath" returntype="void" output="false" access="public">
 		<cfset var xml = getXml(1) />
-		<cfset var path = '#siteroot#/test/temp/emXml.cfm'>
+		<cfset var path = '/cfeventmanager/com/andreacfm/cfem/test/temp/emXml.cfm'>
 		<cffile action="write" file="#expandPath(path)#" output="#trim(xml)#" />
 		
 		<cfset local.em = createObject('component','com.andreacfm.cfem.EventManager').init(xmlPath = path) />
@@ -62,7 +60,7 @@
 		
 		<!--- anotherevent --->
 		<cfset local.event = local.em.getEvent('anotherEvent') />
-		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
+		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.test.mocks.Event',
 				"Event Type not saved correctly") />
 		
 		<!--- onemoreevent --->		
@@ -87,7 +85,7 @@
 		
 		<!--- anotherevent --->
 		<cfset local.event = local.em.getEvent('anotherEvent') />
-		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
+		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.test.mocks.Event',
 				"Event Type not saved correctly") />
 		
 		<!--- onemoreevent --->		
@@ -112,7 +110,7 @@
 		
 		<!--- anotherevent --->
 		<cfset local.event = local.em.getEvent('anotherEvent') />
-		<cfset assertTrue(local.event.type eq '#cfcroot#.mocks.Event',
+		<cfset assertTrue(local.event.type eq 'com.andreacfm.cfem.test.mocks.Event',
 				"Event Type not saved correctly") />
 		
 		<!--- onemoreevent --->		
@@ -138,7 +136,7 @@
 				
 		<!--- Listener --->
 		<cfset local.listenerArray=[
-				{event='asynchTest',listener = '#cfcroot#.mocks.AsynchListener', method = "addItem"}
+				{event='asynchTest',listener = 'com.andreacfm.cfem.test.mocks.AsynchListener', method = "addItem"}
 			]/>
 			
 		<!--- Em --->	
@@ -189,7 +187,7 @@
 		        		
 		        		<event name="oneEvent" />
 		        		
-		        		<event name="anotherEvent" type="#cfcroot#.mocks.Event" />
+		        		<event name="anotherEvent" type="com.andreacfm.cfem.test.mocks.Event" />
 		        		
 				      	<event name="oneMoreEvent">
 				            
@@ -197,7 +195,7 @@
 				                <action name="dispatch" event="addDefaultSidebar" />   
 				            </interception>
 				
-				            <interception point="each" class="#cfcroot#.mocks.Interception"/>
+				            <interception point="each" class="com.andreacfm.cfem.test.mocks.Interception"/>
 				            
 				            <interception point="after">
 				                <condition><![CDATA[arraylen(event.getItems()) eq 0]]></condition>

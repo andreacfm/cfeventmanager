@@ -7,7 +7,7 @@
 		
 		<cfscript>
 		var em = getEventManager();
-		var result = createObject('component','com.andreacfm.cfem.listener.Parser').init(em,arguments.dir,arguments.recurse)
+		var result = createObject('component','com.andreacfm.cfem.listener.Parser').init(em,arguments.dir,arguments.recurse);
 		return result;
 		</cfscript>
 

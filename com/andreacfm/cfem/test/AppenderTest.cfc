@@ -31,7 +31,7 @@
 		
 	</cffunction>
 	
-	<cffunction name="test_level_do_not exists" returntype="void" output="false" mxunit:expectedException="com.andreacfm.logging.MinLevelDoNotExists" >
+	<cffunction name="test_level_do_not_exists" returntype="void" output="false" mxunit:expectedException="com.andreacfm.logging.MinLevelDoNotExists" >
 		<cfset createObject('component','com.andreacfm.cfem.util.SimpleAppender').init(minLevel:'do_not_exists') />
 	</cffunction>
 	

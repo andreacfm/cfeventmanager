@@ -7,7 +7,7 @@
 	variables.instance.events = structNew();
 	variables.instance.config = structNew();
 	variables.instance.helpers = structNew();
-	variables.instance.Sorter = createObject('component','com.andreacfm.cfem.util.SortableListeners').init();
+	variables.instance.Sorter = createObject('component','com.andreacfm.cfem.util.SortableListener').init();
 	variables.instance.islogging = true;
 	</cfscript>
 	
@@ -17,7 +17,7 @@
 		<cfargument name="listeners" required="false" type="array" default="#arrayNew(1)#"/>
 		<cfargument name="xmlPath" required="false" type="string" default="" hint="relative path"/>
 		<cfargument name="xml" required="false" type="string" default="" hint="xml string"/>
-		<cfargument name="xmlObject" required="false" type="Array" hint="xml parsed object"/>
+		<cfargument name="xmlObject" required="false" type="xml" hint="xml parsed object"/>
 		<cfargument name="autowire" required="false" type="boolean" default="false"/>
 		<cfargument name="logging" required="false" type="boolean" default="true"/>
 		<cfargument name="logger" required="false" type="any" default=""/>
@@ -60,10 +60,10 @@
 			loadFromXmlPath(arguments.xmlPath);
 		}
 		if(len(arguments.xml)){
-			loadFromXmlRaw(arguments.xml)
+			loadFromXmlRaw(arguments.xml);
 		}
 		if(structKeyExists(arguments,'xmlObject')){
-			loadFromXmlObject(arguments.xmlObject)
+			loadFromXmlObject(arguments.xmlObject);
 		}
 		
 		//load listeners (listeners are always at final)
@@ -110,7 +110,6 @@
 
 		<cfset var sorter = getSorter() />
 		<cfset var key = "" />
-		<cfset var listener = "" />
 				
 		<cfloop collection="#variables.instance.events#" item="key">
 			
@@ -357,7 +356,7 @@
 				if(arraylen(local.configs)){
 					for(i=1; i <= arraylen(local.configs); i++){
 						variables.instance.config[local.configs[i].xmlAttributes.name] = {};
-						variables.instance.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value)
+						variables.instance.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value);
 						variables.instance.config[local.configs[i].xmlAttributes.name].props = {};
 						var props = xmlSearch(local.xml,'/event-manager/configs/config[#i#]/property');
 						for(p=1; p <= arraylen(props); p++){
@@ -408,7 +407,7 @@
 	<cffunction name="loadFromXmlRaw" returntype="void" output="false" access="public">
 		<cfargument name="xml" required="true" type="string" />
 		<cfscript>
-
+		
 		if(isXml(arguments.xml)){
 			loadXmlData(xmlParse(arguments.xml));
 		}else{
@@ -423,7 +422,7 @@
 	loadFromXmlObject
 	 --->
 	<cffunction name="loadFromXmlObject" returntype="void" output="false" access="public">
-		<cfargument name="xml" required="true" type="array" />
+		<cfargument name="xml" required="true" type="xml" />
 		<cfscript>
 		loadXmlData(arguments.xml);
 		</cfscript>
@@ -583,7 +582,7 @@
 	loadXmlData
 	--->
 	<cffunction name="loadXmlData" output="false" returntype="void" access="private">
-		<cfargument name="data" required="true" type="array" />
+		<cfargument name="data" required="true" type="xml" />
 		<cfscript>
 		var i = "";
 		var j = "";

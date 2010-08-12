@@ -97,7 +97,7 @@
 	</cffunction>	
 	<cffunction name="setAutowired" returntype="Boolean" output="false" access="public">
 		<cfargument name="status" type="Boolean">
-		<cfreturn variables.instance.autowired = arguments.status />
+		<cfset variables.instance.autowired = arguments.status />
 	</cffunction>	
 	
 	<!--- 

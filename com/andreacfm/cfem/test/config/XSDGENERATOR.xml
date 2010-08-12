@@ -9,19 +9,21 @@
         <event name="oneMoreEvent">
             
             <interception point="before">
-                <action name="dispatch" event="addDefaultSidebar" />   
+                <action name="stop"/>   
             </interception>
             
-            <interception point="each" class="Interception"/>
+            <interception point="each" class="Interception">
+            	<action name="throw" type="Exception Type" message="Exception Message"/>   
+			</interception>	
 
             <interception point="after">
-                <action name="dispatch"/>
+                <action name="dispatch" event="eventname"/>
                 <condition></condition> 
             </interception>
             
             <interception point="after">
                 <condition><![CDATA[arraylen(event.getItems()) eq 0]]></condition>
-                <action name="dispatch" eventAlias="true" event="onSidebarMissingItems"/>
+                <action name="dispatch" persists="true" event="onSidebarMissingItems"/>
             </interception>
 
             
