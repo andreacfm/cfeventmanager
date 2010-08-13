@@ -1,6 +1,6 @@
 <cfcomponent extends="com.andreacfm.cfem.events.actions.AbstractAction" output="false">
 	
-	<cfset variables.instance.name = 'Stop' />
+	<cfset variables.name = 'Stop' />
 	
 	<!---execute--->
     <cffunction name="execute" output="false" returntype="void">

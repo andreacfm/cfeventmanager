@@ -4,11 +4,11 @@
 	hint="Event Manager Class">
 
 	<cfscript>
-	variables.instance.events = structNew();
-	variables.instance.config = structNew();
-	variables.instance.helpers = structNew();
-	variables.instance.Sorter = createObject('component','com.andreacfm.cfem.util.SortableListener').init();
-	variables.instance.islogging = true;
+	variables.events = structNew();
+	variables.config = structNew();
+	variables.helpers = structNew();
+	variables.Sorter = createObject('component','com.andreacfm.cfem.util.SortableListener').init();
+	variables.loggingStatus = true;
 	</cfscript>
 	
 	<!--- Constructor --->
@@ -83,11 +83,11 @@
 		<cfargument name="type" required="false" type="string" default="#getconfig('defaultBaseEventClass')#" />		
 		<cfscript>
 		if(not eventExists(arguments.name)){
-			variables.instance.events['#name#'] = structNew();
-			variables.instance.events['#name#'].type = arguments.type;
-			variables.instance.events['#name#'].listeners = createObject('java','java.util.ArrayList').init();
-			variables.instance.events['#name#'].interceptions = createObject('java','java.util.ArrayList').init();
-			variables.instance.events['#name#'].counter = 0 ;
+			variables.events['#name#'] = structNew();
+			variables.events['#name#'].type = arguments.type;
+			variables.events['#name#'].listeners = createObject('java','java.util.ArrayList').init();
+			variables.events['#name#'].interceptions = createObject('java','java.util.ArrayList').init();
+			variables.events['#name#'].counter = 0 ;
 		}else{
 			throw('Cannot register a duplicate Event. The event #arguments.name# already exists.','com.andreacfm.cfem.duplicateEventsExeption');
 		}
@@ -111,15 +111,15 @@
 		<cfset var sorter = getSorter() />
 		<cfset var key = "" />
 				
-		<cfloop collection="#variables.instance.events#" item="key">
+		<cfloop collection="#variables.events#" item="key">
 			
-			<cfif findNocase(arguments.event,key) gt 0  >
+			<cfif findNocase(arguments.event,key) gt 0 >
 				
 				<cfset listener = getFactory().createListener(argumentCollection=arguments) />
 				
-				<cfset variables.instance.events[key]['listeners'].add(listener) />
+				<cfset variables.events[key]['listeners'].add(listener) />
 				
-				<cfset variables.instance.events[key]['listeners'] = sorter.sortArray(variables.instance.events[key]['listeners'],'LT') />	
+				<cfset variables.events[key]['listeners'] = sorter.sortArray(variables.events[key]['listeners'],'LT') />	
 				
 				<cfif isLogging()>
 					<cfset getLogger().info('Registered Listener id :#listener.getid()# to Event:#key# {Priority:#arguments.priority#}') />				
@@ -154,7 +154,7 @@
 	events   
 	--->
 	<cffunction name="getevents" access="public" output="false" returntype="struct">
-		<cfreturn variables.instance.events/>
+		<cfreturn variables.events/>
 	</cffunction>	
 	<cffunction name="setevents" access="public" output="false" returntype="void">
 		<cfargument name="events" type="array" required="true"/>		
@@ -257,7 +257,7 @@
 		if(not eventExists(arguments.eventname)){
 			throw('The event #arguments.eventname# do not exists!','com.andreacfm.cfem.noSuchEventExeption');			
 		}
-		return variables.instance.events[arguments.eventname];
+		return variables.events[arguments.eventname];
 		</cfscript>
 	</cffunction>
 	
@@ -317,7 +317,7 @@
 		<cfargument name="class" type="string" required="true"/>
 		<cfscript>
 			var result = true;
-			if(not structKeyExists(variables.instance.cachedListeners,arguments.class)){
+			if(not structKeyExists(variables.cachedListeners,arguments.class)){
 				result = false;
 			}
 			return result;
@@ -331,7 +331,7 @@
 		<cfargument name="eventname" type="string" required="true"/>
 		<cfscript>
 			var result = true;
-			if(not structKeyExists(variables.instance.events,arguments.eventname)){
+			if(not structKeyExists(variables.events,arguments.eventname)){
 				result = false;
 			}
 			return result;
@@ -355,20 +355,20 @@
 				local.configs = xmlSearch(local.xml,'/event-manager/configs/config');
 				if(arraylen(local.configs)){
 					for(i=1; i <= arraylen(local.configs); i++){
-						variables.instance.config[local.configs[i].xmlAttributes.name] = {};
-						variables.instance.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value);
-						variables.instance.config[local.configs[i].xmlAttributes.name].props = {};
+						variables.config[local.configs[i].xmlAttributes.name] = {};
+						variables.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value);
+						variables.config[local.configs[i].xmlAttributes.name].props = {};
 						var props = xmlSearch(local.xml,'/event-manager/configs/config[#i#]/property');
 						for(p=1; p <= arraylen(props); p++){
-							variables.instance.config[local.configs[i].xmlAttributes.name].props[props[p].xmlAttributes.name] = props[p].xmlAttributes.value;
+							variables.config[local.configs[i].xmlAttributes.name].props[props[p].xmlAttributes.name] = props[p].xmlAttributes.value;
 						}	
 					}
 				}					
 				local.actions = xmlSearch(local.xml,'/event-manager/actions/action');
 				if(arraylen(local.actions)){
-					variables.instance.config['actions'] = {};
+					variables.config['actions'] = {};
 					for(i=1; i <= arraylen(local.actions); i++){
-						variables.instance.config.actions[local.actions[i].xmlAttributes.name] = local.actions[i].xmlAttributes.class;
+						variables.config.actions[local.actions[i].xmlAttributes.name] = local.actions[i].xmlAttributes.class;
 					}
 				}					
 			}else{					
@@ -459,18 +459,18 @@
 	Sorter  
 	--->
 	<cffunction name="getSorter" access="public" output="false" returntype="com.andreacfm.cfem.util.AbstractSortable">
-		<cfreturn variables.instance.Sorter/>
+		<cfreturn variables.Sorter/>
 	</cffunction>
 
     <!---   
 	Factory   
 	--->
 	<cffunction name="getFactory" access="public" output="false" returntype="com.andreacfm.cfem.factory.Factory">
-		<cfreturn variables.instance.Factory/>
+		<cfreturn variables.Factory/>
 	</cffunction>
 	<cffunction name="setFactory" access="public" output="false" returntype="void">
 		<cfargument name="Factory" type="com.andreacfm.cfem.factory.Factory" required="true"/>
-		<cfset variables.instance.Factory = arguments.Factory/>
+		<cfset variables.Factory = arguments.Factory/>
 	</cffunction>
 
 	<!--- 
@@ -478,10 +478,10 @@
 	--->
 	<cffunction name="setAutowire" access="public" returntype="void">
 		<cfargument name="autowire" type="Boolean" required="true"/>
-		<cfset variables.instance.autowire = autowire />
+		<cfset variables.autowire = autowire />
 	</cffunction> 
 	<cffunction name="getAutowire" access="public" returntype="Boolean">
-		<cfreturn variables.instance.autowire/>
+		<cfreturn variables.autowire/>
 	</cffunction>
 
 	<!--- 
@@ -489,14 +489,14 @@
 	--->
 	<cffunction name="setloggingMode" access="public" returntype="void">
 		<cfargument name="loggingMode" type="Boolean" required="true"/>
-		<cfset variables.instance.islogging = loggingMode />
+		<cfset variables.loggingStatus = loggingMode />
 	</cffunction> 
 	
 	<!--- 
 	isLogging
 	 --->
 	<cffunction name="islogging" access="public" returntype="Boolean">
-		<cfreturn variables.instance.islogging/>
+		<cfreturn variables.loggingStatus/>
 	</cffunction>
 	
 
@@ -506,15 +506,15 @@
 	<cffunction name="setlogger" access="public" returntype="void">
 		<cfargument name="logger" type="any" required="true"/>
 		<cfif not isSimpleValue(arguments.logger)>
-			<cfset variables.instance.logger = logger />
+			<cfset variables.logger = logger />
 		</cfif>
 	</cffunction> 
 	<cffunction name="getlogger" access="public" returntype="any">
-		<cfif not structKeyExists(variables.instance,'logger')>
+		<cfif not structKeyExists(variables,'logger')>
 			<cfset var loggerclass = getConfig('defaultLoggerClass') />
-			<cfset variables.instance.logger = createObject('component',loggerclass).init(argumentCollection = getConfigProps('defaultLoggerClass')) />
+			<cfset variables.logger = createObject('component',loggerclass).init(argumentCollection = getConfigProps('defaultLoggerClass')) />
 		</cfif>
-		<cfreturn variables.instance.logger/>
+		<cfreturn variables.logger/>
 	</cffunction>
 	
 	<!--- 
@@ -522,23 +522,23 @@
 	--->
 	<cffunction name="getConfig" returntype="any" output="false">
 		<cfargument name="config" type="string" required="true" />
-		<cfreturn variables.instance.config[config].value />
+		<cfreturn variables.config[config].value />
 	</cffunction> 
 	<cffunction name="getConfigProps" returntype="any" output="false">
 		<cfargument name="config" type="string" required="true" />
-		<cfreturn variables.instance.config[config].props />
+		<cfreturn variables.config[config].props />
 	</cffunction> 	
 	<cffunction name="setConfig" returntype="void" output="false">
 		<cfargument name="config" type="string" required="true" />
 		<cfargument name="value" type="any" required="true" />
-		<cfset variables.instance.config[arguments.config] = arguments.value />
+		<cfset variables.config[arguments.config] = arguments.value />
 	</cffunction> 
 
 	<!--- 
 	getActions
 	 --->
 	<cffunction name="getActions" returntype="struct" output="false" access="public">
-		<cfreturn variables.instance.config['actions'] />	
+		<cfreturn variables.config['actions'] />	
 	</cffunction>
 	
 	<!--- 
@@ -546,34 +546,34 @@
 	--->
 	<cffunction name="getHelper" returntype="any" output="false">
 		<cfargument name="helper" type="any" required="true" />
-		<cfreturn variables.instance.helpers[helper] />
+		<cfreturn variables.helpers[helper] />
 	</cffunction> 
 	<cffunction name="setHelper" returntype="void" output="false">
 		<cfargument name="name" type="string" required="true" />
 		<cfargument name="value" type="any" required="true" />
-		<cfset variables.instance.helpers[arguments.name] = arguments.value />
+		<cfset variables.helpers[arguments.name] = arguments.value />
 	</cffunction> 
 
 	<!---	
 	beanInjector  
 	--->
 	<cffunction name="getBeanInjector" access="public" returntype="any" output="false" hint="I return the BeanInjector.">
-		<cfreturn variables.instance['beanInjector'] />
+		<cfreturn variables.beanInjector />
 	</cffunction>		
 	<cffunction name="setBeanInjector" access="public" returntype="void" output="false" hint="I set the BeanInjector.">
 		<cfargument name="beanInjector" type="any" required="true" hint="BeanInjector" />
-		<cfset variables.instance['beanInjector'] = arguments.beanInjector />
+		<cfset variables.beanInjector = arguments.beanInjector />
 	</cffunction>
 
 	<!----	
 	beanFactory	
 	--->
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false" hint="Return the beanFactory instance">
-		<cfreturn variables.instance.beanFactory />
+		<cfreturn variables.beanFactory />
 	</cffunction>		
 	<cffunction name="setBeanFactory" access="public" returntype="void" output="false" hint="Inject a beanFactory reference.">
 		<cfargument name="beanFactory" type="coldspring.beans.BeanFactory" required="true" />
-		<cfset variables.instance.beanFactory = arguments.beanFactory />
+		<cfset variables.beanFactory = arguments.beanFactory />
 	</cffunction>
 
 	<!------------------------------------------- PRIVATE ------------------------------------------->		
@@ -680,7 +680,7 @@
 	--->
 	<cffunction name="setSorter" access="private" output="false" returntype="void">
 		<cfargument name="Sorter" type="com.andreacfm.cfem.util.AbstractSortable" required="true"/>
-		<cfset variables.instance['sorter'] = arguments.Sorter/>
+		<cfset variables.sorter = arguments.Sorter/>
 	</cffunction>
 
 	<!---

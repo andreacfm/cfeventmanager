@@ -1,7 +1,6 @@
-
 <cfcomponent output="false">
 	
-	<cfset variables.instance.autowired = false />
+	<cfset variables.autowired = false />
 	
 	<!---   constructor   --->
 	<cffunction name="init" output="false" returntype="com.andreacfm.cfem.events.AbstractEvent">
@@ -30,14 +29,14 @@
 		<cfargument name="initmethod" type="String" required="true"/>
 		<cfscript>
 		if(isSimpleValue(arguments.listener)){
-			variables.instance.listenerObject = invokeObject(arguments.listener,arguments.initMethod);
+			variables.listenerObject = invokeObject(arguments.listener,arguments.initMethod);
 		}else{
-			variables.instance.listenerObject = arguments.listener;
+			variables.listenerObject = arguments.listener;
 		}
 		</cfscript>
 	</cffunction> 
 	<cffunction name="getlistenerObject" access="public" returntype="Any">
-		<cfreturn variables.instance.listenerObject/>
+		<cfreturn variables.listenerObject/>
 	</cffunction>
 
 	<!--- method--->
@@ -46,14 +45,14 @@
 		<cfargument name="event" type="String"/>
 		<cfscript>
 		if(not len(arguments.method)){
-			variables.instance.method = arguments.event;
+			variables.method = arguments.event;
 		}else{
-			variables.instance.method = arguments.method;
+			variables.method = arguments.method;
 		}
 		</cfscript>
 	</cffunction> 
 	<cffunction name="getmethod" access="public" returntype="String">
-		<cfreturn variables.instance.method/>
+		<cfreturn variables.method/>
 	</cffunction>
 
 	<!--- Id--->
@@ -61,43 +60,43 @@
 		<cfargument name="Id" type="String" required="true"/>
 		<cfscript>
 		if(not len(id)){
-			variables.instance.Id = getClass() & '.' & getMethod();
+			variables.Id = getClass() & '.' & getMethod();
 		}else{
-			variables.instance.Id = arguments.Id;
+			variables.Id = arguments.Id;
 		}
 		</cfscript>
 	</cffunction> 
 	<cffunction name="getId" access="public" returntype="String">
-		<cfreturn variables.instance.Id/>
+		<cfreturn variables.Id/>
 	</cffunction>
 
 	<!--- priority--->
 	<cffunction name="setpriority" access="public" returntype="void">
 		<cfargument name="priority" type="Numeric" required="true"/>
-		<cfset variables.instance.priority = priority />
+		<cfset variables.priority = priority />
 	</cffunction> 
 	<cffunction name="getpriority" access="public" returntype="Numeric">
-		<cfreturn variables.instance.priority/>
+		<cfreturn variables.priority/>
 	</cffunction>
 
 	<!--- autowire--->
 	<cffunction name="setautowire" access="public" returntype="void">
 		<cfargument name="autowire" type="Boolean" required="true"/>
-		<cfset variables.instance.autowire = autowire />
+		<cfset variables.autowire = autowire />
 	</cffunction> 
 	<cffunction name="getautowire" access="public" returntype="Boolean">
-		<cfreturn variables.instance.autowire/>
+		<cfreturn variables.autowire/>
 	</cffunction>
 		
 	<!--- 
 	isAutowired
 	 --->
 	<cffunction name="isAutowired" returntype="Boolean" output="false" access="public">
-		<cfreturn variables.instance.autowired />
+		<cfreturn variables.autowired />
 	</cffunction>	
 	<cffunction name="setAutowired" returntype="Boolean" output="false" access="public">
 		<cfargument name="status" type="Boolean">
-		<cfset variables.instance.autowired = arguments.status />
+		<cfset variables.autowired = arguments.status />
 	</cffunction>	
 	
 	<!--- 
@@ -105,10 +104,10 @@
 	 --->
 	<cffunction name="getClass" returntype="string" output="false" access="public">
 		<cfscript>
-		if(not structKeyExists(variables.instance,'class')){
-			variables.instance.class = getMetadata(getlistenerObject()).name;
+		if(not structKeyExists(variables,'class')){
+			variables.class = getMetadata(getlistenerObject()).name;
 		}
-		return variables.instance.class;
+		return variables.class;
 		</cfscript>
 	</cffunction>
 

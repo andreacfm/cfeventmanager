@@ -1,6 +1,6 @@
 <cfcomponent>
 	
-	<cfset variables.instance.factories = {} />
+	<cfset variables.factories = {} />
 	
 	<!---init--->
     <cffunction name="init" output="false" access="public" returntype="com.andreacfm.cfem.factory.Factory">
@@ -12,14 +12,14 @@
     	<cfargument name="factoryName" required="true" type="string" />
 		<cfargument name="factory" required="true" type="com.andreacfm.cfem.factory.AbstractFactory" />
 		
-		<cfset variables.instance.factories[arguments.factoryName] = arguments.factory />
+		<cfset variables.factories[arguments.factoryName] = arguments.factory />
 		
     </cffunction>
 
 	<!---getFactory--->
     <cffunction name="getFactory" output="false" access="public" returntype="com.andreacfm.cfem.factory.AbstractFactory">
     	<cfargument name="factoryName" required="true" type="string" />
-    	<cfreturn variables.instance.factories[arguments.factoryName] />
+    	<cfreturn variables.factories[arguments.factoryName] />
     </cffunction>
 	
 	<!---createEvent--->

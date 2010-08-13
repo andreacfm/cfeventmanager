@@ -1,6 +1,4 @@
 <cfcomponent extends="mxunit.framework.TestCase">
-	
-	<cfinclude template="settings.cfm">
 
 	<cfscript>		
 	variables.mockBox = createObject("component","mockbox.system.testing.MockBox").init();

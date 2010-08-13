@@ -1,7 +1,6 @@
 <cfcomponent extends="com.andreacfm.cfem.util.IObserver" output="false">
 	
-	<cfset variables.instance = {}/>
-	<cfset variables.instance.actions = createObject('java','java.util.ArrayList').init()/>
+	<cfset variables.actions = createObject('java','java.util.ArrayList').init()/>
 
 	<!---init--->
     <cffunction name="init" output="false" returntype="com.andreacfm.cfem.events.AbstractEventInterception">
@@ -21,19 +20,19 @@
 	<!---addAction--->
     <cffunction name="addAction" output="false" access="public" returntype="void">
     	<cfargument name="action" required="true" type="com.andreacfm.cfem.events.actions.AbstractAction" />
-    	<cfset variables.instance.actions.add(action) />
+    	<cfset variables.actions.add(action) />
     </cffunction>
 
 	<!---addActions--->
     <cffunction name="addActions" output="false" access="public" returntype="void">
     	<cfargument name="actions" required="true" type="Array" />
-    	<cfset variables.instance.actions.addAll(arguments.actions) />
+    	<cfset variables.actions.addAll(arguments.actions) />
     </cffunction>
 
 	<!---execute--->
     <cffunction name="execute" output="false" access="public" returntype="void">
     	<cfargument name="event" type="com.andreacfm.cfem.events.AbstractEvent" required="true" />
-    	<cfset var iterator = variables.instance.actions.iterator() />
+    	<cfset var iterator = variables.actions.iterator() />
 		<cfset var em = getEventManager() />
 		<cfset var action = "" />
     	<cfloop condition="#iterator.hasNext()#">
@@ -49,37 +48,37 @@
 	hasActions
 	 --->
 	<cffunction name="hasActions" returntype="Boolean" output="false" access="public">
-		<cfreturn javaCast("boolean",variables.instance.actions.size()) />
+		<cfreturn javaCast("boolean",variables.actions.size()) />
 	</cffunction>
 			
     <!---   EventManager   --->
 	<cffunction name="getEventManager" access="public" output="false" returntype="com.andreacfm.cfem.EventManager">
-		<cfreturn variables.instance.EventManager/>
+		<cfreturn variables.EventManager/>
 	</cffunction>
 	<cffunction name="setEventManager" access="public" output="false" returntype="void">
 		<cfargument name="EventManager" type="com.andreacfm.cfem.EventManager" required="true"/>
-		<cfset variables.instance.EventManager = arguments.EventManager/>
+		<cfset variables.EventManager = arguments.EventManager/>
 	</cffunction>
 
     <!---   point   --->
 	<cffunction name="getpoint" access="public" output="false" returntype="string">
-		<cfreturn variables.instance.point/>
+		<cfreturn variables.point/>
 	</cffunction>
 	<cffunction name="setpoint" access="public" output="false" returntype="void">
 		<cfargument name="point" type="string" required="true"/>
 		<cfif listFind(getEventManager().getConfig('eventInterceptionsPoints'),arguments.point) eq 0>
 			<cfthrow type="com.andreacfm.cfem.IllegalInterceptionPoint" message="point [#arguments.point#] is not valid. Add it to config xml file.">
 		</cfif>
-		<cfset variables.instance.point = arguments.point/>
+		<cfset variables.point = arguments.point/>
 	</cffunction>	
 	
     <!---   condition   --->
 	<cffunction name="getcondition" access="public" output="false" returntype="string">
-		<cfreturn variables.instance.condition/>
+		<cfreturn variables.condition/>
 	</cffunction>
 	<cffunction name="setcondition" access="public" output="false" returntype="void">
 		<cfargument name="condition" type="string" required="true"/>
-		<cfset variables.instance.condition = arguments.condition/>
+		<cfset variables.condition = arguments.condition/>
 	</cffunction>
 
 	<!--- ABSTRACT UPDATE METHOD --->

@@ -1,6 +1,4 @@
 <cfcomponent extends="mxunit.framework.TestCase">
-	
-	<cfinclude template="settings.cfm">
 
 	<!--- setup--->
 	<cffunction name="setUp">	

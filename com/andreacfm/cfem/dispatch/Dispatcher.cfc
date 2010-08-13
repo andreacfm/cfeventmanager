@@ -63,20 +63,20 @@
    
     <!---   event   --->
 	<cffunction name="getevent" access="public" output="false" returntype="com.andreacfm.cfem.events.AbstractEvent">
-		<cfreturn variables.instance.event/>
+		<cfreturn variables.event/>
 	</cffunction>
 	<cffunction name="setevent" access="public" output="false" returntype="void">
 		<cfargument name="event" type="com.andreacfm.cfem.events.AbstractEvent" required="true"/>
-		<cfset variables.instance.event = arguments.event/>
+		<cfset variables.event = arguments.event/>
 	</cffunction>
 
     <!---   EventManager   --->
 	<cffunction name="getEventManager" access="public" output="false" returntype="com.andreacfm.cfem.EventManager">
-		<cfreturn variables.instance.EventManager/>
+		<cfreturn variables.EventManager/>
 	</cffunction>
 	<cffunction name="setEventManager" access="public" output="false" returntype="void">
 		<cfargument name="EventManager" type="com.andreacfm.cfem.EventManager" required="true"/>
-		<cfset variables.instance.EventManager = arguments.EventManager/>
+		<cfset variables.EventManager = arguments.EventManager/>
 	</cffunction>
 
 

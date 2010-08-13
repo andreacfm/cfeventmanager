@@ -55,7 +55,7 @@ Usage:
 	
 		<cffunction name="setValidatorFactory" access="public" returntype="void" output="false" hint="I set the ValidatorFactory.">
 			<cfargument name="validatorFactory" type="any" required="true" hint="ValidatorFactory" />
-			<cfset variables.instance.validatorFactory = arguments.validatorFactory />
+			<cfset variables.validatorFactory = arguments.validatorFactory />
 		</cffunction>
 		
 	To autowire a new User inside my UserService, I would simply create the User (either directly or with a factory) and then
@@ -242,12 +242,12 @@ Usage:
 	
 	<!--- Dependency injection methods for Bean Factory. --->
 	<cffunction name="getBeanFactory" access="public" returntype="any" output="false" hint="I return the BeanFactory.">
-		<cfreturn variables.instance.beanFactory />
+		<cfreturn variables.beanFactory />
 	</cffunction>
 		
 	<cffunction name="setBeanFactory" access="public" returntype="void" output="false" hint="I set the BeanFactory.">
 		<cfargument name="beanFactory" type="coldspring.beans.BeanFactory" required="true" />
-		<cfset variables.instance.beanFactory = arguments.beanFactory />
+		<cfset variables.beanFactory = arguments.beanFactory />
 	</cffunction>
 
 </cfcomponent>

@@ -3,7 +3,7 @@
 		output="false"
 		accessors="true">
 
-	<cfset variables.instance.name = 'Dispatch' />
+	<cfset variables.name = 'Dispatch' />
 	
 	<!---   Constructor --->
     <cffunction name="init" output="false"returntype="com.andreacfm.cfem.events.actions.AbstractAction" >
@@ -23,40 +23,40 @@
    <!---Event--->
    <cffunction name="setEvent" output="false" access="public" returntype="void">
     	<cfargument name="Event" required="true" type="string"/>
-		<cfset variables.instance.Event = arguments.Event />
+		<cfset variables.Event = arguments.Event />
     </cffunction>
    <cffunction name="getEvent" output="false" access="public" returntype="string">
-    	<cfreturn variables.instance.Event />
+    	<cfreturn variables.Event />
     </cffunction>
 	
    <!---persist--->
    <cffunction name="setpersists" output="false" access="public" returntype="void">
     	<cfargument name="persists" required="true" type="boolean"/>
-		<cfset variables.instance.persists = arguments.persists />
+		<cfset variables.persists = arguments.persists />
     </cffunction>
     <cffunction name="eventPersists" output="false" access="public" returntype="boolean">
-    	<cfreturn variables.instance.persists />
+    	<cfreturn variables.persists />
     </cffunction>
 	
 	<!---Mode--->
     <cffunction name="setMode" output="false" access="public" returntype="void">
     	<cfargument name="mode" required="true" type="string"/>
-		<cfset variables.instance.mode = arguments.mode />
+		<cfset variables.mode = arguments.mode />
     </cffunction>	
     <cffunction name="getMode" output="false" access="public" returntype="string">
-    	<cfreturn variables.instance.mode />
+    	<cfreturn variables.mode />
     </cffunction>
 	
 	<!---setData--->
    <cffunction name="setData" output="false" access="public" returntype="void">
     	<cfargument name="data" required="true" type="any"/>
-		<cfset variables.instance.data = arguments.data />
+		<cfset variables.data = arguments.data />
     </cffunction>
    <cffunction name="getData" output="false" access="public" returntype="struct">
-    	<cfif isSimpleValue(variables.instance.data)>
- 			<cfreturn deserializeJSON(variables.instance.data) />
+    	<cfif isSimpleValue(variables.data)>
+ 			<cfreturn deserializeJSON(variables.data) />
 		</cfif>
-    	<cfreturn variables.instance.data/>
+    	<cfreturn variables.data/>
     </cffunction>
 	
 	<!---execute--->

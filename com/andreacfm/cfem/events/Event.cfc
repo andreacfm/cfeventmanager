@@ -10,15 +10,13 @@
 		<cfargument name="target" required="true" type="any"/>
 		<cfargument name="mode" required="true" type="string"/>
 		<cfargument name="type" required="true" type="string"/>
-		<cfargument name="alias" required="false" type="string" default=""/>
 		
 		<cfscript>
-		variables.instance.name = arguments.name;
-		variables.instance.data = arguments.data;
-		variables.instance.target = arguments.target;
-		variables.instance.mode = arguments.mode;		
-		variables.instance.type = arguments.type;
-		variables.instance.alias = arguments.alias;
+		variables.name = name;
+		variables.data = data;
+		variables.target = target;
+		variables.mode = mode;		
+		variables.type = type;
 		</cfscript>
 		
 		<cfreturn this/>

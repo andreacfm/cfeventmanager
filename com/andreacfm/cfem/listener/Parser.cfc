@@ -1,14 +1,13 @@
 <cfcomponent output="false"
 	hint="Look for listener into a specified directory.Add listeners and implicit events.">
 	
-	<cfset variables.instance = {} />
 	
 	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.listener.Parser">
 		<cfargument name="eventManager" required="true" type="com.andreacfm.cfem.EventManager">
 		<cfargument name="path" required="true" type="string" hint="relative path to the directory to be scanned">
 		<cfargument name="recurse" required="false" type="Boolean" default="false">
 		
-		<cfset variables.instance.basecfcpath = arguments.path />
+		<cfset variables.basecfcpath = arguments.path />
 		<cfset setEventManager(arguments.eventManager) />
 		<cfset setPath(arguments.path) />
 		<cfset setRecurse(arguments.recurse) />
@@ -93,24 +92,24 @@
 	<!--- EventManager--->
 	<cffunction name="setEventManager" access="public" returntype="void">
 		<cfargument name="EventManager" type="com.andreacfm.cfem.EventManager" required="true"/>
-		<cfset variables.instance.EventManager = EventManager />
+		<cfset variables.EventManager = EventManager />
 	</cffunction> 
 	<cffunction name="getEventManager" access="public" returntype="com.andreacfm.cfem.EventManager">
-		<cfreturn variables.instance.EventManager/>
+		<cfreturn variables.EventManager/>
 	</cffunction>
 	
 	<!--- Recurse--->
 	<cffunction name="setRecurse" access="public" returntype="void">
 		<cfargument name="Recurse" type="Boolean" required="true"/>
-		<cfset variables.instance.Recurse = Recurse />
+		<cfset variables.Recurse = Recurse />
 	</cffunction> 
 	<cffunction name="getRecurse" access="public" returntype="Boolean">
-		<cfreturn variables.instance.Recurse/>
+		<cfreturn variables.Recurse/>
 	</cffunction>	
 	
 	<!--- base--->
 	<cffunction name="getbasecfcpath" access="public" returntype="String">
-		<cfreturn variables.instance.basecfcpath/>
+		<cfreturn variables.basecfcpath/>
 	</cffunction>
 		
 	<!--- path ( store the expanded base path )--->
@@ -120,11 +119,11 @@
 		if(not directoryexists(expandPath(arguments.path))){
 			getEventManager().throw(message = "Directory [#arguments.path#] does not exists", type="com.andreacfm.cfem.directoryDoesNotExists");
 		}
-		variables.instance.path = expandPath(path);
+		variables.path = expandPath(path);
 		</cfscript>
 	</cffunction> 
 	<cffunction name="getpath" access="public" returntype="String">
-		<cfreturn variables.instance.path/>
+		<cfreturn variables.path/>
 	</cffunction>
 	
 

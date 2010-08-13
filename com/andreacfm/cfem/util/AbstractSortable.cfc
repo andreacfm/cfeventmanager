@@ -1,10 +1,8 @@
 <cfcomponent displayname="AbstractSortable" output="false" hint="Defines the interface and base methods for a sortable object.">
 
 	<cfscript>
- 		// Set up an instance structure to hold instance data.
-		VARIABLES.Instance = StructNew();
 		// Set the target object to which other objects will be compared.
-		VARIABLES.Instance.Target = "";
+		VARIABLES.Target = "";
 	</cfscript>
  
 	<cffunction name="Init" access="public" returntype="any" output="false" hint="Returns an initialized AbstractSortable instance.">
@@ -13,7 +11,7 @@
 		<cfargument name="Target" type="any" required="false" default="" />
  
 		<!--- Store the arguments. --->
-		<cfset VARIABLES.Instance.Target = ARGUMENTS.Target />
+		<cfset VARIABLES.Target = ARGUMENTS.Target />
  
 		<!--- Return This reference. --->
 		<cfreturn THIS />
@@ -23,7 +21,7 @@
 		<!--- Define arguments. --->
 		<cfargument name="Target" type="any" required="true" />
 		<!--- Store the arguments. --->
-		<cfset VARIABLES.Instance.Target = ARGUMENTS.Target />
+		<cfset VARIABLES.Target = ARGUMENTS.Target />
 		<!--- Return out. --->
 		<cfreturn />
 	</cffunction>

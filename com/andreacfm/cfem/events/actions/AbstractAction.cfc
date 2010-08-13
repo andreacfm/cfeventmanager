@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 
-	<cfset variables.instance.name = '' />
+	<cfset variables.name = '' />
 	
     <!---   Constructor --->
     <cffunction name="init" output="false"  returntype="com.andreacfm.cfem.events.actions.AbstractAction" >
@@ -15,7 +15,7 @@
 	
 	<!---getName--->
     <cffunction name="getName" output="false" access="public" returntype="string">
-    	<cfreturn variables.instance.name />
+    	<cfreturn variables.name />
     </cffunction>
 		
 </cfcomponent>

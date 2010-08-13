@@ -4,7 +4,7 @@
 	<cfproperty name="scope" type="string"/>
 	<cfproperty name="log" type="array"/>
 
-	<cfset variables.instance.log = createObject('java','java.util.ArrayList').init() />
+	<cfset variables.log = createObject('java','java.util.ArrayList').init() />
 	
 	<!---init--->
 	<cffunction name="init" output="false" returntype="com.andreacfm.cfem.stats.Tracer">
@@ -154,26 +154,26 @@
 				<cfset session['Event_Manager_Tracer_Scope'] = arrayNew(1) />
 			</cfif>
 		<cfelseif scope eq 'instance'>
-			<cfset variables.instance.log.clear() />	
+			<cfset variables.log.clear() />	
 		</cfif>	
 	</cffunction>	
 	
     <!---   scope   --->
 	<cffunction name="getscope" access="public" output="false" returntype="string">
-		<cfreturn variables.instance.scope/>
+		<cfreturn variables.scope/>
 	</cffunction>
 	<cffunction name="setscope" access="public" output="false" returntype="void">
 		<cfargument name="scope" type="string" required="true"/>
-		<cfset variables.instance.scope = arguments.scope/>
+		<cfset variables.scope = arguments.scope/>
 	</cffunction>
 
     <!---   log   --->
 	<cffunction name="getlog" access="public" output="false" returntype="array">
-		<cfreturn variables.instance.log/>
+		<cfreturn variables.log/>
 	</cffunction>
 	<cffunction name="setlog" access="public" output="false" returntype="void">
 		<cfargument name="log" type="array" required="true"/>
-		<cfset variables.instance.log = arguments.log/>
+		<cfset variables.log = arguments.log/>
 	</cffunction>
 
 	<!------------------------------------------- PRIVATE------------------------------------------->

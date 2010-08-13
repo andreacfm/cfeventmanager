@@ -217,3 +217,10 @@
 	</cffunction>
 	
 </cfcomponent>	
+
+var listeners = [
+	{
+		event = 'myevent'
+		listener = 'com.myapp.mylistener'
+	}
+]

@@ -1,6 +1,4 @@
 <cfcomponent extends="mxunit.framework.TestCase">
-	
-	<cfinclude template="settings.cfm">
 
 	<cfscript>		
 	variables.mockBox = createObject("component","mockbox.system.testing.MockBox").init();
@@ -81,7 +79,7 @@
 		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
 		
 		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
-				variables.emMock,'#siteroot#/test/mocks/scan/') />
+				variables.emMock,'/cfeventmanager/com/andreacfm/cfem/test/mocks/scan/') />
 		<cfset obj.run() />
 		<cfset local.event = variables.emMock.getEvent('onTestCase') />			
 		<cfset assertEquals(2, local.event.listeners.size(), "Listener not registered") />
@@ -100,7 +98,7 @@
 		<cfset variables.emMock.$(method='getFactory',returns=local.factory)>
 		
 		<cfset var obj = createObject('component','com.andreacfm.cfem.listener.Parser').init(
-				variables.emMock,'#siteroot#/test/mocks/scan/',true) />
+				variables.emMock,'/cfeventmanager/com/andreacfm/cfem/test/mocks/scan/',true) />
 		<cfset obj.run() />
 		<cfset local.event = variables.emMock.getEvent('onTestCase') />			
 		<cfset assertEquals(5, local.event.listeners.size()) />
@@ -150,10 +148,8 @@
 
 		<!--- create with arguments --->
 		<cfset local.result = local.factory.create('oneEvent', {test = true}, this, 'asynch') />
-		<cfset assertTrue(local.result.getData().test,
-				"Data not passed correctly") />
-		<cfset assertTrue(createObject("java", "java.lang.System").identityHashCode(this) eq createObject("java", "java.lang.System").identityHashCode(local.result.getTarget()),
-				"Target not passed correctly")>		
+		<cfset assertTrue(local.result.getData().test,"Data not passed correctly") />
+		<cfset assertTrue(createObject("java", "java.lang.System").identityHashCode(this) eq createObject("java", "java.lang.System").identityHashCode(local.result.getTarget()),"Target not passed correctly")>		
 		<cfset assertTrue(local.result.getMode() eq 'Asynch',
 				"mode not passed correctly")>		
 					
@@ -232,9 +228,9 @@
 										
 	</cffunction>
 
-	<cffunction name="test_add_event_with_interceptions_and_actions" returntype="void" output="false" access="public">
+	<!--- <cffunction name="test_add_event_with_interceptions_and_actions" returntype="void" output="false" access="public">
 				
-	</cffunction>	
+	</cffunction> --->	
 
 
 		
@@ -287,13 +283,13 @@
 		 - listener class 
 		 - default event 
 		 --->
-		<cfset local.conf = { event="oneEvent", listener = '#cfcroot#.mocks.Listener'} />
+		<cfset local.conf = { event="oneEvent", listener = 'com.andreacfm.cfem.test.mocks.Listener'} />
 		<cfset local.result = local.factory.create(argumentCollection = local.conf)>
 		<cfset assertTrue(local.result.getmethod() eq 'oneEvent',"Incorrect method") />
-		<cfset assertTrue(isinstanceof(local.result.getListenerObject(),'#cfcroot#.mocks.Listener'),
+		<cfset assertTrue(isinstanceof(local.result.getListenerObject(),'com.andreacfm.cfem.test.mocks.Listener'),
 				"Incorrect listener object creation") />
 		<cfset assertTrue(local.result.getAutowire() eq 'true',"Incorrect autowiring setting.") />
-		<cfset assertTrue(local.result.getId() eq '#cfcroot#.mocks.Listener.oneEvent',
+		<cfset assertTrue(local.result.getId() eq 'com.andreacfm.cfem.test.mocks.Listener.oneEvent',
 				"Incorrect generated id.") />
 
 		<!--- Autowire default : false --->
@@ -341,8 +337,8 @@
 				"Actions has not been added")>
 				
 		<!--- custom type --->				
-		<cfset local.result = local.em.createInterception(point = 'each', class = '#cfcroot#.mocks.Interception') />
-		<cfset assertTrue(isinstanceOf(local.result,'#cfcroot#.mocks.Interception'),
+		<cfset local.result = local.em.createInterception(point = 'each', class = 'com.andreacfm.cfem.test.mocks.Interception') />
+		<cfset assertTrue(isinstanceOf(local.result,'com.andreacfm.cfem.test.mocks.Interception'),
 				"Type incorrect.")>
 		<cfset assertTrue(local.result.getPoint() eq 'each',
 				"Point incorrect.")>
@@ -413,8 +409,8 @@
 		<!--- 
 		create a custom type
 		 --->
-		<cfset local.result = local.factory.create('before','#cfcroot#.mocks.Interception') />
-		<cfset assertTrue(isinstanceof(local.result,'#cfcroot#.mocks.Interception'),
+		<cfset local.result = local.factory.create('before','com.andreacfm.cfem.test.mocks.Interception') />
+		<cfset assertTrue(isinstanceof(local.result,'com.andreacfm.cfem.test.mocks.Interception'),
 				"Custom Int type error.")>
 		 				 		 				
 	</cffunction>

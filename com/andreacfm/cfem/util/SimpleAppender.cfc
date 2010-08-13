@@ -1,6 +1,5 @@
 <cfcomponent output="false">
 	
-	<cfset variables.instance = {} />
 	<cfset variables.severityScale = {debug=1,info=2,warn=3,error=4,fatal=5} />
 	
 	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.util.SimpleAppender">		
@@ -67,7 +66,7 @@
 	<!---FilePath--->
 	<cffunction name="getFilePath" output="false" returntype="string">
 		<cfscript>
-			return variables.instance.FilePath;
+			return variables.FilePath;
 		</cfscript>
 	</cffunction>
 	<cffunction name="setFilePath" output="false" returntype="void">
@@ -77,8 +76,8 @@
 			if(not fileExists(path)){
 				fileWrite(path,'');
 			}
-			variables.instance.filePath = path;
-			variables.instance.file = createObject('java','java.io.File').init(variables.instance.filePath);
+			variables.filePath = path;
+			variables.file = createObject('java','java.io.File').init(variables.filePath);
 		</cfscript>
 	</cffunction>
 
@@ -86,19 +85,19 @@
 	getFile
 	 --->
 	<cffunction name="getFile" returntype="any" output="false" access="public">
-		<cfreturn variables.instance.file />
+		<cfreturn variables.file />
 	</cffunction>	
 
 	<!--- out--->
 	<cffunction name="setout" access="public" returntype="void">
 	<cfargument name="out" type="String" required="true"/>
-		<cfset variables.instance.out = out />
-		<cfif variables.instance.out eq 'console'>
-			<cfset variables.instance.console = createObject('java','java.lang.System').out />
+		<cfset variables.out = out />
+		<cfif variables.out eq 'console'>
+			<cfset variables.console = createObject('java','java.lang.System').out />
 		</cfif>
 	</cffunction> 
 	<cffunction name="getout" access="public" returntype="String">
-		<cfreturn variables.instance.out/>
+		<cfreturn variables.out/>
 	</cffunction>
 
 	<!--- minLevel--->
@@ -107,14 +106,14 @@
 	
 		<cfif not structKeyExists(variables.severityScale,arguments.minLevel)>
 			<cfthrow type="com.andreacfm.logging.MinLevelDoNotExists" message="The min level logging [#arguments.minLevel#] is not valid.">
-			<cfset variables.instance.minLevel = 2>
+			<cfset variables.minLevel = 2>
 		<cfelse>
-			<cfset variables.instance.minLevel = variables.severityScale[arguments.minLevel] />	
+			<cfset variables.minLevel = variables.severityScale[arguments.minLevel] />	
 		</cfif>
 
 	</cffunction>
 	<cffunction name="getminLevel" access="public" returntype="String">
-		<cfreturn variables.instance.minLevel/>
+		<cfreturn variables.minLevel/>
 	</cffunction>	
 	<cffunction name="getTranslatedMinLevel" access="public" returntype="String">
 		<cfset var key = "" />
@@ -130,10 +129,10 @@
 	<!--- maxSize--->
 	<cffunction name="setmaxSize" access="public" returntype="void">
 		<cfargument name="maxSize" type="Numeric" required="true"/>
-		<cfset variables.instance.maxSize = maxSize />
+		<cfset variables.maxSize = maxSize />
 	</cffunction> 
 	<cffunction name="getmaxSize" access="public" returntype="Numeric">
-		<cfreturn variables.instance.maxSize/>
+		<cfreturn variables.maxSize/>
 	</cffunction>	
 	
 	<!----------------------------------------- PRIVATE ---------------------------------------------------------->
@@ -155,7 +154,7 @@
 			if(out eq 'file'){
 				writeLogFile(entry,arguments.async);
 			}else if(out eq 'console'){
-				variables.instance.console.println(entry);
+				variables.console.println(entry);
 			}		
 		}
 		</cfscript>		
@@ -223,7 +222,7 @@
 	
 	<!--- getSize --->
 	<cffunction name="getSize" output="false" returntype="date">	
-		<cfreturn variables.instance.file.length() />
+		<cfreturn variables.file.length() />
 	</cffunction>
 
 

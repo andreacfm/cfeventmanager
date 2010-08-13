@@ -1,7 +1,6 @@
 <cfcomponent>
 
-	<cfset variables.instance = {} />
-	<cfset variables.instance.cache = {} />
+	<cfset variables.cache = {} />
 
 	<cffunction name="init" access="public" output="false" returntype="com.andreacfm.cfem.caching.ICacheAdapter">
 		<cfargument name="EventManager" type="com.andreacfm.cfem.EventManager" />	
@@ -39,11 +38,11 @@
 
     <!---   EventManager   --->
 	<cffunction name="getEventManager" access="public" output="false" returntype="com.andreacfm.cfem.EventManager">
-		<cfreturn variables.instance.EventManager/>
+		<cfreturn variables.EventManager/>
 	</cffunction>
 	<cffunction name="setEventManager" access="public" output="false" returntype="void">
 		<cfargument name="EventManager" type="com.andreacfm.cfem.EventManager" required="true"/>
-		<cfset variables.instance.EventManager = arguments.EventManager/>
+		<cfset variables.EventManager = arguments.EventManager/>
 	</cffunction>
 
 </cfcomponent>
