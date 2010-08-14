@@ -18,9 +18,12 @@
 			stop = 'com.andreacfm.cfem.events.actions.Stop',
 			throw = 'com.andreacfm.cfem.events.actions.Throw',
 			dispatch = 'com.andreacfm.cfem.events.actions.Dispatch'
-			});				
+			});
+		var config = createObject("component","logbox.system.logging.config.LogBoxConfig").init(expandPath("/com/andreacfm/cfem/config/logbox.xml.cfm"));	
+		var logBox = createObject("component","logbox.system.logging.LogBox").init(config);
+		variables.emMock.setLogManager(logbox);
 
-		variables.emMock.$("isLogging").$results(false);			
+		//variables.emMock.$("isLogging").$results(false);			
 		</cfscript>
 	</cffunction>
 
@@ -177,7 +180,6 @@
 	<cffunction name="test_addEvent" returntype="void" output="true" access="public">
 		
 		<cfset var local = {} />
-		<cfset variables.emMock.$(method='getDebug',returns=false)>
 		
 		<!--- default type --->		
 		<cfset variables.emMock.addEvent('oneEvent') />

@@ -3,7 +3,8 @@
 <cfset this.path = expandPath('/cfeventmanager')>	
 <cfset this.mappings = {
 	"/com" = this.path & '/com/',
-	"/colddoc" = this.path & '/colddoc/'	
+	"/colddoc" = this.path & '/colddoc/',
+	"/logbox" = this.path & '/logbox/'			
 }>	
 
 </cfcomponent>

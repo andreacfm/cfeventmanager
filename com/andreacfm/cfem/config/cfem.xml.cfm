@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <event-manager>
 	
 	<configs>
@@ -42,11 +41,8 @@
 		<config name="cacheAdapter" value="com.andreacfm.cfem.caching.BasicCacheAdapter"/>
 
 		<!-- defaultLoggerClass -->
-		<config name="defaultLoggerClass" value="com.andreacfm.cfem.util.SimpleAppender">
-			<property name="out" value="file" />		
-			<property name="filepath" value="/cfem.log" />
-			<property name="minLevel" value="info" />
-			<property name="maxSize" value="10485760" />
+		<config name="logging">
+			<property name="logboxConfigPath" value="/com/andreacfm/cfem/config/logbox.xml.cfm" />				
 		</config>
 		
 	</configs>	

@@ -20,7 +20,7 @@
 		<cfargument name="xmlObject" required="false" type="xml" hint="xml parsed object"/>
 		<cfargument name="autowire" required="false" type="boolean" default="false"/>
 		<cfargument name="logging" required="false" type="boolean" default="true"/>
-		<cfargument name="logger" required="false" type="any" default=""/>
+		<cfargument name="logManager" required="false" type="any" default=""/>
 		<cfargument name="dir" required="false" type="any"/>
 		<cfargument name="recurseOnDir" required="false" type="Boolean" default="false"/>
 		
@@ -50,8 +50,8 @@
 		loadConfig('/com/andreacfm/cfem/config/cfem.xml.cfm');
 		//Ie EM in logging mode ? 
 		setLoggingMode(arguments.logging);
-		//create the logger
-		structkeyExists(arguments,'logger') ? setLogger(arguments.logger) : setLogger(); 
+		//create the logManager
+		structkeyExists(arguments,'logManager') ? setLogManager(arguments.logManager) : setlogManager(); 
 		//Load events
 		setEvents(arguments.events);
 		
@@ -92,7 +92,7 @@
 			throw('Cannot register a duplicate Event. The event #arguments.name# already exists.','com.andreacfm.cfem.duplicateEventsExeption');
 		}
 		if(isLogging()){
-			getLogger().info('Registering event #arguments.name#');
+			getLogManager().getLogger(this).info('Registering event #arguments.name#');
 		}
 		</cfscript>
 	</cffunction>
@@ -122,7 +122,7 @@
 				<cfset variables.events[key]['listeners'] = sorter.sortArray(variables.events[key]['listeners'],'LT') />	
 				
 				<cfif isLogging()>
-					<cfset getLogger().info('Registered Listener id :#listener.getid()# to Event:#key# {Priority:#arguments.priority#}') />				
+					<cfset getLogManager().getLogger(this).info('Registered Listener id :#listener.getid()# to Event:#key# {Priority:#arguments.priority#}') />				
 				</cfif>
 			</cfif>	
 		</cfloop>
@@ -304,7 +304,7 @@
 			if(not structKeyExists(local,'eventObj')){
 				local.eventObj = getFactory().createEvent(name=arguments.name,data=arguments.data,target=arguments.target,mode=arguments.mode);
 			}
-			getLogger().info('Dispatched Event #arguments.name#');
+			getLogManager().getLogger(this).info('Dispatched Event #arguments.name#');
 		}				
 		</cfscript>	
 
@@ -356,7 +356,11 @@
 				if(arraylen(local.configs)){
 					for(i=1; i <= arraylen(local.configs); i++){
 						variables.config[local.configs[i].xmlAttributes.name] = {};
-						variables.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value);
+						if(structKeyExists(local.configs[i].xmlAttributes,'value')){
+							variables.config[local.configs[i].xmlAttributes.name].value = trim(local.configs[i].xmlAttributes.value);
+						}else{
+							variables.config[local.configs[i].xmlAttributes.name].value = "";
+						}	
 						variables.config[local.configs[i].xmlAttributes.name].props = {};
 						var props = xmlSearch(local.xml,'/event-manager/configs/config[#i#]/property');
 						for(p=1; p <= arraylen(props); p++){
@@ -503,18 +507,20 @@
 	<!--- 
 	logger
 	--->
-	<cffunction name="setlogger" access="public" returntype="void">
-		<cfargument name="logger" type="any" required="true"/>
-		<cfif not isSimpleValue(arguments.logger)>
-			<cfset variables.logger = logger />
+	<cffunction name="setLogManager" access="public" returntype="void">
+		<cfargument name="logManager" type="any" required="true"/>
+		<cfif not isSimpleValue(arguments.logManager)>
+			<cfset variables.logManager = logManager />
 		</cfif>
 	</cffunction> 
-	<cffunction name="getlogger" access="public" returntype="any">
-		<cfif not structKeyExists(variables,'logger')>
-			<cfset var loggerclass = getConfig('defaultLoggerClass') />
-			<cfset variables.logger = createObject('component',loggerclass).init(argumentCollection = getConfigProps('defaultLoggerClass')) />
+	<cffunction name="getlogManager" access="public" returntype="any">
+		<cfif not structKeyExists(variables,'logManager')>
+			<cfset var props = getConfigProps('logging')>
+			<cfset var config = createObject("component","logbox.system.logging.config.LogBoxConfig").init(expandPath(props.logboxConfigPath)) />		
+			<cfset var logBox = createObject("component","logbox.system.logging.LogBox").init(config)>
+			<cfset variables.logManager = logbox />
 		</cfif>
-		<cfreturn variables.logger/>
+		<cfreturn variables.logManager/>
 	</cffunction>
 	
 	<!--- 

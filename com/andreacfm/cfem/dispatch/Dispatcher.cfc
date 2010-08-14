@@ -21,7 +21,7 @@
 		local.em = getEventManager();
 		local.listeners = local.em.getListeners(local.event.getName());
 		local.isLogging = local.em.isLogging();
-		local.logger = local.em.getLogger();
+		local.logger = local.em.getLogManager().getLogger(this);
 
 		for(i=1; i lte arraylen(local.listeners); i++){
 			if(local.event.isActive()){
@@ -38,7 +38,7 @@
 					local.event.updatePoint('before');
 				}
 				if(local.isLogging){
-					local.logger.debug(msg ="Event: #local.event.getname()# - Interception point BEFORE", async = arguments.async);
+					local.logger.debug("Event: #local.event.getname()# - Interception point BEFORE");
 				}		
 				
 				// call the listener
@@ -46,14 +46,14 @@
 				
 				local.event.updatePoint('each');
 				if(local.isLogging){
-					local.logger.debug(msg = "Event: #local.event.getname()# - Interception point EACH", async = arguments.async);
-					local.logger.info(msg = "Event: #local.event.getname()# - Invoke Listener #local.listeners[i].getClass()#", async = arguments.async);
+					local.logger.debug("Event: #local.event.getname()# - Interception point EACH");
+					local.logger.info("Event: #local.event.getname()# - Invoke Listener #local.listeners[i].getClass()#");
 				}		
 
 				if(i==arraylen(local.listeners)){
 					local.event.updatePoint('after');
 					if(local.isLogging){
-						local.logger.debug(msg = "Event: #local.event.getname()# - Interception point AFTER", async = arguments.async);
+						local.logger.debug("Event: #local.event.getname()# - Interception point AFTER");
 					}		
 				}
 			}

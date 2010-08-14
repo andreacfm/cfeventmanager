@@ -32,7 +32,6 @@
 	<cffunction name="test_parse_listener_programmatically_recurse" returntype="void" output="false" access="public">
 	
 		<cfset var em = createObject('component','com.andreacfm.cfem.EventManager').init() />
-		<cfset em.getLogger().setOut('console') />		
 		<cfset em.parseDirectory(dir = "/cfeventmanager/com/andreacfm/cfem/test/mocks/scan/",recurse = true) />
 		<cfset var event = em.getEvent('onTestCase')>		
 		<!--- recurse 4 listener --->				
@@ -153,9 +152,11 @@
 		<cfset local.EM.dispatchEvent(event=local.event) />
 
 		<!--- Just After dispatch item len == 0 --->
-		<cfset assertTrue(local.event.getItems().size() eq 0,'Items count fail just after asynch dispatch. Listeners sleep 1000.') />
+		<cfset assertTrue(local.event.getItems().size() eq 0,'Items count fail just after asynch dispatch.') />
 		
 		<cfset sleep(3000) />
+		
+		<cfset debug(local.event.getItems().size())>
 		
 		<!--- Sleep 3000 to give time to the thread to execute --->
 		<cfset assertTrue(local.event.getItems().size() eq 100,'Items count fails.') />		

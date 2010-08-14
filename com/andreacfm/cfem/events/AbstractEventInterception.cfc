@@ -38,7 +38,7 @@
     	<cfloop condition="#iterator.hasNext()#">
     		<cfset action = iterator.next() />
  			<cfif em.islogging()>
-				<cfset em.getLogger().debug("Event:#arguments.event.getname()# - Action #action.getName()#") />
+				<cfset em.getLogManager().getLogger(this).debug("Event:#arguments.event.getname()# - Action #action.getName()#") />
 			</cfif>       
 			<cfset action.execute(arguments.event) />
 		</cfloop>
