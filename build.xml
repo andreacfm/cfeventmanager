@@ -23,7 +23,7 @@
 
 	    <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"/>
 	   	
-		<echo message="Runnig Datax tests"/>
+		<echo message="Runnig tests"/>
 		<mxunittask server="${server.host}" port="${server.port}"
         	defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
            	verbose="true"

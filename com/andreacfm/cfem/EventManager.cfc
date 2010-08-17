@@ -312,7 +312,7 @@
 
 	<!---
 	listenerExists
-	--->
+	
 	<cffunction name="listenerExists" access="public" output="false" returntype="boolean" hint="check from a class path if exist a listener cached in memory">
 		<cfargument name="class" type="string" required="true"/>
 		<cfscript>
@@ -322,7 +322,7 @@
 			}
 			return result;
 		</cfscript>		
-	</cffunction>
+	</cffunction>--->
 
 	<!---
 	eventExists

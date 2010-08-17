@@ -69,13 +69,17 @@
 		<cfset var event = "" />
 		<cfset var params = {} />
 		
+		<cfset var f = "">
 		<cfloop array="#functions#" index="f">
 				
 			<cfif structKeyExists(f,'event') and len(f.event)>
 				<cftry>
 					<cfset event = em.getEvent(f.event) />
 					<cfcatch type="com.andreacfm.cfem.noSuchEventExeption">
-						<cfset em.addEvent(f.event) />
+						<!--- workaround: event class expects an argument name and not event  --->
+						<cfset var str = duplicate(f)>
+						<cfset str.name = str.event>
+						<cfset em.addEvent(argumentCollection=str) />
 					</cfcatch>
 				</cftry>
 				<cfset params = duplicate(f) />
