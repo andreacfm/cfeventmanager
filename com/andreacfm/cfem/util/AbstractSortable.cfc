@@ -42,15 +42,7 @@
 				<!--- Set the target to which we will comapre objects. --->
 				<cfset THIS.SetTarget( ARGUMENTS.Data[ LOCAL.InnerIndex ] ) />
  
-				<!--- Get the method that we are going to call for comparison. --->
-				<cfset LOCAL.Method = THIS[ ARGUMENTS.Method ] />
- 
-				<!--- Compare to next object using the requested method. --->
-				<!--- 
-				TODO:LT is hardcoded		
-				https://jira.jboss.org/browse/RAILO-877
-				 --->
-				<cfinvoke component="#this#" method="LT" returnvariable="res"> 
+				<cfinvoke component="#this#" method="#arguments.method #" returnvariable="res"> 
 					<cfinvokeargument name="comparable" value="#ARGUMENTS.Data[ LOCAL.InnerIndex + 1 ]#"> 
 				</cfinvoke> 
  
@@ -63,23 +55,23 @@
 		<cfreturn ARGUMENTS.Data />
 	</cffunction>
  
-	<cffunction name="LT" access="public" returntype="boolean" output="false"
+	<cffunction name="$LT" access="public" returntype="boolean" output="false"
 		hint="Determins if this object is less than the passed in object.">
 	</cffunction>
  
-	<cffunction name="LTE" access="public" returntype="boolean" output="false"
+	<cffunction name="$LTE" access="public" returntype="boolean" output="false"
 		hint="Determins if this object is less than or equal to the passed in object.">
 	</cffunction>
  
-	<cffunction name="EQ" access="public" returntype="boolean" output="false"
+	<cffunction name="$EQ" access="public" returntype="boolean" output="false"
 		hint="Determins if this object is equal to the passed in object.">
 	</cffunction>
  
-	<cffunction name="GTE" access="public" returntype="boolean" output="false"
+	<cffunction name="$GTE" access="public" returntype="boolean" output="false"
 		hint="Determins if this object is greater than or equal to the passed in object.">
 	</cffunction>
  
-	<cffunction name="GT" access="public" returntype="boolean" output="false"
+	<cffunction name="$GT" access="public" returntype="boolean" output="false"
 		hint="Determins if this object is greater than the passed in object.">
 	</cffunction>
  

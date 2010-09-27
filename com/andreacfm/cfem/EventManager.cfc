@@ -119,7 +119,7 @@
 				
 				<cfset variables.events[key]['listeners'].add(listener) />
 				
-				<cfset variables.events[key]['listeners'] = sorter.sortArray(variables.events[key]['listeners'],'LT') />	
+				<cfset variables.events[key]['listeners'] = sorter.sortArray(variables.events[key]['listeners'],'$LT') />	
 				
 				<cfif isLogging()>
 					<cfset getLogManager().getLogger(this).info('Registered Listener id :#listener.getid()# to Event:#key# {Priority:#arguments.priority#}') />				

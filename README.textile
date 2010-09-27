@@ -1,5 +1,5 @@
 h4. ChangeLog
 
-h5. 0.9.252
+p. *0.9.252*
 
 * Adding implicit events via function metadata allows to pass the event type.
