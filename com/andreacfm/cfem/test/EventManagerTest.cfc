@@ -21,7 +21,8 @@
 			});
 		var config = createObject("component","logbox.system.logging.config.LogBoxConfig").init(expandPath("/com/andreacfm/cfem/config/logbox.xml.cfm"));	
 		var logBox = createObject("component","logbox.system.logging.LogBox").init(config);
-		variables.emMock.setLogManager(logbox);
+		
+		variables.emMock.$("getLogManager").$results(logbox);
 
 		//variables.emMock.$("isLogging").$results(false);			
 		</cfscript>

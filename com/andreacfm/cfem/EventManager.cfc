@@ -9,7 +9,7 @@
 	variables.helpers = structNew();
 	variables.Sorter = createObject('component','com.andreacfm.cfem.util.SortableListener').init();
 	variables.loggingStatus = true;
-	</cfscript>
+	</cfscript>ƒ
 	
 	<!--- Constructor --->
 	<cffunction name="init" output="false" returntype="com.andreacfm.cfem.EventManager" hint="Constructor" >
